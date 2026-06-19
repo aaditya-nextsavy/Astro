@@ -475,6 +475,33 @@ img {
 
 
 
+@media (max-width:991px) {
+  .loader-wheel {
+    height: 40vh;
+  }
+
+
+  .loader-percent {
+    font-size: 28px;
+
+  }
+
+
+  .loader-quote {
+
+    margin-top: 1rem;
+    font-size: 22px;
+    line-height: 1;
+    margin-left: 24px;
+
+  }
+
+
+}
+
+
+
+
 /* global stars */
 
 .background-stars {
