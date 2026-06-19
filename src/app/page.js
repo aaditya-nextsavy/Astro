@@ -22,7 +22,7 @@ export default function Home() {
   const floatingNavRef = useRef(null);
   const bottomNavRef = useRef(null);
   const lastlightSection = useRef(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [drawerOpen, setDrawerOpen] =
     useState(false);
 
