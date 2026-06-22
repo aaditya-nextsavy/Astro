@@ -400,7 +400,7 @@ export default function AboutWrapper() {
 
                 </div>
 
-                <div
+                {/* <div
                     className={`absolute inset-0 z-50 transition-opacity duration-1000 ${loading
                         ? "opacity-100"
                         : "pointer-events-none opacity-0"
@@ -409,7 +409,7 @@ export default function AboutWrapper() {
                     <Loader
                         onComplete={() => setLoading(false)}
                     />
-                </div>
+                </div> */}
             </main>
 
 

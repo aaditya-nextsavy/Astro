@@ -23,20 +23,5 @@ export default function RootLayout({ children }) {
         {children}
       </body>
     </html>
-
-    // <html
-    //   lang="en"
-    //   className={`${newYork.variable} ${satoshi.variable}`}
-    // >
-    //   <body className="min-h-full flex flex-col">
-    //     <GlobalBackground />
-
-    //     <SmoothScroll />
-
-    //     <SiteShell />
-
-    //     {children}
-    //   </body>
-    // </html>
   );
 }

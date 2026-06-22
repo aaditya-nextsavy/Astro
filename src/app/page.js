@@ -22,7 +22,7 @@ export default function Home() {
   const floatingNavRef = useRef(null);
   const bottomNavRef = useRef(null);
   const lastlightSection = useRef(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [drawerOpen, setDrawerOpen] =
     useState(false);
 
@@ -541,17 +541,18 @@ export default function Home() {
 
 
         </div>
+          {/* 
+          <div
+            className={`absolute inset-0 z-50 transition-opacity duration-1000 ${loading
+              ? "opacity-100"
+              : "pointer-events-none opacity-0"
+              }`}
+          >
+            <Loader
+              onComplete={() => setLoading(false)}
+            />
+          </div> */}
 
-        <div
-          className={`absolute inset-0 z-50 transition-opacity duration-1000 ${loading
-            ? "opacity-100"
-            : "pointer-events-none opacity-0"
-            }`}
-        >
-          <Loader
-            onComplete={() => setLoading(false)}
-          />
-        </div>
       </main>
 
 

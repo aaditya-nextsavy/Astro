@@ -65,7 +65,6 @@ const GalleryImagePreview = () => {
 
             gsap.to(item, {
                 opacity: i === activeIndex ? 1 : 0.35,
-                scale: i === activeIndex ? 1 : 1,
                 duration: 1,
                 ease: "power3.out",
             });
@@ -78,19 +77,37 @@ const GalleryImagePreview = () => {
             trackRef.current &&
             navRef.current
         ) {
-            const navHeight = navRef.current.offsetHeight;
-            const buttonTop = activeButton.offsetTop;
-            const buttonHeight = activeButton.offsetHeight;
+            const isMobile = window.innerWidth <= 991;
 
-            const y =
-                navHeight / 2 -
-                (buttonTop + buttonHeight / 2);
+            if (isMobile) {
+                const navWidth = navRef.current.offsetWidth;
+                const buttonLeft = activeButton.offsetLeft;
+                const buttonWidth = activeButton.offsetWidth;
 
-            gsap.to(trackRef.current, {
-                y,
-                duration: 1,
-                ease: "power3.out",
-            });
+                const x =
+                    navWidth / 2 -
+                    (buttonLeft + buttonWidth / 2);
+
+                gsap.to(trackRef.current, {
+                    x,
+                    duration: 1,
+                    ease: "power3.out",
+                });
+            } else {
+                const navHeight = navRef.current.offsetHeight;
+                const buttonTop = activeButton.offsetTop;
+                const buttonHeight = activeButton.offsetHeight;
+
+                const y =
+                    navHeight / 2 -
+                    (buttonTop + buttonHeight / 2);
+
+                gsap.to(trackRef.current, {
+                    y,
+                    duration: 1,
+                    ease: "power3.out",
+                });
+            }
         }
     }, [activeIndex]);
 
@@ -158,7 +175,7 @@ const GalleryImagePreview = () => {
         animateImage();
 
         setActiveIndex((prev) =>
-            prev === 0 ? galleryItems.                                                                                              length - 1 : prev - 1
+            prev === 0 ? galleryItems.length - 1 : prev - 1
         );
     };
 
