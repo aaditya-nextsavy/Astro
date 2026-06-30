@@ -4,12 +4,12 @@
 
 
 import { useEffect, useState } from "react";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 import LoaderCenter from "./LoaderCenter";
 import LoaderQuotes from "./LoaderQuotes";
 import LoaderProgress from "./LoaderProgress";
 import { useRef } from "react";
-import { gsap } from "@/lib/gsap";
 import Stars from "../background/Stars";
 import Clouds from "../background/Clouds";
 export default function Loader({ onComplete }) {
@@ -68,7 +68,6 @@ export default function Loader({ onComplete }) {
     }, []);
 
     useEffect(() => {
-
         if (progress < 100) return;
 
         const tl = gsap.timeline();
@@ -80,12 +79,20 @@ export default function Loader({ onComplete }) {
             delay: 0.8,
 
             onComplete: () => {
+                // Let the loader unmount
                 onComplete?.();
+
+                // Wait for React to remove the loader
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        ScrollTrigger.refresh(true);
+                    });
+                });
             },
         });
 
+        return () => tl.kill();
     }, [progress, onComplete]);
-
 
 
     const wrapperRef = useRef(null);

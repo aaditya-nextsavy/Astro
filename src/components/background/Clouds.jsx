@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect } from "react";
-import gsap from "gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 const CLOUDS = [
     {

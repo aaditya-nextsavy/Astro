@@ -3,6 +3,7 @@ import SmoothScroll from "@/components/shared/SmoothScroll";
 import GlobalBackground from "@/components/background/GlobalBackground";
 import { newYork, satoshi } from "./fonts";
 import SiteShell from "@/components/layout/SiteShell";
+import SessionLoader from "@/components/loader/SessionLoader";
 
 
 export const metadata = {
@@ -17,6 +18,8 @@ export default function RootLayout({ children }) {
       className={`${newYork.variable} ${satoshi.variable}`}
     >
       <body className="min-h-full flex flex-col">
+
+        <SessionLoader />
         <GlobalBackground />
         <SmoothScroll />
 
