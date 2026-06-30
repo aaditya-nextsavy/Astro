@@ -98,8 +98,16 @@ export default function GlobalBackground() {
 
       </div>
 
+      <div className="background-leftRight-dark-temp">
+        {/* <div className="relative w-full h-full"> */}
+          <div className="info-sticky-card-section__card-noise-bg">
+              
+          {/* </div> */}
+        </div>
 
- 
+      </div>
+
+
       <div style={{ position: 'relative', background: "#111", width: '100%', height: '100%' }}>
 
         {/* LightRays fills the background */}

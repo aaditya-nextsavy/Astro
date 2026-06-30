@@ -14,13 +14,12 @@ import Footer from "@/components/footer/Footer";
 import SliderWithFade from "@/components/home/SliderWithFade";
 import ContactCTA from "@/components/home/ContactCTA";
 import Link from "next/link";
-import GalleryImagePreview from "./GalleryImagePreview";
 import { FaChevronRight } from "react-icons/fa6";
+import { useSearchParams } from "next/navigation";
 
 
 
-const GalleryWrapper = () => {
-
+export default function HomePageWrapper() {
 
     const heroCloudContainerRef = useRef(null);
     const floatingNavRef = useRef(null);
@@ -31,12 +30,35 @@ const GalleryWrapper = () => {
         useState(false);
 
     const [selectedAcharya, setSelectedAcharya] = useState(null);
-
+    const [menuOpen, setMenuOpen] = useState(false);
     const handleOpenAcharya = (data) => {
         setSelectedAcharya(data);
         setDrawerOpen(true);
     };
-    const [menuOpen, setMenuOpen] = useState(false);
+
+    const searchParams = useSearchParams();
+    useEffect(() => {
+        const id = searchParams.get("scroll");
+
+
+        if (!id) return;
+
+        const timer = setTimeout(() => {
+            ScrollTrigger.refresh();
+
+            const el = document.getElementById(id);
+
+            if (el) {
+                window.lenis?.scrollTo(el, {
+                    offset: -60,
+                    duration: 1.5,
+                });
+            }
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [searchParams]);
+
 
 
     useLayoutEffect(() => {
@@ -105,7 +127,7 @@ const GalleryWrapper = () => {
                 trigger: section,
 
                 // First light section behaves normally
-                start: isTakeover ? "top+=30%" : "top 55%",
+                start: isTakeover ? "top+=50%" : "top 55%",
 
                 // Keep your existing end position
                 // end: "bottom 100%",
@@ -168,7 +190,29 @@ const GalleryWrapper = () => {
     }, [loading]);
 
 
+    useEffect(() => {
+        if (!menuOpen) return;
 
+        const scrollY = window.scrollY;
+
+        document.body.style.position = "fixed";
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.left = "0";
+        document.body.style.right = "0";
+        document.body.style.width = "100%";
+        document.body.style.overflow = "hidden";
+
+        return () => {
+            document.body.style.position = "";
+            document.body.style.top = "";
+            document.body.style.left = "";
+            document.body.style.right = "";
+            document.body.style.width = "";
+            document.body.style.overflow = "";
+
+            window.scrollTo(0, scrollY);
+        };
+    }, [menuOpen]);
 
 
     const [time, setTime] = useState("");
@@ -224,6 +268,41 @@ const GalleryWrapper = () => {
     }, []);
 
 
+    useEffect(() => {
+        if (!menuOpen) {
+            document.body.style.overflow = "";
+            return;
+        }
+
+        document.body.style.overflow = "hidden";
+
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [menuOpen]);
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") {
+                setMenuOpen(false);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
+
+    useLayoutEffect(() => {
+
+        requestAnimationFrame(() => {
+            ScrollTrigger.refresh();
+        });
+
+    }, []);
+
     return (
 
 
@@ -236,11 +315,10 @@ const GalleryWrapper = () => {
                         }`}
                 >
 
-                    {/* move to global layout */}
 
-                    <div
+
+                    <div className="site-floating-navbars"
                         ref={floatingNavRef}
-                        className="site-floating-navbars"
                     >
                         <div className="astroHeroTopBar">
                             <Link href="/" className="astroHeroBrand">
@@ -268,12 +346,12 @@ const GalleryWrapper = () => {
                                         <circle cx="12.7949" cy="12.5" r="2.5" fill="currentColor" />
                                     </svg>
 
+
                                 </a>
 
                                 <a href="/contact" className="astroHeroContactButton glass-effect-card">
                                     Get In Touch
                                 </a>
-
 
                                 <div onClick={() => setMenuOpen(true)} className="astroHeroMenuButton mobile-nav-trigger glass-effect-card">
                                     <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -285,16 +363,16 @@ const GalleryWrapper = () => {
 
                                 </div>
 
+
+
                             </div>
                         </div>
 
 
+
+
                         <div ref={bottomNavRef}
                             className="astroHeroBottomSection">
-
-
-
-
                             <div className="astroHeroTimeBlock">
                                 <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
@@ -312,38 +390,6 @@ const GalleryWrapper = () => {
 
                             <nav className="astroHeroNavigation glass-effect-card">
 
-
-                                <div className="navigation-indicator gallery">
-                                    <div className="blurred-bg">
-                                        <svg width="173" height="56" viewBox="0 0 173 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g filter="url(#filter0_f_41_11276)">
-                                                <path d="M123 55C123 55 106.658 55 86.5 55C66.3416 55 50 55 50 55C50 55 66.3416 44 86.5 44C106.658 44 123 55 123 55Z" fill="#C4D6E5" />
-                                            </g>
-                                            <defs>
-                                                <filter id="filter0_f_41_11276" x="0" y="-6" width="173" height="111" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                                                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                                                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-                                                    <feGaussianBlur stdDeviation="25" result="effect1_foregroundBlur_41_11276" />
-                                                </filter>
-                                            </defs>
-                                        </svg>
-
-
-                                    </div>
-                                    <svg width="14" height="7" viewBox="0 0 14 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M7.19403 6.80887C10.5797 10.1945 13.1319 13.1318 13.1319 13.1318C13.1319 13.1318 10.1948 10.5792 6.80914 7.19374C3.42348 3.80807 0.871094 0.871033 0.871094 0.871033C0.871094 0.871033 3.80836 3.42342 7.19403 6.80887Z" fill="#D0E3F1" />
-                                        <path d="M7.19403 7.1944C3.80814 10.5801 0.871094 13.132 0.871094 13.132C0.871094 13.132 3.42326 10.1952 6.80914 6.80931C10.195 3.42364 13.1321 0.871033 13.1321 0.871033C13.1321 0.871033 10.5801 3.80852 7.19403 7.1944Z" fill="#D0E3F1" />
-                                        <path d="M6.99684 7.21973C3.13091 7.16734 -0.00218189 7.02697 1.1401e-06 6.90516C0.00131096 6.784 3.1366 6.72811 7.00297 6.78028C10.8689 6.83268 14.002 6.97327 13.9998 7.09464C13.998 7.21602 10.8628 7.2719 6.99684 7.21973Z" fill="#D0E3F1" />
-                                        <path d="M7.21875 7.00294C7.27114 3.13701 7.21483 0.00152905 7.09345 9.23608e-07C6.97229 -0.00196381 6.83192 3.1309 6.77953 6.99683C6.72692 10.8628 6.78301 13.9983 6.90417 14C7.02576 14.0015 7.16679 10.8687 7.21875 7.00294Z" fill="#D0E3F1" />
-                                        <path d="M6.94402 7.14142C4.45012 6.13897 2.45352 5.26293 2.48474 5.18434C2.51639 5.10641 4.56341 5.85561 7.05796 6.85784C9.55251 7.86029 11.5485 8.73634 11.5177 8.8145C11.486 8.89265 9.43857 8.14343 6.94402 7.14142Z" fill="#D0E3F1" />
-                                        <path d="M7.14213 7.05798C8.14436 4.56408 8.89334 2.51639 8.81519 2.48474C8.73704 2.45352 7.86077 4.4499 6.85832 6.94423C5.85588 9.43834 5.10733 11.4858 5.18526 11.5175C5.26341 11.5489 6.13924 9.55231 7.14213 7.05798Z" fill="#D0E3F1" />
-                                        <path d="M7.05072 7.14487C4.51251 8.03031 2.43252 8.68391 2.40458 8.60401C2.37664 8.52433 4.41208 7.7415 6.95007 6.8565C9.4885 5.97084 11.5683 5.31789 11.5962 5.39714C11.6237 5.47682 9.58871 6.25943 7.05072 7.14487Z" fill="#D0E3F1" />
-                                        <path d="M7.14451 6.95009C6.25929 4.41188 5.47667 2.37685 5.39721 2.40458C5.31753 2.43252 5.97046 4.51274 6.85634 7.05052C7.74177 9.58851 8.52373 11.6237 8.60407 11.5962C8.68331 11.5681 8.02995 9.4883 7.14451 6.95009Z" fill="#D0E3F1" />
-                                        <path d="M8.87888 8.88292C7.84216 9.91964 6.15468 9.91964 5.11774 8.88248C4.08058 7.84554 4.08058 6.15807 5.11752 5.12135C6.15425 4.08441 7.84173 4.08462 8.87867 5.12156C9.91561 6.15872 9.91561 7.84598 8.87888 8.88292ZM5.17101 5.17504C4.16354 6.18251 4.16332 7.82197 5.17101 8.82923C6.17826 9.83691 7.8177 9.83669 8.82495 8.82923C9.83242 7.82176 9.83264 6.18251 8.82495 5.17504C7.8177 4.16758 6.17848 4.16779 5.17101 5.17504Z" fill="#D0E3F1" />
-                                    </svg>
-
-                                </div>
-
                                 <div>
                                     <svg width="5" height="15" viewBox="0 0 5 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <circle cx="2.5" cy="12.3535" r="2.5" transform="rotate(-90 2.5 12.3535)" fill="currentColor" />
@@ -354,7 +400,9 @@ const GalleryWrapper = () => {
                                 <a href="/about">About</a>
                                 <a href="/services">Services</a>
                                 <a href="/gallery">Gallery</a>
-                                <a href="/?scroll=rudaxSection">Rudraks</a>
+                                <Link href="/?scroll=rudaxSection">
+                                    Rudraks
+                                </Link>
                                 <a href="/contact">Contact</a>
 
                                 <div>
@@ -381,7 +429,6 @@ const GalleryWrapper = () => {
 
 
                     </div>
-
                     <div className={`mobile-drawer-menu ${menuOpen ? "open" : ""}`}>
 
                         <div
@@ -429,16 +476,170 @@ const GalleryWrapper = () => {
                     <div className="hero-stack-sequence-wrapper">
 
 
-                        <GalleryImagePreview />
+                        <HomeHero onOpenAcharya={handleOpenAcharya} />
+
+
+                        <AcharyaDrawer
+                            isOpen={drawerOpen}
+                            onClose={() => setDrawerOpen(false)}
+                            service={selectedAcharya}
+                        />
+
+
+                        <div className="light-background-zone">
+
+                            {/* top */}
+                            <svg className="light-background-content-top curve-1" width="1926" height="86" viewBox="0 0 1926 86" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0.371094 83.8028C0.371094 83.8028 396.871 7.98401 967.371 2.33315C1537.87 -3.31771 1924.87 64.792 1924.87 64.792" stroke="#F3E9D8" strokeWidth="4" />
+                            </svg>
+
+
+                            <svg className="light-background-content-top curve-2" width="1929" height="228" viewBox="0 0 1929 228" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M969 2.33314C398.5 7.984 2 83.8028 2 83.8028V225.5H1926.5V64.792C1926.5 64.792 1539.5 -3.31772 969 2.33314Z" fill="#F3E9D8" stroke="#F3E9D8" strokeWidth="4" />
+                            </svg>
+
+
+                            {/* bottom */}
+                            <svg className="light-background-content-bottom curve-1" width="1926" height="86" viewBox="0 0 1926 86" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0.371094 83.8028C0.371094 83.8028 396.871 7.98401 967.371 2.33315C1537.87 -3.31771 1924.87 64.792 1924.87 64.792" stroke="#F3E9D8" strokeWidth="4" />
+                            </svg>
+
+
+                            <svg className="light-background-content-bottom curve-2" width="1929" height="228" viewBox="0 0 1929 228" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M969 2.33314C398.5 7.984 2 83.8028 2 83.8028V225.5H1926.5V64.792C1926.5 64.792 1539.5 -3.31772 969 2.33314Z" fill="#F3E9D8" stroke="#F3E9D8" strokeWidth="4" />
+                            </svg>
+
+
+
+
+                            <div className="light-background-bg">
+
+
+
+                                <div className="light-background-overlay" />
+
+                            </div>
+
+                            <div className="light-background-content">
+
+                                <ImageZoom />
+
+
+                                <MainImageInfoSection />
+
+
+                            </div>
+
+                        </div>
 
 
 
                     </div>
 
 
+
+                    {/* <HomeServices /> */}
+
+
+                    <div className="home-services-wrapper">
+                        <HomeServices />
+                    </div>
+
+
+
+
+
+
+                    <div className="hero-stack-sequence-wrapper">
+
+
+
+                        <div className="hero-stack-sequence-2" >
+
+
+                            <WhoAreWe />
+
+                            {/* <HomeStory /> */}
+
+
+
+                        </div>
+
+
+
+                        <div className="light-background-zone light-background-zone--takeover min-h-screen" >
+
+                            <svg className="light-background-content-top curve-1" width="1926" height="86" viewBox="0 0 1926 86" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0.371094 83.8028C0.371094 83.8028 396.871 7.98401 967.371 2.33315C1537.87 -3.31771 1924.87 64.792 1924.87 64.792" stroke="#F3E9D8" strokeWidth="4" />
+                            </svg>
+
+
+                            <svg className="light-background-content-top curve-2" width="1929" height="228" viewBox="0 0 1929 228" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M969 2.33314C398.5 7.984 2 83.8028 2 83.8028V225.5H1926.5V64.792C1926.5 64.792 1539.5 -3.31772 969 2.33314Z" fill="#F3E9D8" stroke="#F3E9D8" strokeWidth="4" />
+                            </svg>
+
+
+                            <svg className="light-background-content-bottom curve-1" width="1926" height="86" viewBox="0 0 1926 86" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0.371094 83.8028C0.371094 83.8028 396.871 7.98401 967.371 2.33315C1537.87 -3.31771 1924.87 64.792 1924.87 64.792" stroke="#F3E9D8" strokeWidth="4" />
+                            </svg>
+
+
+                            <svg className="light-background-content-bottom curve-2" width="1929" height="228" viewBox="0 0 1929 228" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M969 2.33314C398.5 7.984 2 83.8028 2 83.8028V225.5H1926.5V64.792C1926.5 64.792 1539.5 -3.31772 969 2.33314Z" fill="#F3E9D8" stroke="#F3E9D8" strokeWidth="4" />
+                            </svg>
+
+
+
+
+                            <div className="light-background-bg">
+
+
+                                <div className="light-background-overlay" />
+
+                            </div>
+
+                            <div className="light-background-content" >
+
+
+                                <WhyUs />
+
+                                <SliderWithFade />
+
+
+                                <ContactCTA />
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
                 </div>
+                {/* 
+          <div
+            className={`absolute inset-0 z-50 transition-opacity duration-1000 ${loading
+              ? "opacity-100"
+              : "pointer-events-none opacity-0"
+              }`}
+          >
+            <Loader
+              onComplete={() => setLoading(false)}
+            />
+          </div> */}
 
             </main>
+
+
+
+            <div ref={lastlightSection} className="footer-takeover-zone">
+                <Footer />
+            </div>
+
 
 
 
@@ -446,6 +647,3 @@ const GalleryWrapper = () => {
 
     );
 }
-
-
-export default GalleryWrapper

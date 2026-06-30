@@ -39,7 +39,7 @@ const slides = [
 const SliderWithFade = () => {
     const [active, setActive] = useState(0);
     const swiperRef = useRef(null);
-
+    const [isAnimating, setIsAnimating] = useState(false);
     return (
         <section className="home-product-slider-section" id="rudaxSection">
 
@@ -107,7 +107,17 @@ const SliderWithFade = () => {
                     modules={[Autoplay, Pagination]}
                     centeredSlides
                     loop={false}
+                    allowTouchMove={false}
+                    simulateTouch={false}
+                    touchRatio={0}
                     speed={900}
+                    onSlideChange={(swiper) => setActive(swiper.realIndex)}
+                    onSlideChangeTransitionStart={() => {
+                        setIsAnimating(true);
+                    }}
+                    onSlideChangeTransitionEnd={() => {
+                        setIsAnimating(false);
+                    }}
                     slidesPerView={3}
                     breakpoints={{
                         0: {
@@ -126,7 +136,6 @@ const SliderWithFade = () => {
                         delay: 2500000000000,
                         disableOnInteraction: false,
                     }}
-                    onSlideChange={(swiper) => setActive(swiper.realIndex)}
                     className="product-swiper"
                     onSwiper={(swiper) => (swiperRef.current = swiper)}
                 >
@@ -157,6 +166,7 @@ const SliderWithFade = () => {
             <div className="slider-nav">
                 <button
                     className="nav-btn left"
+                    disabled={isAnimating}
                     onClick={() => swiperRef.current?.slidePrev()}
                 >
                     <svg width="41" height="15" viewBox="0 0 41 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -170,6 +180,7 @@ const SliderWithFade = () => {
 
                 <button
                     className="nav-btn right"
+                    disabled={isAnimating}
                     onClick={() => swiperRef.current?.slideNext()}
                 >
                     <svg width="41" height="15" viewBox="0 0 41 15" fill="none" xmlns="http://www.w3.org/2000/svg">

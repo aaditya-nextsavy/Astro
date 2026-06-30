@@ -140,7 +140,7 @@ export default function HomeHero({ onOpenAcharya }) {
                     <a href="#">About</a>
                     <a href="#">Services</a>
                     <a href="#">Gallery</a>
-                    <a href="#">Rituals</a>
+                    <a href="#">Rudraks</a>
                     <a href="#">Contact</a>
 
                     <div>

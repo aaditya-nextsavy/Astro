@@ -8,6 +8,7 @@ import Footer from "@/components/footer/Footer";
 import Link from "next/link";
 import ServicesListing from "./ServicesListing";
 import ServicesHero from "./ServicesHero";
+import { FaChevronRight } from "react-icons/fa6";
 
 
 export default function ServicesWrapper() {
@@ -20,7 +21,7 @@ export default function ServicesWrapper() {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedService, setSelectedService] = useState(null);
     const [activeServiceIndex, setActiveServiceIndex] = useState(null);
-
+    const [menuOpen, setMenuOpen] = useState(false);
     const handleDrawerClose = () => {
         setDrawerOpen(false);
         setSelectedService(null);
@@ -262,6 +263,16 @@ export default function ServicesWrapper() {
                                 <a href="/contact" className="astroHeroContactButton glass-effect-card">
                                     Get In Touch
                                 </a>
+
+                                <div onClick={() => setMenuOpen(true)} className="astroHeroMenuButton mobile-nav-trigger glass-effect-card">
+                                    <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
+                                        <circle cx="2.94141" cy="12.5" r="2.5" fill="currentColor" />
+                                        <circle cx="12.5" cy="2.5" r="2.5" fill="currentColor" />
+                                        <circle cx="12.7949" cy="12.5" r="2.5" fill="currentColor" />
+                                    </svg>
+
+                                </div>
                             </div>
                         </div>
 
@@ -326,7 +337,7 @@ export default function ServicesWrapper() {
                                 <a href="/about">About</a>
                                 <a href="/services">Services</a>
                                 <a href="/gallery">Gallery</a>
-                                <a href="/#rudaxSection">Rituals</a>
+                                <a href="/?scroll=rudaxSection">Rudraks</a>
                                 <a href="/contact">Contact</a>
 
                                 <div>
@@ -350,9 +361,52 @@ export default function ServicesWrapper() {
 
                             </a>
                         </div>
+                    </div>
 
+                    <div className={`mobile-drawer-menu ${menuOpen ? "open" : ""}`}>
+
+                        <div
+                            className="mobile-drawer-menu-backdrop relative"
+                            onClick={() => setMenuOpen(false)}
+                        />
+                        <div className={`acharyaDrawerContent mobile-header-menu  glass-effect-card `}>
+
+                            <div className="acharyaDrawerContent-bg-filter"></div>
+
+                            <Link href=''>
+                                <nav>Home</nav>
+                                <FaChevronRight />
+
+                            </Link>
+                            <Link href='./about'>
+                                <nav>About</nav>
+                                <FaChevronRight />
+
+                            </Link>
+                            <Link href='./services'>
+                                <nav>Services</nav>
+                                <FaChevronRight />
+
+                            </Link>
+                            <Link href='./gallery'>
+                                <nav>Gallery</nav>
+                                <FaChevronRight />
+
+                            </Link>
+                            <Link href='./contact'>
+                                <nav>Contact</nav>
+                                <FaChevronRight />
+
+                            </Link>
+
+
+
+
+
+                        </div>
 
                     </div>
+
 
                     <div className="hero-stack-sequence-wrapper">
 

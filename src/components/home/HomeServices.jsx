@@ -1,16 +1,21 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const cards = [
-    { title: "Card 1", description: "Description 1" },
-    { title: "Card 2", description: "Description 2" },
-    // { title: "Card 3" },
-    // { title: "Card 4" },
+    { title: "Vastu Consultation", description: "From strengthening relationships to unlocking career potential, their insights empower you to embrace your destiny with clarity." },
+    { title: "Personalized Birth Chart Analysis", description: "From strengthening relationships to unlocking career potential, their insights empower you to embrace your destiny with clarity." },
+    { title: "Astrological Predictions & Effective Remedies", description: "From strengthening relationships to unlocking career potential, their insights empower you to embrace your destiny with clarity." },
+    // { title: "Relationship and Career Guidance", description: "Description 4" },
+    // { title: "Custom Solutions for Prosperity and Growth", description: "Description 5" },
+    // { title: "Spiritual Counseling and Life Path Direction", description: "Description 6" },
+    // { title: "Authentic Puja Services", description: "Description 7" },
+    // { title: "Sarvabadha Nivaran Homa", description: "Description 8" },
+
 ];
 
 const HomeServices = () => {
@@ -68,7 +73,9 @@ const HomeServices = () => {
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top top",
-                    end: "+=250%",
+                    // end: "+=250%",
+                    // end: `+=${cards.length * 120}%`,
+                    end: () => `+=${cards.length * window.innerHeight * 0.9}`,
                     pin: true,
                     scrub: 1.2,
                     anticipatePin: 1,
@@ -118,6 +125,15 @@ const HomeServices = () => {
         return () => ctx.revert();
     }, []);
 
+
+    useLayoutEffect(() => {
+
+        requestAnimationFrame(() => {
+            ScrollTrigger.refresh();
+        });
+
+    }, []);
+
     return (
 
 
@@ -138,9 +154,11 @@ const HomeServices = () => {
                         <span>And The Cosmos</span>
                     </h2>
 
-                    <button className="info-sticky-card-section__button">
+
+                    <a href="./service" className="info-sticky-card-section__button ">
                         View All Services
-                    </button>
+                    </a>
+
 
                 </div>
 
@@ -251,7 +269,10 @@ const HomeServices = () => {
                                     <path d="M126.324 45.705C127.264 42.4254 126.601 39.3584 126.601 39.3584C126.601 39.3584 124.413 41.608 123.473 44.8876C122.532 48.1672 123.196 51.2343 123.196 51.2343C123.196 51.2343 125.384 48.9846 126.324 45.705Z" fill="#17374F" />
                                 </svg>
 
-                                {card.description}
+                                <p className="card-description">
+                                    {card.description}
+                                </p>
+
                             </div>
 
 

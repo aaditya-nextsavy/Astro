@@ -82,9 +82,9 @@ export default function MainImageInfoSection() {
                     );
 
                     gsap.set(image, {
-                        scale: 1.2,
+                        scale: 1,
                         y: 100,
-                        rotate: i % 2 === 0 ? -5 : 5,
+                        rotate: i % 2 === 0 ? -0 : 0,
                     });
 
                     gsap.set(content, {
@@ -131,9 +131,9 @@ export default function MainImageInfoSection() {
 
 
                     gsap.set(image, {
-                        scale: 1.15,
+                        scale: 1,
                         y: 60,
-                        rotate: i % 2 === 0 ? -5 : 5,
+                        rotate: i % 2 === 0 ? -0 : 0,
                     });
 
                     gsap.set(content, {
@@ -175,7 +175,7 @@ export default function MainImageInfoSection() {
     return (
         <section ref={sectionRef} className="main-image-info-section">
 
-           
+
 
 
             {sectionData.map((item, index) => (

@@ -2,20 +2,11 @@
 
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import Loader from "@/components/loader/Loader";
-import HomeHero from "@/components/home/Hero";
-import AcharyaDrawer from "@/components/drawer/AcharyaDrawer";
-import ImageZoom from "@/components/home/ImageZoom";
-import MainImageInfoSection from "@/components/home/MainImageInfoSection";
-import HomeServices from "@/components/home/HomeServices";
-import WhoAreWe from "@/components/home/WhoAreWe";
-import WhyUs from "@/components/home/WhyUs";
 import Footer from "@/components/footer/Footer";
-import SliderWithFade from "@/components/home/SliderWithFade";
-import ContactCTA from "@/components/home/ContactCTA";
 import AboutStory from "./AboutStory";
 import Link from "next/link";
 import AboutOperations from "./AboutOperations";
+import { FaChevronRight } from "react-icons/fa6";
 
 
 export default function AboutWrapper() {
@@ -23,7 +14,8 @@ export default function AboutWrapper() {
     const heroCloudContainerRef = useRef(null);
     const floatingNavRef = useRef(null);
     const bottomNavRef = useRef(null);
-    const lastlightSection = useRef(null);
+    const aboutFooterSection = useRef(null);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const [loading, setLoading] = useState(false);
     useLayoutEffect(() => {
@@ -92,7 +84,7 @@ export default function AboutWrapper() {
                 trigger: section,
 
                 // First light section behaves normally
-                start: isTakeover ? "top+=30%" : "top 55%",
+                start: isTakeover ? "top+=30%" : "bottom 55%",
 
                 // Keep your existing end position
                 // end: "bottom 100%",
@@ -188,50 +180,29 @@ export default function AboutWrapper() {
 
 
 
-    // useLayoutEffect(() => {
-    //     if (!lastlightSection.current || !bottomNavRef.current) return;
-
-    //     const nav = bottomNavRef.current;
-
-    //     const trigger = ScrollTrigger.create({
-    //         trigger: lastlightSection.current,
-
-
-    //         // when the section is almost finished
-    //         start: "top+=100% top",
-    //         onEnter: () => {
-    //             nav.classList.add("hide-bottom-nav");
-    //         },
-
-    //         onLeaveBack: () => {
-    //             nav.classList.remove("hide-bottom-nav");
-    //         },
-    //     });
-
-    //     return () => trigger.kill();
-    // }, []);
-
-    useLayoutEffect(() => {
-        if (!lastlightSection.current || !bottomNavRef.current) return;
+    useEffect(() => {
+        if (!aboutFooterSection.current || !bottomNavRef.current) return;
 
         const nav = bottomNavRef.current;
+        const footer = aboutFooterSection.current;
 
-        const trigger = ScrollTrigger.create({
-            trigger: lastlightSection.current,
-
-            // footer top reaches bottom of viewport
-            start: "top bottom",
-
-            onEnter: () => {
-                nav.classList.add("hide-on-footer");
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    nav.classList.add("hide-on-footer");
+                } else {
+                    nav.classList.remove("hide-on-footer");
+                }
             },
+            {
+                root: null,
+                threshold: 0,
+            }
+        );
 
-            onLeaveBack: () => {
-                nav.classList.remove("hide-on-footer");
-            },
-        });
+        observer.observe(footer);
 
-        return () => trigger.kill();
+        return () => observer.disconnect();
     }, []);
 
     return (
@@ -283,6 +254,16 @@ export default function AboutWrapper() {
                                 <a href="/contact" className="astroHeroContactButton glass-effect-card">
                                     Get In Touch
                                 </a>
+
+                                <div onClick={() => setMenuOpen(true)} className="astroHeroMenuButton mobile-nav-trigger glass-effect-card">
+                                    <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
+                                        <circle cx="2.94141" cy="12.5" r="2.5" fill="currentColor" />
+                                        <circle cx="12.5" cy="2.5" r="2.5" fill="currentColor" />
+                                        <circle cx="12.7949" cy="12.5" r="2.5" fill="currentColor" />
+                                    </svg>
+
+                                </div>
                             </div>
                         </div>
 
@@ -347,7 +328,7 @@ export default function AboutWrapper() {
                                 <a href="/about">About</a>
                                 <a href="/services">Services</a>
                                 <a href="/gallery">Gallery</a>
-                                <a href="/#rudaxSection">Rituals</a>
+                                <Link href="/?scroll=rudaxSection">Rudraks</Link>
                                 <a href="/contact">Contact</a>
 
                                 <div>
@@ -372,6 +353,49 @@ export default function AboutWrapper() {
                             </a>
                         </div>
 
+
+                    </div>
+                    <div className={`mobile-drawer-menu ${menuOpen ? "open" : ""}`}>
+
+                        <div
+                            className="mobile-drawer-menu-backdrop relative"
+                            onClick={() => setMenuOpen(false)}
+                        />
+                        <div className={`acharyaDrawerContent mobile-header-menu  glass-effect-card `}>
+
+                            <div className="acharyaDrawerContent-bg-filter"></div>
+
+                            <Link href=''>
+                                <nav>Home</nav>
+                                <FaChevronRight />
+
+                            </Link>
+                            <Link href='./about'>
+                                <nav>About</nav>
+                                <FaChevronRight />
+
+                            </Link>
+                            <Link href='./services'>
+                                <nav>Services</nav>
+                                <FaChevronRight />
+
+                            </Link>
+                            <Link href='./gallery'>
+                                <nav>Gallery</nav>
+                                <FaChevronRight />
+
+                            </Link>
+                            <Link href='./contact'>
+                                <nav>Contact</nav>
+                                <FaChevronRight />
+
+                            </Link>
+
+
+
+
+
+                        </div>
 
                     </div>
 
@@ -414,7 +438,7 @@ export default function AboutWrapper() {
 
 
 
-            <div ref={lastlightSection} className="about-footer-takeover-zone">
+            <div ref={aboutFooterSection} className="about-footer-takeover-zone">
                 <Footer />
             </div>
 

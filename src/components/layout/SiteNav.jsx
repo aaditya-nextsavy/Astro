@@ -92,7 +92,7 @@ export default function SiteNav() {
                     <a href="#">About</a>
                     <a href="/service">Services</a>
                     <a href="#">Gallery</a>
-                    <a href="#">Rituals</a>
+                    <a href="#">Rudraks</a>
                     <a href="/contact">Contact</a>
 
                     <div>

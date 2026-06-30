@@ -68,7 +68,7 @@ const SERVICES_DATA = [
         image: "/assets/drawer/DRAWER-TEMP.png",
         title: "Authentic Puja Services",
         description:
-            `Experience traditional Vedic rituals performed with devotion and precision. Our puja services are conducted according to authentic scriptural practices and can be arranged for blessings, protection, prosperity, health, and spiritual upliftment.`,
+            `Experience traditional Vedic Rudraks performed with devotion and precision. Our puja services are conducted according to authentic scriptural practices and can be arranged for blessings, protection, prosperity, health, and spiritual upliftment.`,
         highlight:
             `Participate in sacred ceremonies tailored to your intentions and performed with complete ritual authenticity.`,
         link: "/contact"

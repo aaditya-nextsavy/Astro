@@ -23,6 +23,9 @@ export default function SmoothScroll() {
       touchMultiplier: 1,
     });
 
+    // 👇 Make Lenis globally accessible
+    window.lenis = lenis;
+
     const unsubscribe = lenis.on("scroll", ScrollTrigger.update);
 
     const update = (time) => {
@@ -38,6 +41,9 @@ export default function SmoothScroll() {
     window.addEventListener("load", handleLoad);
 
     return () => {
+      // 👇 Remove the global reference
+      delete window.lenis;
+
       window.removeEventListener("load", handleLoad);
       gsap.ticker.remove(update);
       unsubscribe();
