@@ -76,12 +76,12 @@
 
 html {
   scrollbar-gutter: stable;
-  background: yellow;
+  /* background: yellow; */
 }
 
 
 body {
-  /* background: var(--color-bg); */
+  background: var(--color-bg);
   /* background: red; */
   color: var(--color-text);
   font-family: var(--font-body);
