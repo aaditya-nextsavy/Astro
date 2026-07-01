@@ -197,7 +197,7 @@ img {
   inset: 0;
   background: #008FF5;
   backdrop-filter: blur(512.7000122070312px);
-  
+
   top: 0%;
   left: 50%;
   transform: translate(-30%, -50%);
@@ -420,6 +420,7 @@ img {
   z-index: var(--z-loader);
   background: transparent;
   height: 100vh;
+  height: 100dvh;
   width: 100%;
   display: flex;
   justify-content: center;
