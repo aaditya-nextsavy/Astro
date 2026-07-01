@@ -81,8 +81,8 @@ html {
 
 
 body {
-  background: var(--color-bg);
-  background: red;
+  /* background: var(--color-bg); */
+  /* background: red; */
   color: var(--color-text);
   font-family: var(--font-body);
   overflow-x: hidden;
