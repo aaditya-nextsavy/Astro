@@ -197,6 +197,7 @@ img {
   inset: 0;
   background: #008FF5;
   backdrop-filter: blur(512.7000122070312px);
+  
   top: 0%;
   left: 50%;
   transform: translate(-30%, -50%);
@@ -213,6 +214,7 @@ img {
   position: absolute;
   inset: 0;
   backdrop-filter: blur(512.7000122070312px);
+  -webkit-backdrop-filter: blur(500px);
   top: 0%;
   right: 0%;
   transform: translate(100%, -50%);
@@ -1578,7 +1580,7 @@ img {
 
   background: rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(8px);
-
+  -webkit-backdrop-filter: blur(4px);
   opacity: 0;
   visibility: hidden;
 
@@ -1624,7 +1626,7 @@ img {
       0.08);
 
   backdrop-filter: blur(4px);
-
+  -webkit-backdrop-filter: blur(4px);
   border-left: 1px solid rgba(255, 255, 255, .1);
   background: #d0e3f118;
 
@@ -2565,6 +2567,7 @@ body.drawer-open {
   background: #D0E3F10D;
   display: inline-block;
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   color: #D0E3F1;
   font-family: var(--font-heading);
   font-weight: 400;
@@ -3056,6 +3059,7 @@ body.drawer-open {
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: #D0E3F10D;
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   color: #D0E3F1;
   font-family: var(--font-heading);
   font-weight: 400;
@@ -3676,6 +3680,7 @@ body.drawer-open {
   top: 0;
   height: 100%;
   backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   z-index: -1;
 }
 
@@ -4145,7 +4150,7 @@ body.drawer-open {
   left: 0;
   top: 0;
   backdrop-filter: blur(0.5px);
-
+  -webkit-backdrop-filter: blur(0.5px);
 }
 
 /* GRID */
@@ -7479,6 +7484,7 @@ body.drawer-open {
 
   .mobile-drawer-menu.open .acharyaDrawerContent-bg-filter {
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 
   }
 
