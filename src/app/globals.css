@@ -76,11 +76,13 @@
 
 html {
   scrollbar-gutter: stable;
+  background: yellow;
 }
 
 
 body {
-  /* background: var(--color-bg); */
+  background: var(--color-bg);
+  background: red;
   color: var(--color-text);
   font-family: var(--font-body);
   overflow-x: hidden;
