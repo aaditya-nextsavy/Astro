@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import Loader from "@/components/loader/Loader";
 import HomeHero from "@/components/home/Hero";
 import AcharyaDrawer from "@/components/drawer/AcharyaDrawer";
 import ImageZoom from "@/components/home/ImageZoom";
@@ -15,7 +14,10 @@ import SliderWithFade from "@/components/home/SliderWithFade";
 import ContactCTA from "@/components/home/ContactCTA";
 import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa6";
-import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import HomeSearchParams from "@/components/home/HomeSearchParams";
+
+// import { useSearchParams } from "next/navigation";
 
 
 
@@ -25,7 +27,6 @@ export default function HomePageWrapper() {
     const floatingNavRef = useRef(null);
     const bottomNavRef = useRef(null);
     const lastlightSection = useRef(null);
-    const [loading, setLoading] = useState(false);
     const [drawerOpen, setDrawerOpen] =
         useState(false);
 
@@ -36,28 +37,28 @@ export default function HomePageWrapper() {
         setDrawerOpen(true);
     };
 
-    const searchParams = useSearchParams();
-    useEffect(() => {
-        const id = searchParams.get("scroll");
+    // const searchParams = useSearchParams();
+    // useEffect(() => {
+    //     const id = searchParams.get("scroll");
 
 
-        if (!id) return;
+    //     if (!id) return;
 
-        const timer = setTimeout(() => {
-            ScrollTrigger.refresh();
+    //     const timer = setTimeout(() => {
+    //         ScrollTrigger.refresh();
 
-            const el = document.getElementById(id);
+    //         const el = document.getElementById(id);
 
-            if (el) {
-                window.lenis?.scrollTo(el, {
-                    offset: -60,
-                    duration: 1.5,
-                });
-            }
-        }, 1000);
+    //         if (el) {
+    //             window.lenis?.scrollTo(el, {
+    //                 offset: -60,
+    //                 duration: 1.5,
+    //             });
+    //         }
+    //     }, 1000);
 
-        return () => clearTimeout(timer);
-    }, [searchParams]);
+    //     return () => clearTimeout(timer);
+    // }, [searchParams]);
 
 
 
@@ -165,29 +166,6 @@ export default function HomePageWrapper() {
         };
     }, []);
 
-    useEffect(() => {
-        if (loading) {
-            const scrollY = window.scrollY;
-
-            document.body.style.position = "fixed";
-            document.body.style.top = `-${scrollY}px`;
-            document.body.style.left = "0";
-            document.body.style.right = "0";
-            document.body.style.width = "100%";
-            document.body.style.overflow = "hidden";
-
-            return () => {
-                document.body.style.position = "";
-                document.body.style.top = "";
-                document.body.style.left = "";
-                document.body.style.right = "";
-                document.body.style.width = "";
-                document.body.style.overflow = "";
-
-                window.scrollTo(0, scrollY);
-            };
-        }
-    }, [loading]);
 
 
     useEffect(() => {
@@ -268,18 +246,7 @@ export default function HomePageWrapper() {
     }, []);
 
 
-    useEffect(() => {
-        if (!menuOpen) {
-            document.body.style.overflow = "";
-            return;
-        }
 
-        document.body.style.overflow = "hidden";
-
-        return () => {
-            document.body.style.overflow = "";
-        };
-    }, [menuOpen]);
 
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -295,23 +262,21 @@ export default function HomePageWrapper() {
         };
     }, []);
 
-    useLayoutEffect(() => {
 
-        requestAnimationFrame(() => {
-            ScrollTrigger.refresh();
-        });
-
-    }, []);
 
     return (
 
 
         <>
 
+            <Suspense fallback={null}>
+                <HomeSearchParams />
+
+            </Suspense>
 
             <main className="relative min-h-screen">
                 <div
-                    className={`transition-opacity duration-1000 ${loading ? "opacity-0" : "opacity-100"
+                    className={`transition-opacity duration-1000 opacity-100
                         }`}
                 >
 
@@ -620,17 +585,7 @@ export default function HomePageWrapper() {
 
 
                 </div>
-                {/* 
-          <div
-            className={`absolute inset-0 z-50 transition-opacity duration-1000 ${loading
-              ? "opacity-100"
-              : "pointer-events-none opacity-0"
-              }`}
-          >
-            <Loader
-              onComplete={() => setLoading(false)}
-            />
-          </div> */}
+
 
             </main>
 

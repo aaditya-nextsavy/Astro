@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { subscribeAppReady } from "@/lib/appReady";
 
 const whoWeAreData = [
     {
@@ -37,89 +38,87 @@ function WhoAreWePanel({ item, index }) {
     const panelRef = useRef(null);
 
     useLayoutEffect(() => {
-        const panel = panelRef.current;
+        if (!panelRef.current) return;
 
-        if (!panel) {
-            return undefined;
-        }
+        let ctx;
 
-        const ctx = gsap.context(() => {
-            const image = panel.querySelector(".who-we-are-image");
-            const label = panel.querySelector(".who-we-are-label");
-            const title = panel.querySelector(".who-we-are-title");
-            const descriptions = panel.querySelectorAll(".who-we-are-description");
-            const buttons = panel.querySelector(".who-we-are-buttons-wrapper");
+        const unsubscribe = subscribeAppReady((ready) => {
+            if (!ready || ctx) return;
 
-            gsap.set(image, {
-                opacity: 0.95,
-                yPercent: 10,
-                scale: 1.1,
-                transformOrigin: "center center",
-            });
+            ctx = gsap.context(() => {
+                const panel = panelRef.current;
 
-            gsap.set([label, title, ...descriptions, buttons], {
-                opacity: 0,
-                y: 56,
-            });
+                const image = panel.querySelector(".who-we-are-image");
+                const label = panel.querySelector(".who-we-are-label");
+                const title = panel.querySelector(".who-we-are-title");
+                const descriptions = panel.querySelectorAll(".who-we-are-description");
+                const buttons = panel.querySelector(".who-we-are-buttons-wrapper");
 
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: panel,
-                    start: "top top",
-                    end: "+=180%",
-                    scrub: 1.25,
-                    invalidateOnRefresh: true,
-                },
-            });
+                gsap.set(image, {
+                    opacity: 0.95,
+                    yPercent: 10,
+                    scale: 1.1,
+                    transformOrigin: "center center",
+                });
 
-            tl.to(image, {
-                yPercent: 0,
-                scale: 1,
-                ease: "none",
-                duration: 1.15,
-            })
-                .to(label, {
-                    opacity: 1,
-                    y: 0,
-                    ease: "power3.out",
-                    duration: 0.45,
+                gsap.set([label, title, ...descriptions, buttons], {
+                    opacity: 0,
+                    y: 30,
+                });
+
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: panel,
+                        start: "top 85%",
+                        end: "top 50%",
+                        toggleActions: "play none none reverse",
+                    },
+                });
+
+                // image (optional scroll feel but NOT required for text timing)
+                tl.to(image, {
+                    yPercent: 0,
+                    scale: 1,
+                    ease: "none",
+                    duration: 1,
                 })
-                .to(
-                    title,
-                    {
-                        opacity: 1,
-                        y: 0,
-                        ease: "power3.out",
-                        duration: 0.6,
-                    },
-                    0.24
-                )
-                .to(
-                    descriptions,
-                    {
-                        opacity: 1,
-                        y: 0,
-                        stagger: 0.28,
-                        ease: "power2.out",
-                        duration: 0.75,
-                    },
-                    0.48
-                )
-                .to(
-                    buttons,
-                    {
-                        opacity: 1,
-                        y: 0,
-                        ease: "power2.out",
-                        duration: 0.55,
-                    },
-                    1.18
-                );
-        }, panelRef);
 
-        return () => ctx.revert();
+                    // text animation (stagger fade-in)
+                    .fromTo(
+                        label,
+                        { opacity: 0, y: 30 },
+                        { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }
+                    )
+                    .fromTo(
+                        title,
+                        { opacity: 0, y: 30 },
+                        { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }
+                    )
+                    .fromTo(
+                        descriptions,
+                        { opacity: 0, y: 30 },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.45,
+                            stagger: 0.15,
+                            ease: "power2.out",
+                        }
+                    )
+                    .fromTo(
+                        buttons,
+                        { opacity: 0, y: 30 },
+                        { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }
+                    );
+
+            }, panelRef);
+        });
+
+        return () => {
+            unsubscribe();
+            ctx?.revert();
+        };
     }, []);
-
     return (
         <article
             ref={panelRef}

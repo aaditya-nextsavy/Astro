@@ -1,4 +1,6 @@
 import HomePageWrapper from "@/components/home/HomePageWrapper";
+import PageLoader from "@/components/loader/PageLoader";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Unlock The Cosmic Pathway To Your Inner Harmony",
@@ -34,9 +36,9 @@ export default function Home() {
 
   return (
 
-    <>
-      <HomePageWrapper />
-    </>
-
+    // <Suspense fallback={<PageLoader />}>
+    //   <HomePageWrapper />
+    // </Suspense>
+    <HomePageWrapper />
   );
 }

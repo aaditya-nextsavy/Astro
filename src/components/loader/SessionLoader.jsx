@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Loader from "@/components/loader/Loader";
+import { setAppReady } from "@/lib/appReady";
+
 
 export default function SessionLoader() {
     const [loading, setLoading] = useState(false);
@@ -14,13 +16,21 @@ export default function SessionLoader() {
 
         if (!hasSeenLoader) {
             setLoading(true);
+        } else {
+            // Loader skipped this session
+            setAppReady(true);
         }
     }, []);
 
     const handleComplete = () => {
         sessionStorage.setItem("hasSeenLoader", "true");
+
+        // it's now safe to animate
+        setAppReady(true);
+
         setLoading(false);
     };
+
 
     if (!mounted) return null;
 

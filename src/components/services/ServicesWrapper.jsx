@@ -2,14 +2,13 @@
 
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import Loader from "@/components/loader/Loader";
 import AcharyaDrawer from "@/components/drawer/AcharyaDrawer";
 import Footer from "@/components/footer/Footer";
 import Link from "next/link";
 import ServicesListing from "./ServicesListing";
 import ServicesHero from "./ServicesHero";
 import { FaChevronRight } from "react-icons/fa6";
-
+import { subscribeAppReady } from "@/lib/appReady";
 
 export default function ServicesWrapper() {
 
@@ -131,29 +130,6 @@ export default function ServicesWrapper() {
         };
     }, []);
 
-    useEffect(() => {
-        if (loading) {
-            const scrollY = window.scrollY;
-
-            document.body.style.position = "fixed";
-            document.body.style.top = `-${scrollY}px`;
-            document.body.style.left = "0";
-            document.body.style.right = "0";
-            document.body.style.width = "100%";
-            document.body.style.overflow = "hidden";
-
-            return () => {
-                document.body.style.position = "";
-                document.body.style.top = "";
-                document.body.style.left = "";
-                document.body.style.right = "";
-                document.body.style.width = "";
-                document.body.style.overflow = "";
-
-                window.scrollTo(0, scrollY);
-            };
-        }
-    }, [loading]);
 
 
 
@@ -192,27 +168,35 @@ export default function ServicesWrapper() {
     useLayoutEffect(() => {
         if (!lastlightSection.current || !bottomNavRef.current) return;
 
-        const nav = bottomNavRef.current;
+        let ctx;
 
-        const trigger = ScrollTrigger.create({
-            trigger: lastlightSection.current,
+        const unsubscribe = subscribeAppReady((ready) => {
+            if (!ready || ctx) return;
 
-            // footer top reaches top of viewport,
-            // then wait another 100vh
-            start: "top top-=0%",
+            ctx = gsap.context(() => {
+                const nav = bottomNavRef.current;
 
-            onEnter: () => {
-                nav.classList.add("hide-bottom-nav");
-            },
+                ScrollTrigger.create({
+                    trigger: lastlightSection.current,
 
-            onLeaveBack: () => {
-                nav.classList.remove("hide-bottom-nav");
-            },
+                    start: "top top-=0%",
+
+                    onEnter: () => {
+                        nav.classList.add("hide-bottom-nav");
+                    },
+
+                    onLeaveBack: () => {
+                        nav.classList.remove("hide-bottom-nav");
+                    },
+                });
+            }, lastlightSection);
         });
 
-        return () => trigger.kill();
+        return () => {
+            unsubscribe();
+            ctx?.revert();
+        };
     }, []);
-
 
     return (
 

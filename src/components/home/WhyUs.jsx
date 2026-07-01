@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
+import { useLayoutEffect, useRef, useState } from "react";
+import { subscribeAppReady } from "@/lib/appReady";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 const sectionData = [
     {
@@ -38,104 +37,113 @@ const sectionData = [
 export default function WhyUs() {
 
 
-    gsap.registerPlugin(ScrollTrigger);
 
     const [activeImage, setActiveImage] = useState(1);
     const blocksRef = useRef([]);
 
 
 
+   useLayoutEffect(() => {
+    let ctx;
+    let observer;
+    let trigger;
 
-    useEffect(() => {
-        const blocks = document.querySelectorAll(".why-us-content-block");
+    const unsubscribe = subscribeAppReady((ready) => {
+        if (!ready || ctx) return;
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    const block = entry.target;
+        ctx = gsap.context(() => {
+            const blocks = gsap.utils.toArray(".why-us-content-block");
 
-                    const elements = block.querySelectorAll(
-                        ".why-us-label, .why-us-title, .why-us-subtitle, .why-us-description"
-                    );
+            // ----------------------------
+            // Reveal Animation
+            // ----------------------------
+            observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        const block = entry.target;
 
-                    if (entry.isIntersecting) {
-                        // setActiveImage(Number(block.dataset.id));
+                        const elements = block.querySelectorAll(
+                            ".why-us-label, .why-us-title, .why-us-subtitle, .why-us-description"
+                        );
 
-                        gsap.to(elements, {
-                            y: 0,
-                            duration: 0.6,
-                            ease: "power2.out",
-                            stagger: 0.05,
-                        });
-                    }
-                });
-            },
-            {
-                threshold: 0.3,
-            }
-        );
-
-        blocks.forEach((block) => observer.observe(block));
-
-        return () => observer.disconnect();
-    }, []);
-
-    useEffect(() => {
-        const blocks = document.querySelectorAll(".why-us-content-block");
-
-        blocks.forEach((block, index) => {
-            const elements = block.querySelectorAll(
-                ".why-us-label, .why-us-title, .why-us-subtitle, .why-us-description"
+                        if (entry.isIntersecting) {
+                            gsap.to(elements, {
+                                y: 0,
+                                duration: 0.6,
+                                ease: "power2.out",
+                                stagger: 0.05,
+                            });
+                        }
+                    });
+                },
+                {
+                    threshold: 0.3,
+                }
             );
 
-            elements.forEach((el, i) => {
-                gsap.to(el, {
-                    y: (i + 1) * -15, // different depth per element
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: block,
-                        start: "top bottom",
-                        end: "bottom top",
-                        scrub: true, // 👈 key for parallax feel
-                    },
+            blocks.forEach((block) => observer.observe(block));
+
+            // ----------------------------
+            // Text Parallax
+            // ----------------------------
+            blocks.forEach((block) => {
+                const elements = block.querySelectorAll(
+                    ".why-us-label, .why-us-title, .why-us-subtitle, .why-us-description"
+                );
+
+                elements.forEach((el, i) => {
+                    gsap.to(el, {
+                        y: (i + 1) * -15,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: block,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: true,
+                        },
+                    });
                 });
             });
-        });
-    }, []);
 
+            // ----------------------------
+            // Active Image
+            // ----------------------------
+            const updateActiveBlock = () => {
+                const viewportCenter = window.innerHeight * 0.5;
 
+                let activeId = 1;
 
-    useEffect(() => {
-        const blocks = blocksRef.current.filter(Boolean);
+                blocksRef.current
+                    .filter(Boolean)
+                    .forEach((block) => {
+                        const rect = block.getBoundingClientRect();
 
-        const updateActiveBlock = () => {
-            const viewportCenter = window.innerHeight * 0.5;
+                        if (rect.top <= viewportCenter) {
+                            activeId = Number(block.dataset.id);
+                        }
+                    });
 
-            let activeId = 1;
+                setActiveImage(activeId);
+            };
 
-            blocks.forEach((block) => {
-                const rect = block.getBoundingClientRect();
-
-                // block has crossed the center line
-                if (rect.top <= viewportCenter) {
-                    activeId = Number(block.dataset.id);
-                }
+            trigger = ScrollTrigger.create({
+                trigger: ".why-us-section",
+                start: "top top",
+                end: "bottom bottom",
+                onUpdate: updateActiveBlock,
             });
 
-            setActiveImage(activeId);
-        };
-
-        const trigger = ScrollTrigger.create({
-            trigger: ".why-us-section",
-            start: "top top",
-            end: "bottom bottom",
-            onUpdate: updateActiveBlock,
+            updateActiveBlock();
         });
+    });
 
-        updateActiveBlock();
-
-        return () => trigger.kill();
-    }, []);
+    return () => {
+        observer?.disconnect();
+        trigger?.kill();
+        unsubscribe();
+        ctx?.revert();
+    };
+}, []);
 
 
 

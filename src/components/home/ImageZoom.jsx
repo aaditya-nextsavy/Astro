@@ -1,8 +1,7 @@
 "use client";
 
 import { useRef, useLayoutEffect } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -46,9 +45,12 @@ export default function ImageZoom() {
                 overflow: "hidden",
             });
 
-            let currentImage = 3;
+
+            let activeImage  = 3;
 
             const tl = gsap.timeline({
+
+
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top top",
@@ -56,27 +58,72 @@ export default function ImageZoom() {
                     scrub: 0.5,
                     pin: true,
 
-                    onUpdate: (self) => {
+
+
+                    onUpdate(self) {
+
                         const p = self.progress;
 
-                        if (p < 0.13) {
-                            gsap.to(image3Ref.current, { opacity: 1, duration: 0.5, overwrite: true });
-                            gsap.to(image2Ref.current, { opacity: 0, duration: 0.5, overwrite: true });
-                            gsap.to(image1Ref.current, { opacity: 0, duration: 0.5, overwrite: true });
-                        }
+                        let nextImage;
 
-                        else if (p < 0.43) {
-                            gsap.to(image3Ref.current, { opacity: 0, duration: 0.5, overwrite: true });
-                            gsap.to(image2Ref.current, { opacity: 1, duration: 0.5, overwrite: true });
-                            gsap.to(image1Ref.current, { opacity: 0, duration: 0.5, overwrite: true });
-                        }
+                        if (p < 0.13) nextImage = 3;
+                        else if (p < 0.43) nextImage = 2;
+                        else nextImage = 1;
 
-                        else {
-                            gsap.to(image3Ref.current, { opacity: 0, duration: 0.5, overwrite: true });
-                            gsap.to(image2Ref.current, { opacity: 0, duration: 0.5, overwrite: true });
-                            gsap.to(image1Ref.current, { opacity: 1, duration: 0.5, overwrite: true });
-                        }
+                        if (nextImage === activeImage) return;
+
+                        activeImage = nextImage;
+
+                        gsap.to(image3Ref.current, {
+                            opacity: nextImage === 3 ? 1 : 0,
+                            duration: 0.5,
+                            overwrite: true,
+                        });
+
+                        gsap.to(image2Ref.current, {
+                            opacity: nextImage === 2 ? 1 : 0,
+                            duration: 0.5,
+                            overwrite: true,
+                        });
+
+                        gsap.to(image1Ref.current, {
+                            opacity: nextImage === 1 ? 1 : 0,
+                            duration: 0.5,
+                            overwrite: true,
+                        });
                     }
+
+                    // onUpdate: (self) => {
+
+                    //     // let nextIndex;
+                    //     //   if (...) nextIndex = 3;
+                    //     //     else if (...) nextIndex = 2;
+                    //     //     else nextIndex = 1;
+
+                    //     //     if (nextIndex === activeIndex) return;
+
+                    //     //     activeIndex = nextIndex;
+
+                    //     const p = self.progress;
+
+                    //     if (p < 0.13) {
+                    //         gsap.to(image3Ref.current, { opacity: 1, duration: 0.5, overwrite: true });
+                    //         gsap.to(image2Ref.current, { opacity: 0, duration: 0.5, overwrite: true });
+                    //         gsap.to(image1Ref.current, { opacity: 0, duration: 0.5, overwrite: true });
+                    //     }
+
+                    //     else if (p < 0.43) {
+                    //         gsap.to(image3Ref.current, { opacity: 0, duration: 0.5, overwrite: true });
+                    //         gsap.to(image2Ref.current, { opacity: 1, duration: 0.5, overwrite: true });
+                    //         gsap.to(image1Ref.current, { opacity: 0, duration: 0.5, overwrite: true });
+                    //     }
+
+                    //     else {
+                    //         gsap.to(image3Ref.current, { opacity: 0, duration: 0.5, overwrite: true });
+                    //         gsap.to(image2Ref.current, { opacity: 0, duration: 0.5, overwrite: true });
+                    //         gsap.to(image1Ref.current, { opacity: 1, duration: 0.5, overwrite: true });
+                    //     }
+                    // }
                 }
             });
 

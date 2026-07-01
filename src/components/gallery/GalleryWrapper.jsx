@@ -2,21 +2,10 @@
 
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import Loader from "@/components/loader/Loader";
-import HomeHero from "@/components/home/Hero";
-import AcharyaDrawer from "@/components/drawer/AcharyaDrawer";
-import ImageZoom from "@/components/home/ImageZoom";
-import MainImageInfoSection from "@/components/home/MainImageInfoSection";
-import HomeServices from "@/components/home/HomeServices";
-import WhoAreWe from "@/components/home/WhoAreWe";
-import WhyUs from "@/components/home/WhyUs";
-import Footer from "@/components/footer/Footer";
-import SliderWithFade from "@/components/home/SliderWithFade";
-import ContactCTA from "@/components/home/ContactCTA";
 import Link from "next/link";
 import GalleryImagePreview from "./GalleryImagePreview";
 import { FaChevronRight } from "react-icons/fa6";
-
+import { subscribeAppReady } from "@/lib/appReady";
 
 
 const GalleryWrapper = () => {
@@ -26,16 +15,6 @@ const GalleryWrapper = () => {
     const floatingNavRef = useRef(null);
     const bottomNavRef = useRef(null);
     const lastlightSection = useRef(null);
-    const [loading, setLoading] = useState(false);
-    const [drawerOpen, setDrawerOpen] =
-        useState(false);
-
-    const [selectedAcharya, setSelectedAcharya] = useState(null);
-
-    const handleOpenAcharya = (data) => {
-        setSelectedAcharya(data);
-        setDrawerOpen(true);
-    };
     const [menuOpen, setMenuOpen] = useState(false);
 
 
@@ -143,29 +122,6 @@ const GalleryWrapper = () => {
         };
     }, []);
 
-    useEffect(() => {
-        if (loading) {
-            const scrollY = window.scrollY;
-
-            document.body.style.position = "fixed";
-            document.body.style.top = `-${scrollY}px`;
-            document.body.style.left = "0";
-            document.body.style.right = "0";
-            document.body.style.width = "100%";
-            document.body.style.overflow = "hidden";
-
-            return () => {
-                document.body.style.position = "";
-                document.body.style.top = "";
-                document.body.style.left = "";
-                document.body.style.right = "";
-                document.body.style.width = "";
-                document.body.style.overflow = "";
-
-                window.scrollTo(0, scrollY);
-            };
-        }
-    }, [loading]);
 
 
 
@@ -204,26 +160,34 @@ const GalleryWrapper = () => {
     useLayoutEffect(() => {
         if (!lastlightSection.current || !bottomNavRef.current) return;
 
-        const nav = bottomNavRef.current;
+        let ctx;
 
-        const trigger = ScrollTrigger.create({
-            trigger: lastlightSection.current,
+        const unsubscribe = subscribeAppReady((ready) => {
+            if (!ready || ctx) return;
 
-            // when the section is almost finished
-            start: "bottom 0%",
-            onEnter: () => {
-                nav.classList.add("hide-bottom-nav");
-            },
+            ctx = gsap.context(() => {
+                const nav = bottomNavRef.current;
 
-            onLeaveBack: () => {
-                nav.classList.remove("hide-bottom-nav");
-            },
+                ScrollTrigger.create({
+                    trigger: lastlightSection.current,
+                    start: "bottom 0%",
+
+                    onEnter: () => {
+                        nav.classList.add("hide-bottom-nav");
+                    },
+
+                    onLeaveBack: () => {
+                        nav.classList.remove("hide-bottom-nav");
+                    },
+                });
+            }, lastlightSection);
         });
 
-        return () => trigger.kill();
+        return () => {
+            unsubscribe();
+            ctx?.revert();
+        };
     }, []);
-
-
     return (
 
 
@@ -232,7 +196,7 @@ const GalleryWrapper = () => {
 
             <main className="relative min-h-screen">
                 <div
-                    className={`transition-opacity duration-1000 ${loading ? "opacity-0" : "opacity-100"
+                    className={`transition-opacity duration-1000 opacity-100
                         }`}
                 >
 

@@ -1,108 +1,111 @@
 import React, { useLayoutEffect } from 'react'
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-
+import { subscribeAppReady } from "@/lib/appReady";
 
 const AboutOperations = () => {
 
     useLayoutEffect(() => {
-        const ctx = gsap.context(() => {
+        let ctx;
 
-            // Cards reveal
-            gsap.utils.toArray(".operation-card").forEach((card) => {
-                gsap.fromTo(
-                    card,
-                    {
-                        opacity: 0,
-                        y: 120,
-                    },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        duration: 1.5,
-                        ease: "power3.out",
-                        scrollTrigger: {
-                            trigger: card,
-                            start: "top 85%",
-                        },
-                    }
-                );
-            });
+        const unsubscribe = subscribeAppReady((ready) => {
+            if (!ready || ctx) return;
 
-            if (window.innerWidth > 1330) {
-                // Floating icons
-                gsap.utils
-                    .toArray(".about-operations-icon")
-                    .forEach((icon, i) => {
-                        gsap.to(icon, {
-                            y: i % 2 ? -20 : 20,
-                            duration: 4 + (i * 0.5),
-                            repeat: -1,
-                            yoyo: true,
-                            ease: "sine.inOut",
-                        });
-                    });
-
-                // Scroll parallax
-                gsap.utils
-                    .toArray(".about-operations-icon")
-                    .forEach((icon) => {
-                        gsap.to(icon, {
-                            yPercent: -30,
-                            ease: "none",
-                            scrollTrigger: {
-                                trigger: icon,
-                                start: "top bottom",
-                                end: "bottom top",
-                                scrub: 1.5,
-                            },
-                        });
-                    });
-
-
-                // Section titles
-                gsap.utils
-                    .toArray(".about-operations-title")
-                    .forEach((title) => {
-                        gsap.from(title.children, {
-                            y: 80,
+            ctx = gsap.context(() => {
+                // Cards reveal
+                gsap.utils.toArray(".operation-card").forEach((card) => {
+                    gsap.fromTo(
+                        card,
+                        {
                             opacity: 0,
-                            stagger: 0.15,
-                            duration: 1.2,
+                            y: 120,
+                        },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 1.5,
                             ease: "power3.out",
                             scrollTrigger: {
-                                trigger: title,
-                                start: "top 80%",
+                                trigger: card,
+                                start: "top 85%",
                             },
+                        }
+                    );
+                });
+
+                if (window.innerWidth > 1330) {
+                    // Floating icons
+                    gsap.utils
+                        .toArray(".about-operations-icon")
+                        .forEach((icon, i) => {
+                            gsap.to(icon, {
+                                y: i % 2 ? -20 : 20,
+                                duration: 4 + i * 0.5,
+                                repeat: -1,
+                                yoyo: true,
+                                ease: "sine.inOut",
+                            });
                         });
-                    });
 
-                // Icon scale reveal
-                gsap.utils
-                    .toArray(".about-operations-items-wrapper")
-                    .forEach((section) => {
-                        gsap.from(
-                            section.querySelectorAll(".about-operations-icon"),
-                            {
-                                scale: 0.8,
-                                opacity: 0,
-                                stagger: 0.2,
-                                duration: 1.4,
-                                ease: "power4.out",
+                    // Scroll parallax
+                    gsap.utils
+                        .toArray(".about-operations-icon")
+                        .forEach((icon) => {
+                            gsap.to(icon, {
+                                yPercent: -30,
+                                ease: "none",
                                 scrollTrigger: {
-                                    trigger: section,
-                                    start: "top 70%",
+                                    trigger: icon,
+                                    start: "top bottom",
+                                    end: "bottom top",
+                                    scrub: 1.5,
                                 },
-                            }
-                        );
-                    });
-            }
+                            });
+                        });
 
+                    // Section titles
+                    gsap.utils
+                        .toArray(".about-operations-title")
+                        .forEach((title) => {
+                            gsap.from(title.children, {
+                                y: 80,
+                                opacity: 0,
+                                stagger: 0.15,
+                                duration: 1.2,
+                                ease: "power3.out",
+                                scrollTrigger: {
+                                    trigger: title,
+                                    start: "top 80%",
+                                },
+                            });
+                        });
 
-
-
+                    // Icon scale reveal
+                    gsap.utils
+                        .toArray(".about-operations-items-wrapper")
+                        .forEach((section) => {
+                            gsap.from(
+                                section.querySelectorAll(".about-operations-icon"),
+                                {
+                                    scale: 0.8,
+                                    opacity: 0,
+                                    stagger: 0.2,
+                                    duration: 1.4,
+                                    ease: "power4.out",
+                                    scrollTrigger: {
+                                        trigger: section,
+                                        start: "top 70%",
+                                    },
+                                }
+                            );
+                        });
+                }
+            });
         });
 
-        return () => ctx.revert();
+        return () => {
+            unsubscribe();
+            ctx?.revert();
+        };
     }, []);
 
     return (

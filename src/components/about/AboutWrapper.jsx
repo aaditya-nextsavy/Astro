@@ -7,7 +7,7 @@ import AboutStory from "./AboutStory";
 import Link from "next/link";
 import AboutOperations from "./AboutOperations";
 import { FaChevronRight } from "react-icons/fa6";
-
+import { subscribeAppReady } from "@/lib/appReady";
 
 export default function AboutWrapper() {
 
@@ -17,134 +17,150 @@ export default function AboutWrapper() {
     const aboutFooterSection = useRef(null);
     const [menuOpen, setMenuOpen] = useState(false);
 
-    const [loading, setLoading] = useState(false);
+   
+
+
     useLayoutEffect(() => {
-        const container = heroCloudContainerRef.current;
+        if (!heroCloudContainerRef.current) return;
 
-        if (!container) return;
+        let ctx;
 
-        const clouds = container.querySelectorAll(
-            ".light-background-cloud"
-        );
+        const unsubscribe = subscribeAppReady((ready) => {
+            if (!ready || ctx) return;
 
-        const tween = gsap.to(clouds, {
-            opacity: 0,
-            y: -100,
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".light-background-content",
+            ctx = gsap.context(() => {
+                const clouds =
+                    heroCloudContainerRef.current.querySelectorAll(
+                        ".light-background-cloud"
+                    );
 
-                // starts fading when middle of content approaches viewport
-                start: "top center",
-
-                // completely gone around middle of content
-                end: "center center",
-
-                scrub: true,
-            },
+                gsap.to(clouds, {
+                    opacity: 0,
+                    y: -100,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: ".light-background-content",
+                        start: "top center",
+                        end: "center center",
+                        scrub: true,
+                    },
+                });
+            }, heroCloudContainerRef);
         });
 
         return () => {
-            tween.scrollTrigger?.kill();
-            tween.kill();
+            unsubscribe();
+            ctx?.revert();
         };
     }, []);
 
 
+    // useLayoutEffect(() => {
+    //     const container = heroCloudContainerRef.current;
+
+    //     if (!container) return;
+
+    //     const clouds = container.querySelectorAll(
+    //         ".light-background-cloud"
+    //     );
+
+    //     const tween = gsap.to(clouds, {
+    //         opacity: 0,
+    //         y: -100,
+    //         ease: "none",
+    //         scrollTrigger: {
+    //             trigger: ".light-background-content",
+
+    //             // starts fading when middle of content approaches viewport
+    //             start: "top center",
+
+    //             // completely gone around middle of content
+    //             end: "center center",
+
+    //             scrub: true,
+    //         },
+    //     });
+
+    //     return () => {
+    //         tween.scrollTrigger?.kill();
+    //         tween.kill();
+    //     };
+    // }, []);
+
+
     useLayoutEffect(() => {
-        const nav = floatingNavRef.current;
+    if (!floatingNavRef.current) return;
 
-        if (!nav) {
-            return undefined;
-        }
+    let ctx;
 
-        const lightSections = gsap.utils.toArray(
-            ".light-background-zone, .light-background-zone--takeover"
-        );
+    const unsubscribe = subscribeAppReady((ready) => {
+        if (!ready || ctx) return;
 
-        if (!lightSections.length) {
-            return undefined;
-        }
+        ctx = gsap.context(() => {
+            const nav = floatingNavRef.current;
 
-        const activeSections = new Set();
-
-        const syncNavTheme = () => {
-            nav.classList.toggle(
-                "light-section-active",
-                activeSections.size > 0
-            );
-        };
-
-        const triggers = lightSections.map((section) => {
-            const isTakeover = section.classList.contains(
-                "light-background-zone--takeover"
+            const lightSections = gsap.utils.toArray(
+                ".light-background-zone, .light-background-zone--takeover"
             );
 
-            return ScrollTrigger.create({
-                trigger: section,
+            if (!lightSections.length) return;
 
-                // First light section behaves normally
-                start: isTakeover ? "top+=30%" : "bottom 55%",
+            const activeSections = new Set();
 
-                // Keep your existing end position
-                // end: "bottom 100%",
-                end: isTakeover ? "bottom+=50%" : "bottom 100%",
-
-                // markers: true,
-
-                onEnter: () => {
-                    activeSections.add(section);
-                    syncNavTheme();
-                },
-
-                onEnterBack: () => {
-                    activeSections.add(section);
-                    syncNavTheme();
-                },
-
-                onLeave: () => {
-                    activeSections.delete(section);
-                    syncNavTheme();
-                },
-
-                onLeaveBack: () => {
-                    activeSections.delete(section);
-                    syncNavTheme();
-                },
-            });
-        });
-
-        syncNavTheme();
-
-        return () => {
-            triggers.forEach((trigger) => trigger.kill());
-            activeSections.clear();
-        };
-    }, []);
-
-    useEffect(() => {
-        if (loading) {
-            const scrollY = window.scrollY;
-
-            document.body.style.position = "fixed";
-            document.body.style.top = `-${scrollY}px`;
-            document.body.style.left = "0";
-            document.body.style.right = "0";
-            document.body.style.width = "100%";
-            document.body.style.overflow = "hidden";
-
-            return () => {
-                document.body.style.position = "";
-                document.body.style.top = "";
-                document.body.style.left = "";
-                document.body.style.right = "";
-                document.body.style.width = "";
-                document.body.style.overflow = "";
-
-                window.scrollTo(0, scrollY);
+            const syncNavTheme = () => {
+                nav.classList.toggle(
+                    "light-section-active",
+                    activeSections.size > 0
+                );
             };
-        }
-    }, [loading]);
+
+            lightSections.forEach((section) => {
+                const isTakeover = section.classList.contains(
+                    "light-background-zone--takeover"
+                );
+
+                ScrollTrigger.create({
+                    trigger: section,
+                    start: isTakeover
+                        ? "top+=30%"
+                        : "bottom 55%",
+                    end: isTakeover
+                        ? "bottom+=50%"
+                        : "bottom 100%",
+
+                    onEnter: () => {
+                        activeSections.add(section);
+                        syncNavTheme();
+                    },
+
+                    onEnterBack: () => {
+                        activeSections.add(section);
+                        syncNavTheme();
+                    },
+
+                    onLeave: () => {
+                        activeSections.delete(section);
+                        syncNavTheme();
+                    },
+
+                    onLeaveBack: () => {
+                        activeSections.delete(section);
+                        syncNavTheme();
+                    },
+                });
+            });
+
+            syncNavTheme();
+        }, floatingNavRef);
+    });
+
+    return () => {
+        unsubscribe();
+        ctx?.revert();
+    };
+}, []);
+
+
 
 
 
@@ -213,7 +229,7 @@ export default function AboutWrapper() {
 
             <main className="relative min-h-screen">
                 <div
-                    className={`transition-opacity duration-1000 ${loading ? "opacity-0" : "opacity-100"
+                    className={`transition-opacity duration-1000 opacity-100
                         }`}
                 >
 

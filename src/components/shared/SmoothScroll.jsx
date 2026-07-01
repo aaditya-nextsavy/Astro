@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
-import gsap from "gsap";
-import { ScrollTrigger } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { subscribeAppReady } from "@/lib/appReady";
 
 export default function SmoothScroll() {
   useEffect(() => {
@@ -23,8 +23,30 @@ export default function SmoothScroll() {
       touchMultiplier: 1,
     });
 
-    // 👇 Make Lenis globally accessible
     window.lenis = lenis;
+    lenis.stop();
+
+    const unsubscribeReady = subscribeAppReady((ready) => {
+      if (!ready) return;
+
+      let started = false;
+
+      const unsubscribeReady = subscribeAppReady((ready) => {
+        if (!ready || started) return;
+
+        started = true;
+
+        lenis.start();
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            ScrollTrigger.refresh(true);
+          });
+        });
+      });
+
+    });
+
 
     const unsubscribe = lenis.on("scroll", ScrollTrigger.update);
 
@@ -34,19 +56,14 @@ export default function SmoothScroll() {
 
     gsap.ticker.add(update);
 
-    const handleLoad = () => {
-      ScrollTrigger.refresh();
-    };
 
-    window.addEventListener("load", handleLoad);
 
     return () => {
       // 👇 Remove the global reference
       delete window.lenis;
-
-      window.removeEventListener("load", handleLoad);
       gsap.ticker.remove(update);
       unsubscribe();
+      unsubscribeReady();
       lenis.destroy();
     };
   }, []);

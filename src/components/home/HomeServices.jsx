@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useLayoutEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { subscribeAppReady } from "@/lib/appReady";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,118 +21,121 @@ const cards = [
 const HomeServices = () => {
     const sectionRef = useRef(null);
 
-    useEffect(() => {
-        const section = sectionRef.current;
-
-        if (!section) {
-            return undefined;
-        }
-
-        const ctx = gsap.context(() => {
-            const eyebrow = section.querySelector(
-                ".info-sticky-card-section__eyebrow"
-            );
-
-            const headingLines = section.querySelectorAll(
-                ".info-sticky-card-section__heading span"
-            );
-
-            const button = section.querySelector(
-                ".info-sticky-card-section__button"
-            );
-
-            const cardWrappers = section.querySelectorAll(
-                ".info-sticky-card-section__card-wrapper"
-            );
-
-            gsap.set(eyebrow, {
-                opacity: 1,
-                y: 0,
-            });
-
-            gsap.set(headingLines, {
-                opacity: 1,
-                y: 0,
-            });
-
-            gsap.set(button, {
-                opacity: 1,
-                y: 0,
-            });
-
-            gsap.set(cardWrappers, {
-                y: 800,
-                opacity: 1,
-                // rotation: (index) => (index % 2 === 0 ? 4 : -4),
-
-            });
-
-
-
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top top",
-                    // end: "+=250%",
-                    // end: `+=${cards.length * 120}%`,
-                    end: () => `+=${cards.length * window.innerHeight * 0.9}`,
-                    pin: true,
-                    scrub: 1.2,
-                    anticipatePin: 1,
-                    invalidateOnRefresh: true,
-                },
-            });
-
-            // Eyebrow
-            tl.to(eyebrow, {
-                opacity: 1,
-                y: 0,
-                duration: 0.5,
-                ease: "power3.out",
-            });
-
-            // Heading lines
-            tl.to(headingLines, {
-                opacity: 1,
-                y: 0,
-                stagger: 0.25,
-                duration: 1,
-                ease: "power4.out",
-            });
-
-            // Button
-            tl.to(
-                button,
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    ease: "power3.out",
-                },
-                "-=0.4"
-            );
-
-            cardWrappers.forEach((card) => {
-                tl.to(card, {
-                    y: 0,
-                    duration: 1,
-                    ease: "none",
-                });
-            });
-
-        }, sectionRef);
-
-        return () => ctx.revert();
-    }, []);
-
-
     useLayoutEffect(() => {
 
-        requestAnimationFrame(() => {
-            ScrollTrigger.refresh();
+
+        if (!sectionRef.current) return;
+
+
+        const section = sectionRef.current;
+
+        let ctx;
+
+        const unsubscribe = subscribeAppReady((ready) => {
+            if (!ready || ctx) return;
+
+            ctx = gsap.context(() => {
+                const eyebrow = section.querySelector(
+                    ".info-sticky-card-section__eyebrow"
+                );
+
+                const headingLines = section.querySelectorAll(
+                    ".info-sticky-card-section__heading span"
+                );
+
+                const button = section.querySelector(
+                    ".info-sticky-card-section__button"
+                );
+
+                const cardWrappers = section.querySelectorAll(
+                    ".info-sticky-card-section__card-wrapper"
+                );
+
+                gsap.set(eyebrow, {
+                    opacity: 1,
+                    y: 0,
+                });
+
+                gsap.set(headingLines, {
+                    opacity: 1,
+                    y: 0,
+                });
+
+                gsap.set(button, {
+                    opacity: 1,
+                    y: 0,
+                });
+
+                gsap.set(cardWrappers, {
+                    y: 800,
+                    opacity: 1,
+                    // rotation: (index) => (index % 2 === 0 ? 4 : -4),
+
+                });
+
+
+
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top top",
+                        // end: "+=250%",
+                        // end: `+=${cards.length * 120}%`,
+                        end: () => `+=${cards.length * window.innerHeight * 0.9}`,
+                        pin: true,
+                        scrub: 1.2,
+                        anticipatePin: 1,
+                        invalidateOnRefresh: true,
+                    },
+                });
+
+                // Eyebrow
+                tl.to(eyebrow, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.5,
+                    ease: "power3.out",
+                });
+
+                // Heading lines
+                tl.to(headingLines, {
+                    opacity: 1,
+                    y: 0,
+                    stagger: 0.25,
+                    duration: 1,
+                    ease: "power4.out",
+                });
+
+                // Button
+                tl.to(
+                    button,
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        ease: "power3.out",
+                    },
+                    "-=0.4"
+                );
+
+                cardWrappers.forEach((card) => {
+                    tl.to(card, {
+                        y: 0,
+                        duration: 1,
+                        ease: "none",
+                    });
+                });
+
+            }, sectionRef);
         });
 
+        return () => {
+            unsubscribe();
+            ctx?.revert();
+        };
     }, []);
+
+
 
     return (
 

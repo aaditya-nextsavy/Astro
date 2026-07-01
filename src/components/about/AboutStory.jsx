@@ -7,12 +7,11 @@ import React, {
     useRef,
 } from "react";
 
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { subscribeAppReady } from "@/lib/appReady";
 import Image from "next/image";
 import AboutStoryMobile from "./AboutStoryMobile";
 
-gsap.registerPlugin(ScrollTrigger);
 
 
 
@@ -147,168 +146,167 @@ const AboutStory = () => {
     }, [activeIndex]);
 
 
-
     useLayoutEffect(() => {
+        if (!isDesktop || !wrapperRef.current) return;
 
+        let ctx;
 
-        if (!isDesktop) return;
+        const unsubscribe = subscribeAppReady((ready) => {
+            if (!ready || ctx) return;
 
+            ctx = gsap.context(() => {
+                const totalSteps = storyTimeline.length;
+                const heartIndex = totalSteps - 2;
 
-        const totalSteps = storyTimeline.length;
-        const heartIndex = totalSteps - 2;
+                let previousIndex = -1;
 
-        let previousIndex = -1;
+                ScrollTrigger.create({
+                    trigger: wrapperRef.current,
+                    start: "top top",
+                    end: `+=${totalSteps * 100}%`,
+                    pin: true,
+                    scrub: true,
 
-        const trigger = ScrollTrigger.create({
-            trigger: wrapperRef.current,
-            start: "top top",
-            end: `+=${totalSteps * 100}%`,
-            pin: true,
-            scrub: true,
+                    onUpdate: (self) => {
+                        const segmentSize = 1 / totalSteps;
 
-            onUpdate: (self) => {
-                const segmentSize = 1 / totalSteps;
+                        const start =
+                            heartIndex * segmentSize +
+                            segmentSize * 0.5;
 
-                const start =
-                    heartIndex * segmentSize +
-                    segmentSize * 0.5;
+                        const end =
+                            (heartIndex + 1) * segmentSize;
 
-                const end =
-                    (heartIndex + 1) * segmentSize;
-
-                const moveProgress = gsap.utils.clamp(
-                    0,
-                    1,
-                    (self.progress - start) /
-                    (end - start)
-                );
-
-                gsap.set(cloudRef.current, {
-                    xPercent: -100 * moveProgress,
-                });
-
-                setTimelineProgress(self.progress);
-
-                const index = Math.min(
-                    totalSteps - 1,
-                    Math.floor(
-                        self.progress *
-                        (totalSteps - 0.001)
-                    )
-                );
-
-                const segmentStart =
-                    index * segmentSize;
-
-                const segmentEnd =
-                    (index + 1) * segmentSize;
-
-                const segmentProgress =
-                    gsap.utils.clamp(
-                        0,
-                        1,
-                        (self.progress - segmentStart) /
-                        (segmentEnd - segmentStart)
-                    );
-
-                /* CONTENT FADE */
-
-                if (index === heartIndex) {
-                    const fadeProgress =
-                        gsap.utils.clamp(
+                        const moveProgress = gsap.utils.clamp(
                             0,
                             1,
-                            (segmentProgress - 0.35) / 0.25
+                            (self.progress - start) /
+                            (end - start)
                         );
 
-                    gsap.set(contentRef.current, {
-                        opacity: 1 - fadeProgress,
-                    });
-                } else if (index < heartIndex) {
-                    gsap.set(contentRef.current, {
-                        opacity: 1,
-                    });
-                }
+                        gsap.set(cloudRef.current, {
+                            xPercent: -100 * moveProgress,
+                        });
 
-                /* IMAGE FADE (trigger based) */
+                        setTimelineProgress(self.progress);
 
-                if (
-                    index === heartIndex &&
-                    segmentProgress >= 0.5 &&
-                    !heartImageFaded.current
-                ) {
-                    heartImageFaded.current = true;
+                        const index = Math.min(
+                            totalSteps - 1,
+                            Math.floor(
+                                self.progress *
+                                (totalSteps - 0.001)
+                            )
+                        );
 
-                    gsap.to(personRef.current, {
-                        opacity: 0,
-                        duration: 0.6,
-                        ease: "power2.out",
-                        overwrite: true,
-                    });
-                }
+                        const segmentStart =
+                            index * segmentSize;
 
-                if (
-                    index < heartIndex &&
-                    heartImageFaded.current
-                ) {
-                    heartImageFaded.current = false;
+                        const segmentEnd =
+                            (index + 1) * segmentSize;
 
-                    gsap.to(personRef.current, {
-                        opacity: 1,
-                        duration: 0.6,
-                        ease: "power2.out",
-                        overwrite: true,
-                    });
-                }
+                        const segmentProgress =
+                            gsap.utils.clamp(
+                                0,
+                                1,
+                                (self.progress - segmentStart) /
+                                (segmentEnd - segmentStart)
+                            );
 
-                if (
-                    index !== previousIndex
-                ) {
-                    previousIndex = index;
-                    setActiveIndex(index);
-                }
-            },
+                        /* CONTENT FADE */
 
+                        if (index === heartIndex) {
+                            const fadeProgress =
+                                gsap.utils.clamp(
+                                    0,
+                                    1,
+                                    (segmentProgress - 0.35) / 0.25
+                                );
+
+                            gsap.set(contentRef.current, {
+                                opacity: 1 - fadeProgress,
+                            });
+                        } else if (index < heartIndex) {
+                            gsap.set(contentRef.current, {
+                                opacity: 1,
+                            });
+                        }
+
+                        /* IMAGE FADE (trigger based) */
+
+                        if (
+                            index === heartIndex &&
+                            segmentProgress >= 0.5 &&
+                            !heartImageFaded.current
+                        ) {
+                            heartImageFaded.current = true;
+
+                            gsap.to(personRef.current, {
+                                opacity: 0,
+                                duration: 0.6,
+                                ease: "power2.out",
+                                overwrite: true,
+                            });
+                        }
+
+                        if (
+                            index < heartIndex &&
+                            heartImageFaded.current
+                        ) {
+                            heartImageFaded.current = false;
+
+                            gsap.to(personRef.current, {
+                                opacity: 1,
+                                duration: 0.6,
+                                ease: "power2.out",
+                                overwrite: true,
+                            });
+                        }
+
+                        if (index !== previousIndex) {
+                            previousIndex = index;
+                            setActiveIndex(index);
+                        }
+                    },
+                });
+
+                requestAnimationFrame(() => {
+                    gsap.fromTo(
+                        ".about-story-animate",
+                        {
+                            opacity: 0,
+                            y: 30,
+                        },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.8,
+                            stagger: 0.25,
+                            ease: "power2.out",
+                        }
+                    );
+
+                    gsap.fromTo(
+                        ".about-story-animate-image",
+                        {
+                            opacity: 0,
+                        },
+                        {
+                            opacity: 1,
+                            duration: 0.6,
+                            ease: "power2.out",
+                        }
+                    );
+                });
+            }, wrapperRef);
         });
-
-
-        requestAnimationFrame(() => {
-            gsap.fromTo(
-                ".about-story-animate",
-                {
-                    opacity: 0,
-                    y: 30,
-                },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    stagger: 0.25,
-                    ease: "power2.out",
-                }
-            );
-
-            gsap.fromTo(
-                ".about-story-animate-image",
-                {
-                    opacity: 0,
-                },
-                {
-                    opacity: 1,
-                    duration: 0.6,
-                    ease: "power2.out",
-                }
-            );
-        });
-
-
 
         return () => {
-            trigger.kill();
+            unsubscribe();
+            ctx?.revert();
         };
-
     }, [isDesktop]);
 
+    
 
     if (isDesktop === null) {
         return (

@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 const CLOUDS = [
@@ -55,104 +54,153 @@ const CLOUDS = [
 export default function Clouds() {
 
 
-    useEffect(() => {
+    // useLayoutEffect(() => {
+    //     let animations = [];
 
-        const clouds = gsap.utils.toArray(".cloud");
+    //     const ctx = gsap.context(() => {
+    //         const clouds = gsap.utils.toArray(".cloud");
 
+    //         clouds.forEach((cloud) => {
+    //             const side = cloud.dataset.side;
+    //             const cloudWidth = cloud.offsetWidth;
+    //             const screenWidth = window.innerWidth;
+
+    //             const speed = gsap.utils.random(0.5, 12);
+    //             const delay = gsap.utils.random(0, 1);
+
+    //             let currentX = 0;
+
+    //             const travelDistance =
+    //                 screenWidth + cloudWidth + 250;
+
+    //             const duration = travelDistance / speed;
+
+    //             const animation = gsap.to(cloud, {
+    //                 x:
+    //                     side === "left"
+    //                         ? `+=${travelDistance}`
+    //                         : `-=${travelDistance}`,
+
+    //                 duration,
+    //                 delay,
+    //                 ease: "none",
+    //                 repeat: -1,
+    //                 repeatDelay: gsap.utils.random(0, 3),
+
+    //                 onRepeat: () => {
+    //                     gsap.set(cloud, {
+    //                         x:
+    //                             side === "left"
+    //                                 ? -cloudWidth - 250
+    //                                 : screenWidth + cloudWidth + 250,
+    //                     });
+
+    //                     currentX =
+    //                         side === "left"
+    //                             ? -cloudWidth - 250
+    //                             : screenWidth + cloudWidth + 250;
+
+    //                     animation.vars.x =
+    //                         side === "left"
+    //                             ? currentX + travelDistance
+    //                             : currentX - travelDistance;
+    //                 },
+    //             });
+
+    //             animations.push(animation);
+
+    //             gsap.to(cloud, {
+    //                 yPercent: -Number(cloud.dataset.depth) * 30,
+    //                 ease: "none",
+
+    //                 scrollTrigger: {
+    //                     trigger: document.body,
+    //                     start: "top top",
+    //                     end: "bottom bottom",
+    //                     scrub: 1.5,
+    //                 },
+    //             });
+    //         });
+    //     });
+
+    //     return () => {
+    //         animations.forEach((anim) => anim.kill());
+    //         ctx.revert();
+    //     };
+    // }, []);
+
+    useLayoutEffect(() => {
         const animations = [];
 
-        clouds.forEach((cloud) => {
+        const ctx = gsap.context(() => {
+            const clouds = gsap.utils.toArray(".cloud");
 
-            const side = cloud.dataset.side;
+            const CLOUD_SPEED = 6; // px/sec (adjust to your liking)
 
-            const cloudWidth = cloud.offsetWidth;
+            clouds.forEach((cloud) => {
+                const side = cloud.dataset.side;
+                const cloudWidth = cloud.offsetWidth;
+                const screenWidth = window.innerWidth;
 
-            const screenWidth = window.innerWidth;
+                const travelDistance =
+                    screenWidth + cloudWidth + 250;
 
-            const speed = gsap.utils.random(.5, 12);
+                const duration = travelDistance / CLOUD_SPEED;
 
-            const delay = gsap.utils.random(0, 1);
+                let currentX = 0;
 
-            let currentX = 0;
+                const animation = gsap.to(cloud, {
+                    x:
+                        side === "left"
+                            ? `+=${travelDistance}`
+                            : `-=${travelDistance}`,
 
-            const travelDistance =
-                side === "left"
-                    ? screenWidth + cloudWidth + 250
-                    : screenWidth + cloudWidth + 250;
+                    duration,
+                    ease: "none",
+                    repeat: -1,
+                    repeatDelay: 0,
 
-            const duration = travelDistance / speed;
+                    onRepeat: () => {
+                        gsap.set(cloud, {
+                            x:
+                                side === "left"
+                                    ? -cloudWidth - 250
+                                    : screenWidth + cloudWidth + 250,
+                        });
 
-            const animation = gsap.to(cloud, {
+                        currentX =
+                            side === "left"
+                                ? -cloudWidth - 250
+                                : screenWidth + cloudWidth + 250;
 
-                x: side === "left"
-                    ? `+=${travelDistance}`
-                    : `-=${travelDistance}`,
+                        animation.vars.x =
+                            side === "left"
+                                ? currentX + travelDistance
+                                : currentX - travelDistance;
+                    },
+                });
 
-                duration,
+                animations.push(animation);
 
-                delay,
-
-                ease: "none",
-
-                repeat: -1,
-
-                repeatDelay: gsap.utils.random(0, 3),
-
-                onRepeat: () => {
-
-                    // Teleport completely outside the opposite side
-                    gsap.set(cloud, {
-                        x: side === "left"
-                            ? -cloudWidth - 250
-                            : screenWidth + cloudWidth + 250
-                    });
-
-                    // Continue travelling
-                    currentX = side === "left"
-                        ? -cloudWidth - 250
-                        : screenWidth + cloudWidth + 250;
-
-                    animation.vars.x = side === "left"
-                        ? currentX + travelDistance
-                        : currentX - travelDistance;
-
-                }
-
+                gsap.to(cloud, {
+                    yPercent: -Number(cloud.dataset.depth) * 30,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: document.body,
+                        start: "top top",
+                        end: "bottom bottom",
+                        scrub: 1.5,
+                    },
+                });
             });
-
-            animations.push(animation);
-
-            gsap.to(cloud, {
-
-                yPercent: -Number(cloud.dataset.depth) * 30,
-
-                ease: "none",
-
-                scrollTrigger: {
-
-                    trigger: document.body,
-
-                    start: "top top",
-
-                    end: "bottom bottom",
-
-                    scrub: 1.5,
-
-                },
-
-            });
-
         });
 
         return () => {
-
-            animations.forEach(anim => anim.kill());
-
-            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-
+            animations.forEach((anim) => anim.kill());
+            ctx.revert();
         };
-
     }, []);
+
 
     return (
         <div className="background-clouds">

@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLayoutEffect, useRef } from "react";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { subscribeAppReady } from "@/lib/appReady";
 
-gsap.registerPlugin(ScrollTrigger);
 
 const sectionData = [
     {
@@ -35,12 +34,15 @@ with opportunities meant for you.`,
 export default function MainImageInfoSection() {
     const sectionRef = useRef(null);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (!sectionRef.current) return;
+
 
         let ctx;
 
-        const initGSAP = () => {
+        const unsubscribe = subscribeAppReady((ready) => {
+            if (!ready || ctx) return;
+
             ctx = gsap.context(() => {
                 const rows = gsap.utils.toArray(".info-row");
 
@@ -52,15 +54,6 @@ export default function MainImageInfoSection() {
                     const subtitle = row.querySelector("span");
                     const paragraph = row.querySelector("p");
 
-                    // initial state
-                    const tl = gsap.timeline({
-                        scrollTrigger: {
-                            trigger: row,
-                            start: "top 60%",
-                            end: "bottom top",
-                            scrub: 0.6, // base smoothness
-                        },
-                    });
                     gsap.fromTo(
                         [title, subtitle, paragraph],
                         {
@@ -83,8 +76,7 @@ export default function MainImageInfoSection() {
 
                     gsap.set(image, {
                         scale: 1,
-                        y: 100,
-                        rotate: i % 2 === 0 ? -0 : 0,
+                        y: 60,
                     });
 
                     gsap.set(content, {
@@ -92,34 +84,7 @@ export default function MainImageInfoSection() {
                     });
 
                     gsap.to(image, {
-                        y: -120,
-                        scale: 1,
-                        rotate: 0,
-                        ease: "none",
-                        scrollTrigger: {
-                            trigger: row,
-                            start: "top bottom",
-                            end: "bottom top",
-                            scrub: 0.6,
-                        },
-                    });
-
-                    gsap.to(content, {
-                        y: -200,
-                        ease: "none",
-                        scrollTrigger: {
-                            trigger: row,
-                            start: "top bottom",
-                            end: "bottom top",
-                            scrub: 0.6,
-                        },
-                    });
-
-                    // IMAGE PARALLAX
-                    gsap.to(image, {
                         y: -180,
-                        scale: 1,
-                        rotate: 0,
                         ease: "none",
                         scrollTrigger: {
                             trigger: row,
@@ -129,22 +94,9 @@ export default function MainImageInfoSection() {
                         },
                     });
 
-
-                    gsap.set(image, {
-                        scale: 1,
-                        y: 60,
-                        rotate: i % 2 === 0 ? -0 : 0,
-                    });
-
-                    gsap.set(content, {
-                        y: 40,
-                    });
-
-                    // CONTENT PARALLAX
                     gsap.to(content, {
                         y: -250,
                         ease: "none",
-                        opacity: 1,
                         scrollTrigger: {
                             trigger: row,
                             start: "top bottom",
@@ -154,21 +106,12 @@ export default function MainImageInfoSection() {
                     });
                 });
 
-                ScrollTrigger.refresh();
             }, sectionRef);
-        };
-
-        // 🔥 WAIT FOR FULL PAGE LOAD (CRITICAL FIX)
-        if (document.readyState === "complete") {
-            initGSAP();
-        } else {
-            window.addEventListener("load", initGSAP);
-        }
+        });
 
         return () => {
-            window.removeEventListener("load", initGSAP);
+            unsubscribe();
             ctx?.revert();
-            ScrollTrigger.getAll().forEach((t) => t.kill());
         };
     }, []);
 
