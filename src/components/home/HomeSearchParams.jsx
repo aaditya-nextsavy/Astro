@@ -20,7 +20,11 @@ export default function HomeSearchParams() {
             if (el) {
                 window.lenis?.scrollTo(el, {
                     offset: -60,
-                    duration: 1.5,
+                    duration: 3,
+                    easing: (t) =>
+                        t < 0.5
+                            ? 8 * t * t * t * t
+                            : 1 - Math.pow(-2 * t + 2, 4) / 2,
                 });
             }
         }, 1000);

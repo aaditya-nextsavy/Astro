@@ -3,34 +3,36 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { subscribeAppReady } from "@/lib/appReady";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import CustomParallaxImages from "../customParallaxImages/CustomParallaxImages";
 
 const sectionData = [
     {
         id: 1,
         label: "Why Us",
         title: "What Makes Us Your Trusted Spiritual Partners?",
-        image: "/assets/home/why-us.png",
+        image: "/assets/home/why-1.png",
     },
     {
         id: 2,
         subTitle: "A Marriage of Tradition & Modernity",
         description:
             "Aacharya Markand’s background in computer engineering lends precision to spiritual analysis, while Aacharya Shandilya’s expertise in international business brings a global perspective to their counsel. Together, they balance the ancient with the contemporary.",
-        image: "/assets/home/who-are-we-1.png",
+        image: "/assets/home/why-2.png",
+        showGlow: true,
     },
     {
         id: 3,
         subTitle: "A Heritage of Sacred Knowledge",
         description:
             "Born into a lineage of spiritual luminaries, their teachings are steeped in the eternal truths passed down by their grandfather, a towering figure of faith and wisdom.",
-        image: "/assets/home/who-are-we-2.png",
+        image: "/assets/home/why-3.png",
     },
     {
         id: 4,
         subTitle: "Solutions Designed for You",
         description:
             "Life is as unique as the stars above. Their consultations are personalized, offering practical remedies tailored to your individual journey—whether a simple Vastu adjustment, an intricate astrological insight, or compassionate spiritual counselling.",
-        image: "/assets/home/main-image-1.png",
+        image: "/assets/home/why-4.png",
     },
 ];
 
@@ -43,107 +45,107 @@ export default function WhyUs() {
 
 
 
-   useLayoutEffect(() => {
-    let ctx;
-    let observer;
-    let trigger;
+    useLayoutEffect(() => {
+        let ctx;
+        let observer;
+        let trigger;
 
-    const unsubscribe = subscribeAppReady((ready) => {
-        if (!ready || ctx) return;
+        const unsubscribe = subscribeAppReady((ready) => {
+            if (!ready || ctx) return;
 
-        ctx = gsap.context(() => {
-            const blocks = gsap.utils.toArray(".why-us-content-block");
+            ctx = gsap.context(() => {
+                const blocks = gsap.utils.toArray(".why-us-content-block");
 
-            // ----------------------------
-            // Reveal Animation
-            // ----------------------------
-            observer = new IntersectionObserver(
-                (entries) => {
-                    entries.forEach((entry) => {
-                        const block = entry.target;
+                // ----------------------------
+                // Reveal Animation
+                // ----------------------------
+                observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            const block = entry.target;
 
-                        const elements = block.querySelectorAll(
-                            ".why-us-label, .why-us-title, .why-us-subtitle, .why-us-description"
-                        );
+                            const elements = block.querySelectorAll(
+                                ".why-us-label, .why-us-title, .why-us-subtitle, .why-us-description"
+                            );
 
-                        if (entry.isIntersecting) {
-                            gsap.to(elements, {
-                                y: 0,
-                                duration: 0.6,
-                                ease: "power2.out",
-                                stagger: 0.05,
-                            });
-                        }
-                    });
-                },
-                {
-                    threshold: 0.3,
-                }
-            );
-
-            blocks.forEach((block) => observer.observe(block));
-
-            // ----------------------------
-            // Text Parallax
-            // ----------------------------
-            blocks.forEach((block) => {
-                const elements = block.querySelectorAll(
-                    ".why-us-label, .why-us-title, .why-us-subtitle, .why-us-description"
+                            if (entry.isIntersecting) {
+                                gsap.to(elements, {
+                                    y: 0,
+                                    duration: 0.6,
+                                    ease: "power2.out",
+                                    stagger: 0.05,
+                                });
+                            }
+                        });
+                    },
+                    {
+                        threshold: 0.3,
+                    }
                 );
 
-                elements.forEach((el, i) => {
-                    gsap.to(el, {
-                        y: (i + 1) * -15,
-                        ease: "none",
-                        scrollTrigger: {
-                            trigger: block,
-                            start: "top bottom",
-                            end: "bottom top",
-                            scrub: true,
-                        },
+                blocks.forEach((block) => observer.observe(block));
+
+                // ----------------------------
+                // Text Parallax
+                // ----------------------------
+                blocks.forEach((block) => {
+                    const elements = block.querySelectorAll(
+                        ".why-us-label, .why-us-title, .why-us-subtitle, .why-us-description"
+                    );
+
+                    elements.forEach((el, i) => {
+                        gsap.to(el, {
+                            y: (i + 1) * -15,
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: block,
+                                start: "top bottom",
+                                end: "bottom top",
+                                scrub: true,
+                            },
+                        });
                     });
                 });
+
+                // ----------------------------
+                // Active Image
+                // ----------------------------
+                const updateActiveBlock = () => {
+                    const viewportCenter = window.innerHeight * 0.5;
+
+                    let activeId = 1;
+
+                    blocksRef.current
+                        .filter(Boolean)
+                        .forEach((block) => {
+                            const rect = block.getBoundingClientRect();
+
+                            if (rect.top <= viewportCenter) {
+                                activeId = Number(block.dataset.id);
+                            }
+                        });
+
+                    setActiveImage(activeId);
+                };
+
+                trigger = ScrollTrigger.create({
+                    trigger: ".why-us-section",
+                    start: "top top",
+                    end: "bottom bottom",
+                    onUpdate: updateActiveBlock,
+                });
+
+                updateActiveBlock();
             });
-
-            // ----------------------------
-            // Active Image
-            // ----------------------------
-            const updateActiveBlock = () => {
-                const viewportCenter = window.innerHeight * 0.5;
-
-                let activeId = 1;
-
-                blocksRef.current
-                    .filter(Boolean)
-                    .forEach((block) => {
-                        const rect = block.getBoundingClientRect();
-
-                        if (rect.top <= viewportCenter) {
-                            activeId = Number(block.dataset.id);
-                        }
-                    });
-
-                setActiveImage(activeId);
-            };
-
-            trigger = ScrollTrigger.create({
-                trigger: ".why-us-section",
-                start: "top top",
-                end: "bottom bottom",
-                onUpdate: updateActiveBlock,
-            });
-
-            updateActiveBlock();
         });
-    });
 
-    return () => {
-        observer?.disconnect();
-        trigger?.kill();
-        unsubscribe();
-        ctx?.revert();
-    };
-}, []);
+        return () => {
+            observer?.disconnect();
+            trigger?.kill();
+            unsubscribe();
+            ctx?.revert();
+        };
+    }, []);
 
 
 
@@ -158,7 +160,7 @@ export default function WhyUs() {
 
                     <div className="why-us-image-stack">
 
-                        {sectionData.map((item) => (
+                        {/* {sectionData.map((item) => (
                             <img
                                 key={item.id}
                                 src={item.image}
@@ -166,7 +168,16 @@ export default function WhyUs() {
                                 className={`why-us-image ${activeImage === item.id ? "active" : ""
                                     }`}
                             />
-                        ))}
+                        ))} */}
+
+                        <CustomParallaxImages
+
+                            images={sectionData.map(item => item.image)}
+                            activeIndex={activeImage - 1}
+                            showGlow={sectionData[activeImage - 1]?.showGlow ?? false}
+                            showBgMask={true}
+                            bgLight={true}
+                        />
 
                     </div>
 
@@ -246,6 +257,6 @@ export default function WhyUs() {
 
             </div>
 
-        </section>
+        </section >
     );
 }

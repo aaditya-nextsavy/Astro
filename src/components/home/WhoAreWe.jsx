@@ -69,13 +69,13 @@ function WhoAreWePanel({ item, index }) {
                 const tl = gsap.timeline({
                     scrollTrigger: {
                         trigger: panel,
-                        start: "top 85%",
-                        end: "top 50%",
+                        start: "top 92%",
+                        end: "top 55%",
                         toggleActions: "play none none reverse",
                     },
                 });
 
-                // image (optional scroll feel but NOT required for text timing)
+
                 tl.to(image, {
                     yPercent: 0,
                     scale: 1,
@@ -86,29 +86,63 @@ function WhoAreWePanel({ item, index }) {
                     // text animation (stagger fade-in)
                     .fromTo(
                         label,
-                        { opacity: 0, y: 30 },
-                        { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }
-                    )
-                    .fromTo(
-                        title,
-                        { opacity: 0, y: 30 },
-                        { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }
-                    )
-                    .fromTo(
-                        descriptions,
-                        { opacity: 0, y: 30 },
+                        {
+                            opacity: 0,
+                            y: 24,
+                        },
                         {
                             opacity: 1,
                             y: 0,
                             duration: 0.45,
-                            stagger: 0.15,
-                            ease: "power2.out",
-                        }
+                            ease: "power3.out",
+                        },
+                        "-=0.55"
                     )
+
+                    .fromTo(
+                        title,
+                        {
+                            opacity: 0,
+                            y: 24,
+                        },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.55,
+                            ease: "power3.out",
+                        },
+                        "-=0.35"
+                    )
+
+                    .fromTo(
+                        descriptions,
+                        {
+                            opacity: 0,
+                            y: 24,
+                        },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.55,
+                            stagger: 0.06,
+                            ease: "power3.out",
+                        },
+                        "-=0.30"
+                    )
+
                     .fromTo(
                         buttons,
-                        { opacity: 0, y: 30 },
-                        { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }
+                        {
+                            opacity: 0,
+                            y: 24,
+                        },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.45,
+                            ease: "power3.out",
+                        },
+                        "-=0.25"
                     );
 
             }, panelRef);

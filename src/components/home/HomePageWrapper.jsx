@@ -16,13 +16,12 @@ import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa6";
 import { Suspense } from "react";
 import HomeSearchParams from "@/components/home/HomeSearchParams";
-
-// import { useSearchParams } from "next/navigation";
-
+import { subscribeAppReady } from "@/lib/appReady";
 
 
 export default function HomePageWrapper() {
 
+    const [appReady, setAppReadyState] = useState(false);
     const heroCloudContainerRef = useRef(null);
     const floatingNavRef = useRef(null);
     const bottomNavRef = useRef(null);
@@ -36,30 +35,37 @@ export default function HomePageWrapper() {
         setSelectedAcharya(data);
         setDrawerOpen(true);
     };
+    const pageRef = useRef(null);
 
-    // const searchParams = useSearchParams();
-    // useEffect(() => {
-    //     const id = searchParams.get("scroll");
+    useLayoutEffect(() => {
+        gsap.set(pageRef.current, {
+            autoAlpha: 0,
+        });
+    }, []);
 
 
-    //     if (!id) return;
+    useEffect(() => {
+        const unsubscribe = subscribeAppReady((ready) => {
+            setAppReadyState(ready);
+        });
 
-    //     const timer = setTimeout(() => {
-    //         ScrollTrigger.refresh();
+        return unsubscribe;
 
-    //         const el = document.getElementById(id);
+    }, []);
 
-    //         if (el) {
-    //             window.lenis?.scrollTo(el, {
-    //                 offset: -60,
-    //                 duration: 1.5,
-    //             });
-    //         }
-    //     }, 1000);
+    useEffect(() => {
+        const unsubscribe = subscribeAppReady((ready) => {
+            if (!ready) return;
 
-    //     return () => clearTimeout(timer);
-    // }, [searchParams]);
+            gsap.to(pageRef.current, {
+                autoAlpha: 1,
+                duration: 2,
+                ease: "expo.out",
+            });
+        });
 
+        return unsubscribe;
+    }, []);
 
 
     useLayoutEffect(() => {
@@ -77,109 +83,75 @@ export default function HomePageWrapper() {
             ease: "none",
             scrollTrigger: {
                 trigger: ".light-background-content",
-
-                // starts fading when middle of content approaches viewport
                 start: "top center",
-
-                // completely gone around middle of content
                 end: "center center",
-
                 scrub: true,
             },
         });
-
         return () => {
             tween.scrollTrigger?.kill();
             tween.kill();
         };
     }, []);
-
-
     useLayoutEffect(() => {
         const nav = floatingNavRef.current;
-
         if (!nav) {
             return undefined;
         }
-
         const lightSections = gsap.utils.toArray(
             ".light-background-zone, .light-background-zone--takeover"
         );
-
         if (!lightSections.length) {
             return undefined;
         }
-
         const activeSections = new Set();
-
         const syncNavTheme = () => {
             nav.classList.toggle(
                 "light-section-active",
                 activeSections.size > 0
             );
         };
-
         const triggers = lightSections.map((section) => {
             const isTakeover = section.classList.contains(
                 "light-background-zone--takeover"
             );
-
             return ScrollTrigger.create({
                 trigger: section,
-
-                // First light section behaves normally
                 start: isTakeover ? "top+=50%" : "top 55%",
-
-                // Keep your existing end position
-                // end: "bottom 100%",
                 end: isTakeover ? "bottom+=50%" : "bottom 100%",
-
-                // markers: true,
-
                 onEnter: () => {
                     activeSections.add(section);
                     syncNavTheme();
                 },
-
                 onEnterBack: () => {
                     activeSections.add(section);
                     syncNavTheme();
                 },
-
                 onLeave: () => {
                     activeSections.delete(section);
                     syncNavTheme();
                 },
-
                 onLeaveBack: () => {
                     activeSections.delete(section);
                     syncNavTheme();
                 },
             });
         });
-
         syncNavTheme();
-
         return () => {
             triggers.forEach((trigger) => trigger.kill());
             activeSections.clear();
         };
     }, []);
-
-
-
     useEffect(() => {
         if (!menuOpen) return;
-
         const scrollY = window.scrollY;
-
         document.body.style.position = "fixed";
         document.body.style.top = `-${scrollY}px`;
         document.body.style.left = "0";
         document.body.style.right = "0";
         document.body.style.width = "100%";
         document.body.style.overflow = "hidden";
-
         return () => {
             document.body.style.position = "";
             document.body.style.top = "";
@@ -187,14 +159,10 @@ export default function HomePageWrapper() {
             document.body.style.right = "";
             document.body.style.width = "";
             document.body.style.overflow = "";
-
             window.scrollTo(0, scrollY);
         };
     }, [menuOpen]);
-
-
     const [time, setTime] = useState("");
-
     useEffect(() => {
         const updateTime = () => {
             const formatted = new Intl.DateTimeFormat(
@@ -206,82 +174,58 @@ export default function HomePageWrapper() {
                     hour12: true,
                 }
             ).format(new Date());
-
             setTime(formatted);
         };
-
         updateTime();
-
         const interval = setInterval(
             updateTime,
             1000
         );
-
         return () =>
             clearInterval(interval);
     }, []);
-
-
-
     useLayoutEffect(() => {
         if (!lastlightSection.current || !bottomNavRef.current) return;
-
         const nav = bottomNavRef.current;
-
         const trigger = ScrollTrigger.create({
             trigger: lastlightSection.current,
-
-            // when the section is almost finished
+            markers: true,
             start: "bottom 0%",
             onEnter: () => {
                 nav.classList.add("hide-bottom-nav");
             },
-
             onLeaveBack: () => {
                 nav.classList.remove("hide-bottom-nav");
             },
         });
-
         return () => trigger.kill();
     }, []);
-
-
-
-
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.key === "Escape") {
                 setMenuOpen(false);
             }
         };
-
         window.addEventListener("keydown", handleKeyDown);
-
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
 
-
-
     return (
-
-
         <>
-
             <Suspense fallback={null}>
                 <HomeSearchParams />
-
             </Suspense>
+            <main
+                ref={pageRef}
 
-            <main className="relative min-h-screen">
+                className={`relative min-h-screen ${appReady ? "app-ready" : "app-loading"
+                    }`}>
                 <div
                     className={`transition-opacity duration-1000 opacity-100
                         }`}
                 >
-
-
-
                     <div className="site-floating-navbars"
                         ref={floatingNavRef}
                     >
@@ -296,12 +240,10 @@ export default function HomePageWrapper() {
                                     <span>Vastu Consultant</span>
                                 </div>
                             </Link>
-
                             <div className="astroHeroCenterLogo">
                                 Astro Acharya
                                 <span className="astroHeroTrademark">©</span>
                             </div>
-
                             <div className="astroHeroActions ">
                                 <a href="/contact" className="astroHeroMenuButton glass-effect-card">
                                     <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -310,14 +252,10 @@ export default function HomePageWrapper() {
                                         <circle cx="12.5" cy="2.5" r="2.5" fill="currentColor" />
                                         <circle cx="12.7949" cy="12.5" r="2.5" fill="currentColor" />
                                     </svg>
-
-
                                 </a>
-
                                 <a href="/contact" className="astroHeroContactButton glass-effect-card">
                                     Get In Touch
                                 </a>
-
                                 <div onClick={() => setMenuOpen(true)} className="astroHeroMenuButton mobile-nav-trigger glass-effect-card">
                                     <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
@@ -325,17 +263,9 @@ export default function HomePageWrapper() {
                                         <circle cx="12.5" cy="2.5" r="2.5" fill="currentColor" />
                                         <circle cx="12.7949" cy="12.5" r="2.5" fill="currentColor" />
                                     </svg>
-
                                 </div>
-
-
-
                             </div>
                         </div>
-
-
-
-
                         <div ref={bottomNavRef}
                             className="astroHeroBottomSection">
                             <div className="astroHeroTimeBlock">
@@ -350,9 +280,7 @@ export default function HomePageWrapper() {
                                     <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
                                     <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
                                 </svg>
-
                             </div>
-
                             <nav className="astroHeroNavigation glass-effect-card">
 
                                 <div>
@@ -360,7 +288,6 @@ export default function HomePageWrapper() {
                                         <circle cx="2.5" cy="12.3535" r="2.5" transform="rotate(-90 2.5 12.3535)" fill="currentColor" />
                                         <circle cx="2.5" cy="2.5" r="2.5" transform="rotate(-90 2.5 2.5)" fill="currentColor" />
                                     </svg>
-
                                 </div>
                                 <a href="/about">About</a>
                                 <a href="/services">Services</a>
@@ -369,16 +296,13 @@ export default function HomePageWrapper() {
                                     Rudraks
                                 </Link>
                                 <a href="/contact">Contact</a>
-
                                 <div>
                                     <svg width="5" height="15" viewBox="0 0 5 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <circle cx="2.5" cy="12.3535" r="2.5" transform="rotate(-90 2.5 12.3535)" fill="currentColor" />
                                         <circle cx="2.5" cy="2.5" r="2.5" transform="rotate(-90 2.5 2.5)" fill="currentColor" />
                                     </svg>
-
                                 </div>
                             </nav>
-
                             <a href="#" target="_blank" className="astroHeroTimeBlock">
                                 <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
@@ -388,14 +312,10 @@ export default function HomePageWrapper() {
                                     <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
                                     <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
                                 </svg>
-
                             </a>
                         </div>
-
-
                     </div>
                     <div className={`mobile-drawer-menu ${menuOpen ? "open" : ""}`}>
-
                         <div
                             className="mobile-drawer-menu-backdrop relative"
                             onClick={() => setMenuOpen(false)}
@@ -403,201 +323,94 @@ export default function HomePageWrapper() {
                         <div className={`acharyaDrawerContent mobile-header-menu  glass-effect-card `}>
 
                             <div className="acharyaDrawerContent-bg-filter"></div>
-
                             <Link href=''>
                                 <nav>Home</nav>
                                 <FaChevronRight />
-
                             </Link>
                             <Link href='./about'>
                                 <nav>About</nav>
                                 <FaChevronRight />
-
                             </Link>
                             <Link href='./services'>
                                 <nav>Services</nav>
                                 <FaChevronRight />
-
                             </Link>
                             <Link href='./gallery'>
                                 <nav>Gallery</nav>
                                 <FaChevronRight />
-
                             </Link>
                             <Link href='./contact'>
                                 <nav>Contact</nav>
                                 <FaChevronRight />
-
                             </Link>
-
-
-
-
-
                         </div>
-
                     </div>
-
                     <div className="hero-stack-sequence-wrapper">
-
-
                         <HomeHero onOpenAcharya={handleOpenAcharya} />
-
-
                         <AcharyaDrawer
                             isOpen={drawerOpen}
                             onClose={() => setDrawerOpen(false)}
                             service={selectedAcharya}
                         />
-
-
                         <div className="light-background-zone">
-
-                            {/* top */}
                             <svg className="light-background-content-top curve-1" width="1926" height="86" viewBox="0 0 1926 86" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M0.371094 83.8028C0.371094 83.8028 396.871 7.98401 967.371 2.33315C1537.87 -3.31771 1924.87 64.792 1924.87 64.792" stroke="#F3E9D8" strokeWidth="4" />
                             </svg>
-
-
                             <svg className="light-background-content-top curve-2" width="1929" height="228" viewBox="0 0 1929 228" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M969 2.33314C398.5 7.984 2 83.8028 2 83.8028V225.5H1926.5V64.792C1926.5 64.792 1539.5 -3.31772 969 2.33314Z" fill="#F3E9D8" stroke="#F3E9D8" strokeWidth="4" />
                             </svg>
-
-
-                            {/* bottom */}
                             <svg className="light-background-content-bottom curve-1" width="1926" height="86" viewBox="0 0 1926 86" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M0.371094 83.8028C0.371094 83.8028 396.871 7.98401 967.371 2.33315C1537.87 -3.31771 1924.87 64.792 1924.87 64.792" stroke="#F3E9D8" strokeWidth="4" />
                             </svg>
-
-
                             <svg className="light-background-content-bottom curve-2" width="1929" height="228" viewBox="0 0 1929 228" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M969 2.33314C398.5 7.984 2 83.8028 2 83.8028V225.5H1926.5V64.792C1926.5 64.792 1539.5 -3.31772 969 2.33314Z" fill="#F3E9D8" stroke="#F3E9D8" strokeWidth="4" />
                             </svg>
-
-
-
-
                             <div className="light-background-bg">
-
-
-
                                 <div className="light-background-overlay" />
-
                             </div>
-
                             <div className="light-background-content">
-
                                 <ImageZoom />
-
-
                                 <MainImageInfoSection />
-
-
                             </div>
-
                         </div>
-
-
-
                     </div>
-
-
-
                     {/* <HomeServices /> */}
-
-
                     <div className="home-services-wrapper">
                         <HomeServices />
                     </div>
-
-
-
-
-
-
                     <div className="hero-stack-sequence-wrapper">
-
-
-
                         <div className="hero-stack-sequence-2" >
-
-
                             <WhoAreWe />
-
                             {/* <HomeStory /> */}
-
-
-
                         </div>
-
-
-
                         <div className="light-background-zone light-background-zone--takeover min-h-screen" >
-
                             <svg className="light-background-content-top curve-1" width="1926" height="86" viewBox="0 0 1926 86" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M0.371094 83.8028C0.371094 83.8028 396.871 7.98401 967.371 2.33315C1537.87 -3.31771 1924.87 64.792 1924.87 64.792" stroke="#F3E9D8" strokeWidth="4" />
                             </svg>
-
-
                             <svg className="light-background-content-top curve-2" width="1929" height="228" viewBox="0 0 1929 228" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M969 2.33314C398.5 7.984 2 83.8028 2 83.8028V225.5H1926.5V64.792C1926.5 64.792 1539.5 -3.31772 969 2.33314Z" fill="#F3E9D8" stroke="#F3E9D8" strokeWidth="4" />
                             </svg>
-
-
                             <svg className="light-background-content-bottom curve-1" width="1926" height="86" viewBox="0 0 1926 86" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M0.371094 83.8028C0.371094 83.8028 396.871 7.98401 967.371 2.33315C1537.87 -3.31771 1924.87 64.792 1924.87 64.792" stroke="#F3E9D8" strokeWidth="4" />
                             </svg>
-
-
                             <svg className="light-background-content-bottom curve-2" width="1929" height="228" viewBox="0 0 1929 228" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M969 2.33314C398.5 7.984 2 83.8028 2 83.8028V225.5H1926.5V64.792C1926.5 64.792 1539.5 -3.31772 969 2.33314Z" fill="#F3E9D8" stroke="#F3E9D8" strokeWidth="4" />
                             </svg>
-
-
-
-
                             <div className="light-background-bg">
-
-
                                 <div className="light-background-overlay" />
-
                             </div>
-
                             <div className="light-background-content" >
-
-
                                 <WhyUs />
-
                                 <SliderWithFade />
-
-
                                 <ContactCTA />
-
                             </div>
-
                         </div>
-
-
-
                     </div>
-
-
-
-
                 </div>
-
-
             </main>
-
-
-
             <div ref={lastlightSection} className="footer-takeover-zone">
                 <Footer />
             </div>
-
-
-
-
         </>
 
     );

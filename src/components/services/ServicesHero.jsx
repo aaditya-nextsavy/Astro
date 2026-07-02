@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 
 export default function ServicesHero() {
 
-
+// Check if its in use or not (02-07-26)
     const [time, setTime] = useState("");
 
     useEffect(() => {
         const updateTime = () => {
+            // global datetime zone TO DO (02-07-26)
             const formatted = new Intl.DateTimeFormat(
                 "en-IN",
                 {

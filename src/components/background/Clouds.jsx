@@ -15,7 +15,7 @@ const CLOUDS = [
     },
     {
         id: 2,
-        src: "./assets/background/cloud2.svg",
+        src: "/assets/background/cloud2.svg",
         top: "20%",
         left: "30%",
         width: "18vw",
@@ -24,7 +24,7 @@ const CLOUDS = [
     },
     {
         id: 3,
-        src: "./assets/background/cloud3.png",
+        src: "/assets/background/cloud3.png",
         top: "30%",
         right: "-20%",
         width: "23vw",

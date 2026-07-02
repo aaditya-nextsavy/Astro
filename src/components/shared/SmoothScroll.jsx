@@ -59,7 +59,7 @@ export default function SmoothScroll() {
 
 
     return () => {
-      // 👇 Remove the global reference
+      //  Remove the global reference
       delete window.lenis;
       gsap.ticker.remove(update);
       unsubscribe();

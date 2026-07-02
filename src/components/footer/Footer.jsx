@@ -1,9 +1,8 @@
 
 "use client"
 import { useState, useRef, useEffect } from "react";
-
+import Link from "next/link";
 const services = [
-
     "Vedic Astrology",
     "Vastu Shastra",
     "Spiritual Guidance",
@@ -12,62 +11,45 @@ const services = [
 
 const Footer = () => {
 
-
     const [open, setOpen] = useState(false);
-    const [selected, setSelected] = useState("Select Service");
-
+    const [selected, setSelected] = useState("");
     const dropdownRef = useRef(null);
-
     useEffect(() => {
         const handleClick = (e) => {
             if (!dropdownRef.current?.contains(e.target)) {
                 setOpen(false);
             }
         };
-
         document.addEventListener("mousedown", handleClick);
-
         return () => document.removeEventListener("mousedown", handleClick);
     }, []);
-
-
-
     return (
         <footer className="footer">
             <div className="footer-container">
-
-                {/* CONTACT FORM */}
-
+                {/* FORM */}
                 <div className="footer-heading">
-                    <h2>Let's Talk</h2>
+                    <h2>Let&apos;s Talk</h2>
                     <p>
                         Aacharya Markand’s background in computer engineering lends precision to spiritual analysis, while Aacharya Shandilya’s expertise in international business brings a global perspective to their counsel.
                     </p>
                 </div>
-
-
                 <div className="glass-card footer-form">
-
                     <div className="footer-form-row">
                         <div className="footer-input">
                             <label>Hey! My name is</label>
                             <input placeholder="type..." />
                         </div>
-
                         <div className="footer-input">
                             <label>this is my number</label>
                             <input placeholder="type..." />
                         </div>
                     </div>
-
                     <div className="footer-input width-full">
                         <label>& my email id</label>
                         <input placeholder="type..." />
                     </div>
-
                     <div className="footer-input width-full">
                         <label>I'm looking for</label>
-
                         <div
                             className={`glass-dropdown ${open ? "active" : ""}`}
                             ref={dropdownRef}
@@ -78,7 +60,9 @@ const Footer = () => {
                                     className="glass-dropdown-trigger"
                                     onClick={() => setOpen(!open)}
                                 >
-                                    <span>{selected}</span>
+                                    <span className={selected ? "dropdown-selected" : "dropdown-placeholder"}>
+                                        {selected || "Select Service"}
+                                    </span>
 
                                     <span className="glass-dropdown-arrow">
                                         <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
@@ -93,10 +77,8 @@ const Footer = () => {
                                     </span>
                                 </button>
                             </div>
-
                             <div className="glass-dropdown-menu">
                                 <div className="glass-dropdown-backdrop"></div>
-
                                 <div className="glass-dropdown-content">
                                     {services.map((service) => (
                                         <button
@@ -115,28 +97,17 @@ const Footer = () => {
                             </div>
                         </div>
                     </div>
-
-
                     <div className="footer-submit-btn-wrapper">
                         <button className="footer-btn">
                             Get In Touch
                         </button>
                         <span className="sumbit-message">Our team will get back to you with custom package information.</span>
-
                     </div>
-
                 </div>
-
                 {/* BOTTOM GRID */}
-
-
                 <div className="footer-grid-wrapper">
-
                     <div className="footer-grid-layer-1">
-
                         <div className="footer-grid-of-2 glow-svgs">
-
-
                             <div className="glass-card icon-card">
                                 <svg width="100" height="107" viewBox="0 0 100 107" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <mask id="mask0_85_7378" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="5" width="100" height="102">
@@ -161,9 +132,6 @@ const Footer = () => {
 
                             <div className="glass-card icon-card">
                                 <svg width="126" height="114" viewBox="0 0 126 114" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    {/* <mask id="mask0_85_7383" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="7" y="0" width="111" height="114">
-                                        <ellipse cx="62.5993" cy="56.8128" rx="55.3805" ry="56.8128" fill="black" />
-                                    </mask> */}
                                     <g mask="url(#mask0_85_7383)">
                                         <g filter="url(#filter0_f_85_7383)">
                                             <path d="M60.6237 20.6373C58.655 21.2327 56.9365 22.7075 56.2396 24.6695C54.7376 28.2147 56.9702 32.6664 60.6169 33.7624C64.9536 35.4809 70.1226 31.3335 69.534 26.7464C69.534 22.3626 64.656 19.3451 60.6237 20.6373ZM66.2391 28.7829C65.1566 31.7463 60.4818 31.8273 59.2097 28.9927C58.134 27.0983 58.9932 24.6221 60.901 23.668C64.0335 21.7739 67.9372 25.637 66.2391 28.7829Z" fill="#D0E3F1" />
@@ -198,9 +166,6 @@ const Footer = () => {
 
                             <div className="glass-card icon-card">
                                 <svg width="127" height="107" viewBox="0 0 127 107" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    {/* <mask id="mask0_85_7405" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="11" y="0" width="105" height="107">
-                                        <ellipse cx="63.1665" cy="53.1871" rx="51.8462" ry="53.1871" fill="black" />
-                                    </mask> */}
                                     <g mask="url(#mask0_85_7405)">
                                         <g filter="url(#filter0_f_85_7405)">
                                             <path d="M23.4507 87.9583C33.5681 90.8288 44.6038 90.1312 54.3482 86.203C57.4473 84.9335 60.4945 83.424 63.0483 81.2283C71.863 87.7582 83.2545 90.3256 94.1007 89.5707C102.56 88.6558 111.277 85.9283 117.503 79.9017C118.06 79.2327 119.311 78.2893 118.496 77.3687C115.22 73.7893 111.271 70.9303 107.426 68.0027C112.344 61.7472 116.453 54.5998 117.911 46.7148C118.198 45.6226 116.993 45.0737 116.224 44.662C109.194 41.3227 101.154 40.4306 93.481 41.4714C93.7622 35.925 92.7752 30.3613 91.1453 25.0721C91.0019 23.9973 89.6705 24.0829 88.9186 24.3402C83.7652 25.6097 78.8987 27.8969 74.4971 30.8415C72.0122 26.0498 68.8673 21.567 65.051 17.7361C64.4599 17.2158 63.8861 16.5354 63.0597 16.4209C62.2793 16.7354 61.6881 17.3531 61.097 17.9304C57.2865 21.7501 54.0899 26.1643 51.605 30.9444C46.9853 27.9997 41.9468 25.6038 36.6153 24.2829C35.6397 23.8655 34.9052 24.7975 34.7846 25.6552C33.3212 30.8529 32.4776 36.245 32.5752 41.6484C24.9484 40.2247 16.8337 41.2825 9.86108 44.6846C8.76495 45.0735 7.92143 46.1427 8.39196 47.3377C9.97596 55.0227 13.8553 62.0786 18.7619 68.1454C14.9226 70.8729 10.9113 73.5375 7.8698 77.1683C6.91711 78.0545 8.13955 79.0438 8.68476 79.7356C12.7879 83.6984 18.0159 86.3343 23.4507 87.9583ZM115.874 78.049C108.367 85.0134 97.7333 87.6895 87.679 87.1006C83.3806 86.7803 79.0479 86.1857 75.0135 84.6074C72.9992 83.9156 71.1513 82.7262 69.005 82.4802C68.5287 81.6912 69.9232 81.5768 70.2158 82.2686C79.0993 82.566 88.2873 81.2909 96.0746 76.7737C99.5293 74.9039 102.628 72.4795 105.613 69.9465C109.176 72.4455 112.746 74.9956 115.874 78.049ZM93.5037 44.0785C100.855 42.8148 108.539 43.8555 115.322 46.949C115.093 48.8932 114.358 50.723 113.675 52.5468C111.173 58.8708 107.535 64.8805 102.353 69.3862C98.0659 73.0113 93.1994 76.0761 87.7761 77.6944C81.6815 79.5185 75.168 80.4677 68.8383 79.4671C73.9055 76.6423 79.0877 73.7721 83.0074 69.3978C89.3144 62.4791 92.7003 53.3131 93.5037 44.0785ZM89.1881 26.8561C91.7534 36.491 91.8452 46.9947 88.161 56.3608C85.085 64.6805 78.6288 71.5991 70.6692 75.5103C69.7855 75.8191 69.1197 76.7568 68.1441 76.7454C77.814 67.2364 80.9243 52.2154 77.4294 39.3271C77.0048 37.2459 75.9201 35.3531 75.6275 33.2489C79.6504 30.2298 84.2874 28.0168 89.1881 26.8561ZM63.1285 19.4684C70.8414 26.9133 75.5644 37.2798 76.2588 47.9324C76.8328 57.3499 73.6935 66.9504 67.5071 74.1092C66.3365 75.4071 65.0222 76.5964 63.5702 77.5743C62.8357 78.0488 62.2101 77.1854 61.6192 76.8767C54.4743 71.136 50.8015 62.0328 49.9868 53.0957C48.9651 40.665 54.0842 28.0284 63.1285 19.4684ZM37.0113 26.9306C41.7746 28.3657 46.3482 30.4699 50.463 33.266C50.1071 35.5474 49.0169 37.6346 48.6323 39.9161C46.3539 49.3622 47.2034 59.6546 51.7599 68.3229C53.361 71.5707 55.4729 74.6011 58.2792 76.917C56.9478 76.6655 55.9149 75.6533 54.6753 75.156C44.7185 70.0841 37.8377 60.0034 35.8752 49.1335C34.4634 41.7686 35.0372 34.1408 37.0113 26.9306ZM10.8081 46.9433C17.5052 43.5926 25.3444 42.7349 32.6727 44.1586C33.3901 51.8722 35.6799 59.5856 40.2479 65.9326C43.301 70.1697 47.3525 73.6119 51.7713 76.3622C53.7226 77.6029 55.909 78.4206 57.8372 79.7015C47.4558 80.6907 36.4488 78.8153 27.8807 72.6169C19.0145 66.756 13.316 57.0984 10.8081 46.9433ZM20.4378 69.981C26.3602 75.2245 33.3328 79.5415 41.1892 81.1138C46.4172 82.1031 51.8919 82.7777 57.1602 81.8514C51.4961 85.5853 44.4947 86.7917 37.8148 87.2321C28.0246 87.3864 17.6258 84.8191 10.3834 77.9234C13.4882 74.9842 16.8739 72.3483 20.4378 69.981Z" fill="#D0E3F1" />
@@ -245,7 +210,7 @@ const Footer = () => {
                         </div>
                         <div className="footer-grid-of-1">
 
-                            <a href="https://maps.app.goo.gl/L4zyurqenBNAyh2T7" target="_blank" className="glass-card address-card">
+                            <Link href="https://maps.app.goo.gl/L4zyurqenBNAyh2T7" target="_blank" className="glass-card address-card">
                                 <span>Office Location</span>
 
                                 <p>
@@ -260,48 +225,48 @@ const Footer = () => {
 
                                     Get Directions
                                 </span>
-                            </a>
+                            </Link>
 
                         </div>
                         <div className="footer-grid-of-2">
 
-                            <a href="https://instagram.com/astro" target="_blank" className="glass-card social-card">
+                            <Link href="https://instagram.com/astro" target="_blank" className="glass-card social-card">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M26.0513 4.00098C28.3021 4.0047 29.4427 4.01662 30.4283 4.04596L30.8165 4.05864C31.2649 4.07458 31.7073 4.09458 32.2407 4.11958C34.3689 4.21792 35.8207 4.55458 37.0957 5.04958C38.4139 5.55792 39.5273 6.24458 40.6389 7.35626C41.7489 8.46792 42.4357 9.58458 42.9457 10.8996C43.4389 12.1729 43.7757 13.6263 43.8757 15.7546C43.8995 16.2879 43.9187 16.7303 43.9345 17.1788L43.9471 17.567C43.9763 18.5525 43.9897 19.6932 43.9939 21.9441L43.9955 23.4353C43.9957 23.6175 43.9957 23.8055 43.9957 23.9995L43.9955 24.5637L43.9943 26.0551C43.9905 28.3059 43.9787 29.4467 43.9493 30.4321L43.9365 30.8203C43.9207 31.2689 43.9007 31.7113 43.8757 32.2445C43.7773 34.3729 43.4389 35.8245 42.9457 37.0995C42.4373 38.4179 41.7489 39.5313 40.6389 40.6429C39.5273 41.7529 38.4089 42.4395 37.0957 42.9495C35.8207 43.4429 34.3689 43.7795 32.2407 43.8795C31.7073 43.9033 31.2649 43.9227 30.8165 43.9383L30.4283 43.9509C29.4427 43.9803 28.3021 43.9935 26.0513 43.9979L24.5599 43.9995C24.3777 43.9995 24.1897 43.9995 23.9957 43.9995H23.4315L21.9401 43.9981C19.6893 43.9945 18.5486 43.9825 17.5631 43.9531L17.1749 43.9405C16.7264 43.9245 16.284 43.9045 15.7507 43.8795C13.6223 43.7813 12.1723 43.4429 10.8957 42.9495C9.57899 42.4413 8.46399 41.7529 7.35233 40.6429C6.24067 39.5313 5.55567 38.4129 5.04567 37.0995C4.55067 35.8245 4.21567 34.3729 4.11567 32.2445C4.09191 31.7113 4.07253 31.2689 4.05683 30.8203L4.04425 30.4321C4.01499 29.4467 4.00165 28.3059 3.99733 26.0551L3.99707 21.9441C4.00079 19.6932 4.01269 18.5525 4.04203 17.567L4.05473 17.1788C4.07067 16.7303 4.09067 16.2879 4.11567 15.7546C4.21399 13.6246 4.55067 12.1746 5.04567 10.8996C5.55399 9.58292 6.24067 8.46792 7.35233 7.35626C8.46399 6.24458 9.58067 5.55958 10.8957 5.04958C12.1707 4.55458 13.6207 4.21958 15.7507 4.11958C16.284 4.09584 16.7264 4.07646 17.1749 4.06076L17.5631 4.04818C18.5486 4.0189 19.6893 4.00556 21.9401 4.00124L26.0513 4.00098ZM23.9957 13.9996C18.4699 13.9996 13.9957 18.4786 13.9957 23.9995C13.9957 29.5253 18.4747 33.9995 23.9957 33.9995C29.5215 33.9995 33.9957 29.5205 33.9957 23.9995C33.9957 18.4738 29.5165 13.9996 23.9957 13.9996ZM23.9957 17.9996C27.3095 17.9996 29.9957 20.6849 29.9957 23.9995C29.9957 27.3133 27.3103 29.9995 23.9957 29.9995C20.6819 29.9995 17.9957 27.3143 17.9957 23.9995C17.9957 20.6857 20.6809 17.9996 23.9957 17.9996ZM34.4957 10.9996C33.1171 10.9996 31.9957 12.1194 31.9957 13.4979C31.9957 14.8764 33.1155 15.9979 34.4957 15.9979C35.8741 15.9979 36.9957 14.8781 36.9957 13.4979C36.9957 12.1194 35.8723 10.9979 34.4957 10.9996Z" fill="#D0E3F1" />
                                 </svg>
 
-                            </a>
+                            </Link>
 
-                            <a href="https://linkedin.com/astro" target="_blank" className="glass-card social-card">
+                            <Link href="https://linkedin.com/astro" target="_blank" className="glass-card social-card">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M13.878 10.0028C13.8773 11.6314 12.8892 13.097 11.3797 13.7084C9.87027 14.3198 8.14081 13.955 7.00687 12.786C5.87293 11.617 5.56097 9.87723 6.21807 8.38707C6.87519 6.89691 8.37015 5.95393 9.99803 6.00279C12.1602 6.06769 13.879 7.83967 13.878 10.0028ZM13.998 16.9628H5.99803V42.0027H13.998V16.9628ZM26.6381 16.9628H18.678V42.0027H26.5581V28.8627C26.5581 21.5427 36.0981 20.8627 36.0981 28.8627V42.0027H43.9981V26.1427C43.9981 13.8028 29.8781 14.2628 26.5581 20.3227L26.6381 16.9628Z" fill="#D0E3F1" />
                                 </svg>
 
-                            </a>
+                            </Link>
 
 
 
 
-                            <a href="https://facebook.com/astro" target="_blank" className="glass-card social-card">
+                            <Link href="https://facebook.com/astro" target="_blank" className="glass-card social-card">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M24.0046 1.59961C11.6252 1.59961 1.58984 11.635 1.58984 24.0143C1.58984 35.2021 9.78656 44.4751 20.5023 46.1566V30.4935H14.811V24.0143H20.5023V19.0761C20.5023 13.4584 23.8486 10.3553 28.9685 10.3553C31.4209 10.3553 33.986 10.7931 33.986 10.7931V16.3092H31.1595C28.3752 16.3092 27.5069 18.037 27.5069 19.8097V24.0143H33.7233L32.7297 30.4935H27.5069V46.1566C38.2224 44.4751 46.4192 35.2021 46.4192 24.0143C46.4192 11.635 36.3837 1.59961 24.0046 1.59961Z" fill="#D0E3F1" />
                                 </svg>
 
-                            </a>
+                            </Link>
 
-                            <a href="https://x.com/astro" target="_blank" className="glass-card social-card">
+                            <Link href="https://x.com/astro" target="_blank" className="glass-card social-card">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M35.044 7.19629H40.9323L28.0681 21.4289L43.2018 40.7963H31.3523L22.0713 29.0501L11.4519 40.7963H5.56004L19.3195 25.5729L4.80176 7.19629H16.9521L25.3412 17.9328L35.044 7.19629ZM32.9774 37.3846H36.2402L15.1792 10.4288H11.6779L32.9774 37.3846Z" fill="#D0E3F1" />
                                 </svg>
 
-                            </a>
+                            </Link>
 
 
 
                         </div>
                     </div>
                     <div className="footer-grid-layer-2">
-                        <a
+                        <Link
                             href="https://wa.me/919876512312"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -309,23 +274,23 @@ const Footer = () => {
                         >
                             <span>WhatsApp</span>
                             <div className="footer-hover-underline">Chat With Us</div>
-                        </a>
+                        </Link>
 
-                        <a
+                        <Link
                             href="mailto:info@example.com"
                             className="glass-card contact-card"
                         >
                             <span>Email Us</span>
                             <div className="footer-hover-underline">info@example.com</div>
-                        </a>
+                        </Link>
 
-                        <a
+                        <Link
                             href="tel:+919876512312"
                             className="glass-card contact-card"
                         >
                             <span>Call Us</span>
                             <div className="footer-hover-underline">+91 98765 12312</div>
-                        </a>
+                        </Link>
 
                     </div>
 
@@ -350,25 +315,25 @@ const Footer = () => {
 
                         </div>
                         <div className="footer-nav-links flex gap-12 items-center justify-between">
-                            <a href="/about">
+                            <Link href="/about">
                                 About
-                            </a>
+                            </Link>
 
-                            <a href="/services">
+                            <Link href="/services">
                                 Services
-                            </a>
+                            </Link>
 
-                            <a href="/gallery">
+                            <Link href="/gallery">
                                 Gallery
-                            </a>
+                            </Link>
 
-                            <a href="/rudraks">
+                            <Link href="/rudraks">
                                 Rudraks
-                            </a>
+                            </Link>
 
-                            <a href="/contact">
+                            <Link href="/contact">
                                 Contact
-                            </a>
+                            </Link>
 
                         </div>
 
@@ -379,7 +344,7 @@ const Footer = () => {
                             <span className="footer-legal-information-link cursor-default">
                                 © 2026 Astro Acharya. All rights reserved.
                             </span>
-                            <a href="/privacy-policies" target="_blank" className="footer-legal-information-link">
+                            <Link href="/privacy-policies" target="_blank" className="footer-legal-information-link">
                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g filter="url(#filter0_f_83_6873)">
                                         <path d="M6 1L6.67175 5.32825L11 6L6.67175 6.67175L6 11L5.32825 6.67175L1 6L5.32825 5.32825L6 1Z" fill="white" />
@@ -393,8 +358,8 @@ const Footer = () => {
                                     </defs>
                                 </svg>
                                 <strong >Privacy policy</strong>
-                            </a>
-                            <a href="/terms-and-conditions" target="_blank" className="footer-legal-information-link">
+                            </Link>
+                            <Link href="/terms-and-conditions" target="_blank" className="footer-legal-information-link">
                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g filter="url(#filter0_f_83_6873)">
                                         <path d="M6 1L6.67175 5.32825L11 6L6.67175 6.67175L6 11L5.32825 6.67175L1 6L5.32825 5.32825L6 1Z" fill="white" />
@@ -412,14 +377,14 @@ const Footer = () => {
                                     Terms & Conditions
                                 </strong>
 
-                            </a>
+                            </Link>
 
                         </div>
-                        <a href="https://www.nextsavy.com/" target="_blank" className="crafted-by">
+                        <Link href="https://www.nextsavy.com/" target="_blank" className="crafted-by">
                             <strong>
                                 Crafted by Nextsavy Technologies
                             </strong>
-                        </a>
+                        </Link>
 
                     </div>
                 </div>
