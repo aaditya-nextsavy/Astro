@@ -189,7 +189,7 @@ export default function HomePageWrapper() {
         const nav = bottomNavRef.current;
         const trigger = ScrollTrigger.create({
             trigger: lastlightSection.current,
-            markers: true,
+            // markers: true,
             start: "bottom 0%",
             onEnter: () => {
                 nav.classList.add("hide-bottom-nav");
