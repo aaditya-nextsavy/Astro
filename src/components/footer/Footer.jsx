@@ -2,6 +2,8 @@
 "use client"
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+
 const services = [
     "Vedic Astrology",
     "Vastu Shastra",
@@ -14,6 +16,133 @@ const Footer = () => {
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState("");
     const dropdownRef = useRef(null);
+    const { executeRecaptcha } = useGoogleReCaptcha();
+    const [formData, setFormData] = useState({
+        name: "",
+        phone: "",
+        email: "",
+        service: "",
+    });
+    const [errors, setErrors] = useState({});
+    const [popup, setPopup] = useState({
+        open: false,
+        type: "",
+        title: "",
+        message: "",
+    });
+    const handleChange = (field, value) => {
+        setFormData((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+
+        setErrors((prev) => ({
+            ...prev,
+            [field]: "",
+        }));
+    };
+
+    const validateForm = () => {
+
+        const newErrors = {};
+
+
+        // Name
+        if (!formData.name.trim()) {
+            newErrors.name = "Please enter your name.";
+        }
+        // Phone
+        if (!formData.phone.trim()) {
+            newErrors.phone = "Please enter your phone number.";
+        } else if (!/^[6-9]\d{9}$/.test(formData.phone)) {
+            newErrors.phone = "Enter a valid 10-digit mobile number.";
+        }
+        // Email
+        if (!formData.email.trim()) {
+            newErrors.email = "Please enter your email address.";
+        } else if (
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
+        ) {
+            newErrors.email = "Enter a valid email address.";
+        }
+        // Service
+        if (!formData.service) {
+            newErrors.service = "Please select a service.";
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) return;
+
+        console.log(formData);
+
+        if (!executeRecaptcha) {
+            console.log("Recaptcha not ready.");
+            return;
+        }
+        try {
+            const token = await executeRecaptcha("footer_contact");
+
+            console.log(token);
+
+            // Send token with your form
+            console.log({
+                ...formData,
+                captchaToken: token,
+            });
+
+            // API call goes here
+
+        } catch (err) {
+            console.error(err);
+        }
+
+
+        // try {
+        //     const response = await fetch("/api/contact", {
+        //         method: "POST",
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //         },
+        //         body: JSON.stringify({
+        //             ...formData,
+        //             captchaToken,
+        //         }),
+        //     });
+
+        //     if (!response.ok) {
+        //         throw new Error("Request failed");
+        //     }
+
+        //     setPopup({
+        //         open: true,
+        //         type: "success",
+        //         title: "Thank You!",
+        //         message:
+        //             "Your enquiry has been submitted successfully. Our team will get in touch with you shortly.",
+        //     });
+
+        // } catch (error) {
+        //     setPopup({
+        //         open: true,
+        //         type: "error",
+        //         title: "Something went wrong",
+        //         message:
+        //             "Please try again later. If the issue continues, feel free to contact us directly.",
+        //     });
+        // }
+
+
+        // Recaptcha validation later
+        // API later
+        // recaptchaRef.current?.reset();
+        // setCaptchaToken(null);
+
+    };
     useEffect(() => {
         const handleClick = (e) => {
             if (!dropdownRef.current?.contains(e.target)) {
@@ -23,6 +152,24 @@ const Footer = () => {
         document.addEventListener("mousedown", handleClick);
         return () => document.removeEventListener("mousedown", handleClick);
     }, []);
+
+
+    useEffect(() => {
+        if (!popup.open || popup.type !== "success") return;
+
+        const timer = setTimeout(() => {
+            setPopup((prev) => ({
+                ...prev,
+                open: false,
+            }));
+        }, 3500);
+
+        return () => clearTimeout(timer);
+
+
+
+
+    }, [popup]);
     return (
         <footer className="footer">
             <div className="footer-container">
@@ -33,21 +180,54 @@ const Footer = () => {
                         Aacharya Markand’s background in computer engineering lends precision to spiritual analysis, while Aacharya Shandilya’s expertise in international business brings a global perspective to their counsel.
                     </p>
                 </div>
-                <div className="glass-card footer-form">
+                <form className="glass-card footer-form">
                     <div className="footer-form-row">
                         <div className="footer-input">
                             <label>Hey! My name is</label>
-                            <input placeholder="type..." />
+                            <input placeholder="type..."
+                                onChange={(e) => handleChange("name", e.target.value)}
+                            />
+                            {errors.name && (
+                                <span className=" form-error-span block text-sm text-red-400">
+                                    {errors.name}
+                                </span>
+                            )}
                         </div>
                         <div className="footer-input">
                             <label>this is my number</label>
-                            <input placeholder="type..." />
+                            <input
+                                type="tel"
+                                maxLength={10}
+                                inputMode="numeric"
+                                placeholder="type..."
+                                value={formData.phone}
+                                onChange={(e) =>
+                                    handleChange(
+                                        "phone",
+                                        e.target.value.replace(/\D/g, "")
+                                    )
+                                }
+                            />
+                            {errors.phone && (
+                                <span className="form-error-span block text-sm text-red-400">
+                                    {errors.phone}
+                                </span>
+                            )}
                         </div>
                     </div>
                     <div className="footer-input width-full">
                         <label>& my email id</label>
-                        <input placeholder="type..." />
+                        <input placeholder="type..."
+                            onChange={(e) => handleChange("email", e.target.value)}
+                        />
+                        {errors.email && (
+                            <span className="form-error-span block text-sm text-red-400">
+                                {errors.email}
+                            </span>
+                        )}
                     </div>
+
+
                     <div className="footer-input width-full">
                         <label>I'm looking for</label>
                         <div
@@ -86,24 +266,40 @@ const Footer = () => {
                                             type="button"
                                             className="glass-dropdown-item"
                                             onClick={() => {
+                                                handleChange("service", service);
                                                 setSelected(service);
                                                 setOpen(false);
                                             }}
                                         >
                                             {service}
                                         </button>
+
                                     ))}
+                                    {errors.service && (
+                                        <span className="mt-2 block text-sm text-red-400">
+                                            {errors.service}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
+
+
+
                     <div className="footer-submit-btn-wrapper">
-                        <button className="footer-btn">
+                        <button
+                            type="button"
+                            className="footer-btn"
+                            onClick={handleSubmit}
+                        >
                             Get In Touch
                         </button>
                         <span className="sumbit-message">Our team will get back to you with custom package information.</span>
                     </div>
-                </div>
+                </form>
                 {/* BOTTOM GRID */}
                 <div className="footer-grid-wrapper">
                     <div className="footer-grid-layer-1">
@@ -327,8 +523,8 @@ const Footer = () => {
                                 Gallery
                             </Link>
 
-                            <Link href="/rudraks">
-                                Rudraks
+                            <Link href="/?scroll=rudaxSection">
+                                Rudraksh
                             </Link>
 
                             <Link href="/contact">
@@ -338,6 +534,7 @@ const Footer = () => {
                         </div>
 
                     </div>
+
                     <div className="footer-legal-information flex justify-between ">
                         <div className="flex justify-start gap-3">
 
@@ -387,9 +584,105 @@ const Footer = () => {
                         </Link>
 
                     </div>
-                </div>
 
+                </div>
+                <div className="footer-legal-information  flex justify-start ">
+                    <div className="flex justify-start gap-3">
+
+                        <span className="footer-legal-information-link cursor-default">
+                            This site is protected by reCAPTCHA and the Google
+                        </span>
+                    </div>
+                </div>
             </div>
+
+            {popup.open && (
+                <div
+                    className="popup-overlay fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-md px-6"
+                    onClick={() =>
+                        setPopup((prev) => ({
+                            ...prev,
+                            open: false,
+                        }))
+                    }
+                >
+                    <div
+                        className="popup-card glass-effect-card relative w-full max-w-md rounded-[28px] p-8 text-center"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div
+                            className={`mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full ${popup.type === "success"
+                                ? "bg-green-500/15 text-green-400"
+                                : "bg-red-500/15 text-red-400"
+                                }`}
+                        >
+                            {popup.type === "success" ? (
+                                <svg
+                                    width="42"
+                                    height="42"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                >
+                                    <path
+                                        d="M20 6L9 17L4 12"
+                                        stroke="currentColor"
+                                        strokeWidth="2.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
+                            ) : (
+                                <svg
+                                    width="42"
+                                    height="42"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                >
+                                    <path
+                                        d="M12 8V13"
+                                        stroke="currentColor"
+                                        strokeWidth="2.5"
+                                        strokeLinecap="round"
+                                    />
+                                    <circle
+                                        cx="12"
+                                        cy="17"
+                                        r="1"
+                                        fill="currentColor"
+                                    />
+                                    <path
+                                        d="M12 3L2 21H22L12 3Z"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
+                            )}
+                        </div>
+
+                        <h3 className="mb-3 text-3xl font-semibold text-white">
+                            {popup.title}
+                        </h3>
+
+                        <p className="mb-8 text-white/70 leading-7">
+                            {popup.message}
+                        </p>
+
+                        <button
+                            onClick={() =>
+                                setPopup((prev) => ({
+                                    ...prev,
+                                    open: false,
+                                }))
+                            }
+                            className="footer-btn"
+                        >
+                            {popup.type === "success" ? "Done" : "Try Again"}
+                        </button>
+                    </div>
+                </div>
+            )}
+
         </footer>
     );
 };

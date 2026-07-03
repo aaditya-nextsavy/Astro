@@ -94,11 +94,11 @@ export default function CustomParallaxImages({
 
                 </div>
 
-                <img
+                {/* <img
                     src="/assets/customParallaxImage/cloud-ring.png"
                     className="cpp-cloud-ring"
                     alt=""
-                />
+                /> */}
 
             </div>
 

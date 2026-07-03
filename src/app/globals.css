@@ -3201,7 +3201,55 @@ body.drawer-open {
   align-items: center;
   gap: 12px;
   margin-bottom: 30px;
+  position: relative;
 }
+
+.footer-input input {
+  position: relative;
+
+}
+
+.form-error-span {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+}
+
+.footer .popup-overlay {
+  animation: popupFade 0.3s ease;
+}
+
+.footer .popup-card {
+  animation: popupScale 0.35s cubic-bezier(.22, 1, .36, 1);
+}
+
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
+
+@keyframes popupFade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popupScale {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 
 .footer .glass-card,
 .footer .glass-effect-card {

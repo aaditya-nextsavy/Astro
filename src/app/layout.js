@@ -3,6 +3,8 @@ import SmoothScroll from "@/components/shared/SmoothScroll";
 import GlobalBackground from "@/components/background/GlobalBackground";
 import { newYork, satoshi } from "./fonts";
 import SessionLoader from "@/components/loader/SessionLoader";
+import Providers from "./providers";
+
 export const metadata = {
   title: "Unlock The Cosmic Pathway To Your Inner Harmony",
   description:
@@ -41,8 +43,11 @@ export default function RootLayout({ children }) {
         <SessionLoader />
         <GlobalBackground />
         <SmoothScroll />
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
+
     </html>
   );
 }

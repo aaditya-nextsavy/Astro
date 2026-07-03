@@ -212,6 +212,21 @@ export default function HomePageWrapper() {
         };
     }, []);
 
+
+
+    useLayoutEffect(() => {
+        const id = requestAnimationFrame(() => {
+            setTimeout(() => {
+                console.log("FINAL REFRESH");
+                ScrollTrigger.refresh();
+            }, 500);
+        });
+
+        return () => cancelAnimationFrame(id);
+    }, []);
+
+
+
     return (
         <>
             <Suspense fallback={null}>
