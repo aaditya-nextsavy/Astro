@@ -54,81 +54,6 @@ const CLOUDS = [
 export default function Clouds() {
 
 
-    // useLayoutEffect(() => {
-    //     let animations = [];
-
-    //     const ctx = gsap.context(() => {
-    //         const clouds = gsap.utils.toArray(".cloud");
-
-    //         clouds.forEach((cloud) => {
-    //             const side = cloud.dataset.side;
-    //             const cloudWidth = cloud.offsetWidth;
-    //             const screenWidth = window.innerWidth;
-
-    //             const speed = gsap.utils.random(0.5, 12);
-    //             const delay = gsap.utils.random(0, 1);
-
-    //             let currentX = 0;
-
-    //             const travelDistance =
-    //                 screenWidth + cloudWidth + 250;
-
-    //             const duration = travelDistance / speed;
-
-    //             const animation = gsap.to(cloud, {
-    //                 x:
-    //                     side === "left"
-    //                         ? `+=${travelDistance}`
-    //                         : `-=${travelDistance}`,
-
-    //                 duration,
-    //                 delay,
-    //                 ease: "none",
-    //                 repeat: -1,
-    //                 repeatDelay: gsap.utils.random(0, 3),
-
-    //                 onRepeat: () => {
-    //                     gsap.set(cloud, {
-    //                         x:
-    //                             side === "left"
-    //                                 ? -cloudWidth - 250
-    //                                 : screenWidth + cloudWidth + 250,
-    //                     });
-
-    //                     currentX =
-    //                         side === "left"
-    //                             ? -cloudWidth - 250
-    //                             : screenWidth + cloudWidth + 250;
-
-    //                     animation.vars.x =
-    //                         side === "left"
-    //                             ? currentX + travelDistance
-    //                             : currentX - travelDistance;
-    //                 },
-    //             });
-
-    //             animations.push(animation);
-
-    //             gsap.to(cloud, {
-    //                 yPercent: -Number(cloud.dataset.depth) * 30,
-    //                 ease: "none",
-
-    //                 scrollTrigger: {
-    //                     trigger: document.body,
-    //                     start: "top top",
-    //                     end: "bottom bottom",
-    //                     scrub: 1.5,
-    //                 },
-    //             });
-    //         });
-    //     });
-
-    //     return () => {
-    //         animations.forEach((anim) => anim.kill());
-    //         ctx.revert();
-    //     };
-    // }, []);
-
     useLayoutEffect(() => {
         const animations = [];
 
@@ -223,6 +148,8 @@ export default function Clouds() {
                         alt="cloud"
                         width={cloud.width}
                         height={200}
+                        fetchPriority="high"
+                        loading="eager"
                     />
                 </div>
             ))}

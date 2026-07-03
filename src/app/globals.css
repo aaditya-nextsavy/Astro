@@ -1132,6 +1132,10 @@ main.app-ready {
 }
 
 
+.astroHeroBottomSection.showmobile {
+  display: none;
+}
+
 /* ---------- RESPONSIVE ---------- */
 
 @media (max-width: 1024px) {
@@ -1203,8 +1207,8 @@ main.app-ready {
     position: absolute;
     inset: 0;
     /* background: rgba(0, 0, 0, 0.068); */
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
+    /* -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px); */
   }
 
 
@@ -1341,7 +1345,8 @@ main.app-ready {
 
 @media (max-width: 991px) {
   .astroHeroContentArea {
-    padding-bottom: 10%;
+    padding-bottom: 0%;
+    position: relative;
   }
 
   .astroHeroMainHeading {
@@ -1374,6 +1379,22 @@ main.app-ready {
     justify-content: space-between;
     left: 24px;
     right: 24px;
+  }
+
+  .astroHeroBottomSection.hidemobile {
+    display: none;
+  }
+
+  .astroHeroBottomSection.showmobile {
+
+    display: flex;
+    position: absolute;
+    left: 24px;
+    right: 414px;
+    width: 100%;
+    padding-right: 24px;
+
+
   }
 
   .astroHeroTimeBlock {
@@ -1728,7 +1749,8 @@ body.drawer-open {
 @media (max-width: 550px) {
 
   .acharyaDrawerPanel {
-    width: 90%;
+    width: calc(100% - 48px);
+    margin: 24px;
   }
 
   .acharyaDrawerClose {
@@ -3210,9 +3232,21 @@ body.drawer-open {
 }
 
 .form-error-span {
+  font-family: var(--font-body);
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
+}
+
+
+@media(max-width:550px) {
+
+  .form-error-span {
+    font-size: 12px;
+    top: calc(100% + 5px);
+
+  }
+
 }
 
 .footer .popup-overlay {
@@ -3824,7 +3858,16 @@ body.drawer-open {
     width: 50%;
   }
 
+  .dropdown-placeholder,
+  .dropdown-selected {
 
+    font-size: 24px;
+  }
+
+  .glass-dropdown-item {
+    padding: 14px 14px;
+    font-size: 22px;
+  }
 }
 
 @media (max-width:600px) {
@@ -5432,9 +5475,9 @@ body.drawer-open {
 
   transform: scale(1.08);
 
-  transition:
+  /* transition:
     opacity .8s ease,
-    transform 1s ease;
+    transform 1s ease; */
 
 
   will-change: transform;
@@ -7052,13 +7095,13 @@ body.drawer-open {
 
 
   .mobile-drawer-menu .mobile-header-menu {
+    background: #0e182f66;
+    width: 70%;
+    height: max-content;
     position: fixed;
-    /* top: 100px; */
     left: 50%;
     transform: translate(-50%, -20%) scale(.08);
-    background: #0e182f66;
-    width: 80%;
-    height: max-content;
+    max-width: 300px;
   }
 
 
@@ -7081,7 +7124,7 @@ body.drawer-open {
     justify-content: center;
     align-items: center;
     gap: 32px;
-    padding: 64px 32px;
+    padding: 24px 16px;
     display: flex;
     color: #d0e3f1 !important;
   }
@@ -7089,6 +7132,21 @@ body.drawer-open {
   .mobile-drawer-menu .mobile-header-menu.acharyaDrawerContent {
     padding: 42px 24px;
 
+  }
+
+  .mobile-drawer-menu .mobile-header-menu.acharyaDrawerContent a {
+
+    padding-bottom: 14px;
+    font-size: 16px;
+  }
+
+  .mobile-drawer-menu .mobile-header-menu.acharyaDrawerContent a nav {
+    letter-spacing: -1px;
+    font-family: var(--font-heading);
+    text-transform: capitalize;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 28px;
   }
 }
 

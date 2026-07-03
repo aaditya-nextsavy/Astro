@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { useState, useEffect } from "react";
 
 const ACHARYA_DATA = [
     {
@@ -31,14 +33,35 @@ const ACHARYA_DATA = [
 export default function HomeHero({ onOpenAcharya }) {
 
 
-
+    const [time, setTime] = useState("");
+    useEffect(() => {
+        const updateTime = () => {
+            const formatted = new Intl.DateTimeFormat(
+                "en-IN",
+                {
+                    timeZone: "Asia/Kolkata",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                }
+            ).format(new Date());
+            setTime(formatted);
+        };
+        updateTime();
+        const interval = setInterval(
+            updateTime,
+            1000
+        );
+        return () =>
+            clearInterval(interval);
+    }, []);
 
 
     return (
 
 
         <section className="astroHeroWrapper">
-          
+
 
             {/* Hero Content */}
             <div className="astroHeroContentArea">
@@ -74,10 +97,40 @@ export default function HomeHero({ onOpenAcharya }) {
                     <button onClick={() => onOpenAcharya(ACHARYA_DATA[1])}>
                         Acharya Shandilya
                     </button>
+
+                </div>
+
+
+                <div
+                    className="astroHeroBottomSection showmobile">
+                    <div className="astroHeroTimeBlock">
+                        <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
+                            <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
+                        </svg>
+                        <span>
+                            ( IST {time} )
+                        </span>
+                        <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
+                            <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
+                        </svg>
+                    </div>
+
+                    <Link href="#" target="_blank" className="astroHeroTimeBlock">
+                        <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
+                            <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
+                        </svg>
+                        Divine Time <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
+                            <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
+                        </svg>
+                    </Link>
                 </div>
             </div>
 
-        
+
         </section>
     );
 }

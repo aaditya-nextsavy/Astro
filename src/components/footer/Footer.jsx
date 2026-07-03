@@ -102,45 +102,6 @@ const Footer = () => {
         }
 
 
-        // try {
-        //     const response = await fetch("/api/contact", {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //         },
-        //         body: JSON.stringify({
-        //             ...formData,
-        //             captchaToken,
-        //         }),
-        //     });
-
-        //     if (!response.ok) {
-        //         throw new Error("Request failed");
-        //     }
-
-        //     setPopup({
-        //         open: true,
-        //         type: "success",
-        //         title: "Thank You!",
-        //         message:
-        //             "Your enquiry has been submitted successfully. Our team will get in touch with you shortly.",
-        //     });
-
-        // } catch (error) {
-        //     setPopup({
-        //         open: true,
-        //         type: "error",
-        //         title: "Something went wrong",
-        //         message:
-        //             "Please try again later. If the issue continues, feel free to contact us directly.",
-        //     });
-        // }
-
-
-        // Recaptcha validation later
-        // API later
-        // recaptchaRef.current?.reset();
-        // setCaptchaToken(null);
 
     };
     useEffect(() => {
@@ -188,7 +149,7 @@ const Footer = () => {
                                 onChange={(e) => handleChange("name", e.target.value)}
                             />
                             {errors.name && (
-                                <span className=" form-error-span block text-sm text-red-400">
+                                <span className=" form-error-span block text-sm text-red-500">
                                     {errors.name}
                                 </span>
                             )}
@@ -209,7 +170,7 @@ const Footer = () => {
                                 }
                             />
                             {errors.phone && (
-                                <span className="form-error-span block text-sm text-red-400">
+                                <span className="form-error-span block text-sm text-red-500">
                                     {errors.phone}
                                 </span>
                             )}
@@ -221,7 +182,7 @@ const Footer = () => {
                             onChange={(e) => handleChange("email", e.target.value)}
                         />
                         {errors.email && (
-                            <span className="form-error-span block text-sm text-red-400">
+                            <span className="form-error-span block text-sm text-red-500">
                                 {errors.email}
                             </span>
                         )}
@@ -275,13 +236,15 @@ const Footer = () => {
                                         </button>
 
                                     ))}
-                                    {errors.service && (
-                                        <span className="mt-2 block text-sm text-red-400">
-                                            {errors.service}
-                                        </span>
-                                    )}
+
                                 </div>
+
                             </div>
+                            {errors.service && (
+                                <span className="form-error-span block text-sm text-red-500">
+                                    {errors.service}
+                                </span>
+                            )}
                         </div>
                     </div>
 

@@ -55,39 +55,6 @@ export default function AboutWrapper() {
     }, []);
 
 
-    // useLayoutEffect(() => {
-    //     const container = heroCloudContainerRef.current;
-
-    //     if (!container) return;
-
-    //     const clouds = container.querySelectorAll(
-    //         ".light-background-cloud"
-    //     );
-
-    //     const tween = gsap.to(clouds, {
-    //         opacity: 0,
-    //         y: -100,
-    //         ease: "none",
-    //         scrollTrigger: {
-    //             trigger: ".light-background-content",
-
-    //             // starts fading when middle of content approaches viewport
-    //             start: "top center",
-
-    //             // completely gone around middle of content
-    //             end: "center center",
-
-    //             scrub: true,
-    //         },
-    //     });
-
-    //     return () => {
-    //         tween.scrollTrigger?.kill();
-    //         tween.kill();
-    //     };
-    // }, []);
-
-
     useLayoutEffect(() => {
     if (!floatingNavRef.current) return;
 
@@ -355,7 +322,6 @@ export default function AboutWrapper() {
 
                                 </div>
                             </nav>
-
                             <a href="#" target="_blank" className="astroHeroTimeBlock">
                                 <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
@@ -365,11 +331,8 @@ export default function AboutWrapper() {
                                     <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
                                     <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
                                 </svg>
-
                             </a>
                         </div>
-
-
                     </div>
                     <div className={`mobile-drawer-menu ${menuOpen ? "open" : ""}`}>
 
@@ -406,50 +369,16 @@ export default function AboutWrapper() {
                                 <FaChevronRight />
 
                             </Link>
-
-
-
-
-
                         </div>
-
                     </div>
-
                     <div className="hero-stack-sequence-wrapper min-h-[250vh]">
-
-
                         <AboutStory />
-
-
                         <AboutOperations />
 
-
                     </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
                 </div>
 
-                {/* <div
-                    className={`absolute inset-0 z-50 transition-opacity duration-1000 ${loading
-                        ? "opacity-100"
-                        : "pointer-events-none opacity-0"
-                        }`}
-                >
-                    <Loader
-                        onComplete={() => setLoading(false)}
-                    />
-                </div> */}
             </main>
 
 
