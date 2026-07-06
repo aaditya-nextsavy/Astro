@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap } from "@/lib/gsap";
 
 import LoaderCenter from "./LoaderCenter";
 import LoaderQuotes from "./LoaderQuotes";
@@ -75,16 +75,9 @@ export default function Loader({ onComplete }) {
             ease: "power2.inOut",
             delay: 0.8,
 
-            onComplete: () => {
+                onComplete: () => {
                 // Let the loader unmount
                 onComplete?.();
-
-                // Wait for React to remove the loader
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        ScrollTrigger.refresh(true);
-                    });
-                });
             },
         });
 

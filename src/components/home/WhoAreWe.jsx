@@ -297,10 +297,6 @@ function WhoAreWePanel({ item, index }) {
 export default function WhoAreWe() {
     const sectionReff = useRef(null);
 
-    useLayoutEffect(() => {
-        ScrollTrigger.refresh();
-    }, []);
-
 
     useLayoutEffect(() => {
         console.log(

@@ -74,7 +74,7 @@ export default function Stars() {
                     }}
                 >
                     <img
-                        src="./assets/background/star.svg"
+                        src="/assets/background/star.svg"
                         alt=""
                         draggable={false}
                     />

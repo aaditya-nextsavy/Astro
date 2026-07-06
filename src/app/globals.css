@@ -329,6 +329,221 @@ main.app-ready {
   font-family: var(--font-body);
 }
 
+.legal-page {
+  position: relative;
+  z-index: var(--z-content);
+  padding-top: clamp(6rem, 10vw, 9rem);
+  padding-bottom: clamp(5rem, 9vw, 8rem);
+}
+
+.legal-shell {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.legal-hero {
+  position: relative;
+}
+
+.legal-eyebrow {
+  width: fit-content;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid rgba(208, 227, 241, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-primary);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.legal-title {
+  max-width: 14ch;
+  font-size: clamp(3rem, 8vw, 6.25rem);
+  line-height: 0.95;
+  color: var(--color-text);
+}
+
+.legal-intro {
+  max-width: 68ch;
+  color: rgba(245, 247, 255, 0.78);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.8;
+}
+
+.legal-updated {
+  color: rgba(208, 227, 241, 0.68);
+  font-size: 0.95rem;
+}
+
+.legal-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.legal-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(208, 227, 241, 0.14);
+  border-radius: 1.5rem;
+  background: linear-gradient(180deg, rgba(14, 24, 47, 0.82), rgba(14, 24, 47, 0.66));
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(16px);
+}
+
+.legal-card--content {
+  padding: clamp(1.3rem, 2vw, 2rem);
+}
+
+.legal-card--sticky {
+  position: sticky;
+  top: 7.5rem;
+}
+
+.legal-section-list {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.legal-section {
+  display: grid;
+  gap: 0.9rem;
+  padding-block: 1.25rem;
+  border-top: 1px solid rgba(208, 227, 241, 0.1);
+}
+
+.legal-section:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.legal-section h2 {
+  font-size: clamp(1.55rem, 3vw, 2.15rem);
+  line-height: 1.1;
+  color: var(--color-text);
+}
+
+.legal-section p,
+.legal-section li,
+.legal-note,
+.legal-actions p {
+  color: rgba(245, 247, 255, 0.76);
+  line-height: 1.85;
+  font-family: var(--font-body);
+}
+
+.legal-section ul {
+  display: grid;
+  gap: 0.8rem;
+  padding-left: 1.15rem;
+}
+
+.legal-section li::marker {
+  color: var(--color-primary);
+}
+
+.legal-note {
+  padding: 1rem 1.1rem;
+  border-radius: 1rem;
+  background: rgba(122, 168, 255, 0.08);
+  border: 1px solid rgba(122, 168, 255, 0.16);
+}
+
+.legal-actions {
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1.3rem, 2vw, 2rem);
+}
+
+.legal-actions__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+.legal-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: transform 0.25s var(--ease-smooth), border-color 0.25s var(--ease-smooth), background-color 0.25s var(--ease-smooth);
+}
+
+.legal-button:hover {
+  transform: translateY(-1px);
+}
+
+.legal-button--primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: #08101d;
+  font-weight: 700;
+}
+
+.legal-button--secondary {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(208, 227, 241, 0.16);
+  color: var(--color-text);
+}
+
+.not-found-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.not-found-figure {
+  display: grid;
+  gap: 0.6rem;
+  justify-items: start;
+  margin-bottom: 1rem;
+}
+
+.not-found-code {
+  font-family: var(--font-heading);
+  font-size: clamp(4.5rem, 18vw, 10rem);
+  line-height: 0.8;
+  color: var(--color-primary);
+}
+
+.not-found-subtitle {
+  max-width: 34ch;
+  color: rgba(245, 247, 255, 0.8);
+}
+
+@media (max-width: 900px) {
+  .legal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .legal-card--sticky {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .legal-page {
+    padding-top: 5.5rem;
+  }
+
+  .legal-title {
+    max-width: 100%;
+  }
+
+  .legal-actions__buttons {
+    flex-direction: column;
+  }
+
+  .legal-button {
+    width: 100%;
+  }
+}
+
 
 
 
@@ -2496,7 +2711,7 @@ body.drawer-open {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: url('../../public/assets/home/card-noise.png');
+  background: url('/assets/home/card-noise.png');
 }
 
 .info-sticky-card-section__cards {

@@ -11,7 +11,7 @@ const galleryItems = [
     },
     {
         id: 2,
-        title: "Sacred Rudraks",
+        title: "Sacred Rudraksha",
         image: "/assets/gallery/g-2.png",
     },
     {

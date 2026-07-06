@@ -22,9 +22,11 @@ import { subscribeAppReady } from "@/lib/appReady";
 export default function HomePageWrapper() {
 
     const [appReady, setAppReadyState] = useState(false);
+    const [navBootstrapReady, setNavBootstrapReady] = useState(false);
     const heroCloudContainerRef = useRef(null);
     const floatingNavRef = useRef(null);
     const bottomNavRef = useRef(null);
+    const takeoverSectionRef = useRef(null);
     const lastlightSection = useRef(null);
     const [drawerOpen, setDrawerOpen] =
         useState(false);
@@ -38,37 +40,61 @@ export default function HomePageWrapper() {
     const pageRef = useRef(null);
 
     useLayoutEffect(() => {
-        gsap.set(pageRef.current, {
-            autoAlpha: 0,
-        });
+        if (!pageRef.current) return;
+
+        gsap.set(pageRef.current, { autoAlpha: 0 });
     }, []);
 
 
     useEffect(() => {
-        const unsubscribe = subscribeAppReady((ready) => {
-            setAppReadyState(ready);
-        });
+        const unsubscribe = subscribeAppReady(setAppReadyState);
 
         return unsubscribe;
-
     }, []);
 
     useEffect(() => {
-        const unsubscribe = subscribeAppReady((ready) => {
-            if (!ready) return;
+        if (!appReady || !pageRef.current) return;
 
-            gsap.to(pageRef.current, {
-                autoAlpha: 1,
-                duration: 2,
-                ease: "expo.out",
+        let cancelled = false;
+
+        const runBootstrap = async () => {
+            try {
+                await document.fonts?.ready;
+            } catch {
+                // Ignore font-loading failures and continue with the layout we have.
+            }
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    if (cancelled) return;
+
+                    ScrollTrigger.refresh(true);
+                    setNavBootstrapReady(true);
+                });
             });
-        });
+        };
 
-        return unsubscribe;
-    }, []);
+        runBootstrap();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [appReady]);
+
+    useEffect(() => {
+        if (!appReady || !navBootstrapReady || !pageRef.current) return;
+
+        gsap.to(pageRef.current, {
+            autoAlpha: 1,
+            duration: 1.2,
+            ease: "expo.out",
+        });
+    }, [appReady, navBootstrapReady]);
 
 
     useLayoutEffect(() => {
+        if (!appReady) return;
+
         const container = heroCloudContainerRef.current;
 
         if (!container) return;
@@ -92,8 +118,10 @@ export default function HomePageWrapper() {
             tween.scrollTrigger?.kill();
             tween.kill();
         };
-    }, []);
+    }, [appReady]);
     useLayoutEffect(() => {
+        if (!appReady) return;
+
         const nav = floatingNavRef.current;
         if (!nav) {
             return undefined;
@@ -118,7 +146,10 @@ export default function HomePageWrapper() {
             return ScrollTrigger.create({
                 trigger: section,
                 start: isTakeover ? "top+=50%" : "top 55%",
-                end: isTakeover ? "bottom+=50%" : "bottom 100%",
+                end: isTakeover
+                    ? () => `+=${Math.max(section.offsetHeight, window.innerHeight)}`
+                    : "bottom 100%",
+                invalidateOnRefresh: true,
                 onEnter: () => {
                     activeSections.add(section);
                     syncNavTheme();
@@ -142,7 +173,7 @@ export default function HomePageWrapper() {
             triggers.forEach((trigger) => trigger.kill());
             activeSections.clear();
         };
-    }, []);
+    }, [appReady]);
     useEffect(() => {
         if (!menuOpen) return;
         const scrollY = window.scrollY;
@@ -184,22 +215,164 @@ export default function HomePageWrapper() {
         return () =>
             clearInterval(interval);
     }, []);
+    // useLayoutEffect(() => {
+    //     if (!appReady) return;
+
+    //     if (!takeoverSectionRef.current || !bottomNavRef.current) return;
+    //     const nav = bottomNavRef.current;
+    //     const takeoverTrigger = ScrollTrigger.create({
+    //         trigger: takeoverSectionRef.current,
+    //         start: "bottom 30%",
+    //         onEnter: () => {
+    //             nav.classList.add("hide-bottom-nav");
+    //         },
+    //         onLeaveBack: () => {
+    //             nav.classList.remove("hide-bottom-nav");
+    //         },
+    //         invalidateOnRefresh: true,
+    //     });
+
+    //     const footerTrigger = ScrollTrigger.create({
+    //         trigger: lastlightSection.current,
+    //         start: "top 50%",
+    //         onEnter: () => {
+    //             nav.classList.add("hide-bottom-nav");
+    //         },
+    //         onLeaveBack: () => {
+    //             nav.classList.remove("hide-bottom-nav");
+    //         },
+    //         invalidateOnRefresh: true,
+    //     });
+
+    //     return () => {
+    //         takeoverTrigger.kill();
+    //         footerTrigger.kill();
+    //     };
+    // }, [appReady]);
+
+
+    // useLayoutEffect(() => {
+    //     if (!appReady) return;
+    //     if (!takeoverSectionRef.current || !bottomNavRef.current || !floatingNavRef.current)
+    //         return;
+
+    //     const bottomNav = bottomNavRef.current;
+    //     const floatingNav = floatingNavRef.current;
+
+    //     //
+    //     // LIGHT THEME
+    //     //
+    //     const themeTrigger = ScrollTrigger.create({
+    //         trigger: takeoverSectionRef.current,
+    //         start: "top 75%", // section is 25% into viewport
+    //         end: "bottom top",
+    //         invalidateOnRefresh: true,
+
+    //         onEnter: () => {
+    //             floatingNav.classList.add("light-section-active");
+    //         },
+
+    //         onLeave: () => {
+    //             floatingNav.classList.remove("light-section-active");
+    //         },
+
+    //         onEnterBack: () => {
+    //             floatingNav.classList.add("light-section-active");
+    //         },
+
+    //         onLeaveBack: () => {
+    //             floatingNav.classList.remove("light-section-active");
+    //         },
+    //     });
+
+    //     //
+    //     // BOTTOM NAV
+    //     //
+    //     const hideTrigger = ScrollTrigger.create({
+    //         trigger: takeoverSectionRef.current,
+    //         start: "bottom 70%", // bottom is 30% above bottom edge
+    //         invalidateOnRefresh: true,
+
+    //         onEnter: () => {
+    //             bottomNav.classList.add("hide-bottom-nav");
+    //         },
+
+    //         onLeaveBack: () => {
+    //             bottomNav.classList.remove("hide-bottom-nav");
+    //         },
+    //     });
+
+    //     return () => {
+    //         themeTrigger.kill();
+    //         hideTrigger.kill();
+    //     };
+    // }, [appReady]);
+
+
     useLayoutEffect(() => {
-        if (!lastlightSection.current || !bottomNavRef.current) return;
-        const nav = bottomNavRef.current;
-        const trigger = ScrollTrigger.create({
-            trigger: lastlightSection.current,
-            // markers: true,
-            start: "bottom 0%",
+        if (!appReady) return;
+        if (
+            !takeoverSectionRef.current ||
+            !bottomNavRef.current ||
+            !floatingNavRef.current
+        )
+            return;
+
+        const bottomNav = bottomNavRef.current;
+        const floatingNav = floatingNavRef.current;
+
+        //
+        // LIGHT THEME
+        //
+        const enterThemeTrigger = ScrollTrigger.create({
+            trigger: takeoverSectionRef.current,
+            start: "top 75%",
+            invalidateOnRefresh: true,
+
             onEnter: () => {
-                nav.classList.add("hide-bottom-nav");
+                floatingNav.classList.add("light-section-active");
             },
-            onLeaveBack: () => {
-                nav.classList.remove("hide-bottom-nav");
+
+            onEnterBack: () => {
+                floatingNav.classList.add("light-section-active");
             },
         });
-        return () => trigger.kill();
-    }, []);
+
+        const leaveThemeTrigger = ScrollTrigger.create({
+            trigger: takeoverSectionRef.current,
+            start: "top 40%",
+            invalidateOnRefresh: true,
+
+            onLeaveBack: () => {
+                floatingNav.classList.remove("light-section-active");
+            },
+        });
+
+        //
+        // BOTTOM NAV
+        //
+        const hideTrigger = ScrollTrigger.create({
+            trigger: takeoverSectionRef.current,
+            start: "bottom 70%",
+            invalidateOnRefresh: true,
+
+            onEnter: () => {
+                bottomNav.classList.add("hide-bottom-nav");
+            },
+
+            onLeaveBack: () => {
+                bottomNav.classList.remove("hide-bottom-nav");
+            },
+        });
+
+        return () => {
+            enterThemeTrigger.kill();
+            leaveThemeTrigger.kill();
+            hideTrigger.kill();
+        };
+    }, [appReady]);
+
+
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.key === "Escape") {
@@ -212,37 +385,15 @@ export default function HomePageWrapper() {
         };
     }, []);
 
-
-
-    useLayoutEffect(() => {
-        const id = requestAnimationFrame(() => {
-            setTimeout(() => {
-                console.log("FINAL REFRESH");
-                ScrollTrigger.refresh();
-            }, 500);
-        });
-
-        return () => cancelAnimationFrame(id);
-    }, []);
-
-
-    useLayoutEffect(() => {
-        console.log(
-            "HomeServices mounted",
-            document.body.scrollHeight
-        );
-    }, []);
-
-
     return (
         <>
             <Suspense fallback={null}>
-                <HomeSearchParams />
+                <HomeSearchParams ready={navBootstrapReady} />
             </Suspense>
             <main
                 ref={pageRef}
 
-                className={`relative min-h-screen ${appReady ? "app-ready" : "app-loading"
+                className={`relative min-h-screen ${appReady && navBootstrapReady ? "app-ready" : "app-loading"
                     }`}>
                 <div
                     className={`transition-opacity duration-1000 opacity-100
@@ -315,7 +466,7 @@ export default function HomePageWrapper() {
                                 <a href="/services">Services</a>
                                 <a href="/gallery">Gallery</a>
                                 <Link href="/?scroll=rudaxSection">
-                                    Rudraks
+                                    Rudraksha
                                 </Link>
                                 <a href="/contact">Contact</a>
                                 <div>
@@ -405,7 +556,7 @@ export default function HomePageWrapper() {
                             <WhoAreWe />
                             {/* <HomeStory /> */}
                         </div>
-                        <div className="light-background-zone light-background-zone--takeover min-h-screen" >
+                        <div ref={takeoverSectionRef} className="light-background-zone light-background-zone--takeover min-h-screen" >
                             <svg className="light-background-content-top curve-1" width="1926" height="86" viewBox="0 0 1926 86" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M0.371094 83.8028C0.371094 83.8028 396.871 7.98401 967.371 2.33315C1537.87 -3.31771 1924.87 64.792 1924.87 64.792" stroke="#F3E9D8" strokeWidth="4" />
                             </svg>

@@ -318,7 +318,7 @@ const GalleryWrapper = () => {
                                 <a href="/about">About</a>
                                 <a href="/services">Services</a>
                                 <a href="/gallery">Gallery</a>
-                                <a href="/?scroll=rudaxSection">Rudraks</a>
+                                <Link href="/?scroll=rudaxSection">Rudraksha</Link>
                                 <a href="/contact">Contact</a>
 
                                 <div>

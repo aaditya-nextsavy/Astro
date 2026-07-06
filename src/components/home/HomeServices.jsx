@@ -22,18 +22,10 @@ const HomeServices = () => {
     const sectionRef = useRef(null);
 
     useLayoutEffect(() => {
-
-
         if (!sectionRef.current) return;
 
-
         const section = sectionRef.current;
-
         let ctx;
-
-        ctx = gsap.context(() => {
-
-        });
 
         const unsubscribe = subscribeAppReady((ready) => {
             if (!ready || ctx) return;

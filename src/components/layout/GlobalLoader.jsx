@@ -2,20 +2,19 @@
 
 import { useEffect, useState } from "react";
 import Loader from "@/components/loader/Loader";
+import { hasSeenSiteLoader, markSiteLoaderSeen } from "@/lib/loaderState";
 
 export default function GlobalLoader() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const loaded = sessionStorage.getItem("site-loaded");
-
-        if (!loaded) {
+        if (!hasSeenSiteLoader()) {
             setLoading(true);
         }
     }, []);
 
     const handleComplete = () => {
-        sessionStorage.setItem("site-loaded", "true");
+        markSiteLoaderSeen();
         setLoading(false);
     };
 

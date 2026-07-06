@@ -28,20 +28,11 @@ export default function SmoothScroll() {
 
     const unsubscribeReady = subscribeAppReady((ready) => {
       if (!ready) return;
+      lenis.start();
 
-      let started = false;
-
-      const unsubscribeReady = subscribeAppReady((ready) => {
-        if (!ready || started) return;
-
-        started = true;
-
-        lenis.start();
-
+      requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            ScrollTrigger.refresh(true);
-          });
+          ScrollTrigger.refresh(true);
         });
       });
 

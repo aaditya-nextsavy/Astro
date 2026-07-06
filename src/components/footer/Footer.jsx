@@ -524,7 +524,7 @@ const Footer = () => {
                             </Link>
 
                             <Link href="/?scroll=rudaxSection">
-                                Rudraksh
+                                Rudraksha
                             </Link>
 
                             <Link href="/contact">
@@ -541,7 +541,7 @@ const Footer = () => {
                             <span className="footer-legal-information-link cursor-default">
                                 © 2026 Astro Acharya. All rights reserved.
                             </span>
-                            <Link href="/privacy-policies" target="_blank" className="footer-legal-information-link">
+                            <Link href="/privacy-policy" target="_blank" className="footer-legal-information-link">
                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g filter="url(#filter0_f_83_6873)">
                                         <path d="M6 1L6.67175 5.32825L11 6L6.67175 6.67175L6 11L5.32825 6.67175L1 6L5.32825 5.32825L6 1Z" fill="white" />

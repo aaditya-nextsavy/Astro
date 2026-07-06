@@ -9,6 +9,12 @@ export const metadata = {
   title: "Unlock The Cosmic Pathway To Your Inner Harmony",
   description:
     "Unlock the cosmic pathway to your inner harmony. Discover ancient wisdom, spiritual guidance, and transformative experiences designed to help you find balance, clarity, and personal growth.",
+  icons: {
+    icon: "/assets/favicons/favicon.ico",
+    shortcut: "/assets/favicons/favicon.ico",
+    apple: "/assets/favicons/apple-touch-icon.png",
+  },
+  manifest: "/assets/favicons/site.webmanifest",
   keywords: [
     "inner harmony",
     "spiritual journey",
@@ -35,7 +41,7 @@ export const metadata = {
 };
 export default function RootLayout({ children }) {
   return (
-    <html
+  <html
       lang="en"
       className={`${newYork.variable} ${satoshi.variable}`}
     >
@@ -47,7 +53,6 @@ export default function RootLayout({ children }) {
           {children}
         </Providers>
       </body>
-
     </html>
   );
 }
