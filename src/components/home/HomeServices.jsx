@@ -31,6 +31,10 @@ const HomeServices = () => {
 
         let ctx;
 
+        ctx = gsap.context(() => {
+
+        });
+
         const unsubscribe = subscribeAppReady((ready) => {
             if (!ready || ctx) return;
 
@@ -135,6 +139,12 @@ const HomeServices = () => {
         };
     }, []);
 
+    useLayoutEffect(() => {
+        console.log(
+            "HomeServices  mounted",
+            document.body.scrollHeight
+        );
+    }, []);
 
 
     return (

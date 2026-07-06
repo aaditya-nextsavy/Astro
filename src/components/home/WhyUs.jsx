@@ -147,6 +147,12 @@ export default function WhyUs() {
         };
     }, []);
 
+    useLayoutEffect(() => {
+        console.log(
+            "WhyUs  mounted",
+            document.body.scrollHeight
+        );
+    }, []);
 
 
     return (

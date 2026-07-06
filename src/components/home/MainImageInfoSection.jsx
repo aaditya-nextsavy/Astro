@@ -115,6 +115,14 @@ export default function MainImageInfoSection() {
         };
     }, []);
 
+
+    useLayoutEffect(() => {
+        console.log(
+            "MainImageInfoSection  mounted",
+            document.body.scrollHeight
+        );
+    }, []);
+
     return (
         <section ref={sectionRef} className="main-image-info-section">
 

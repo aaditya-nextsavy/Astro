@@ -32,32 +32,13 @@ const galleryItems = [
 ];
 
 const GalleryImagePreview = () => {
-    const [activeIndex, setActiveIndex] = useState(3);
+    const [activeIndex, setActiveIndex] = useState(2);
 
     const imageRef = useRef(null);
     const trackRef = useRef(null);
     const navRef = useRef(null);
     const titleRefs = useRef([]);
 
-    // const handleChange = (index) => {
-    //     if (index === activeIndex) return;
-
-    //     gsap.fromTo(
-    //         imageRef.current,
-    //         {
-    //             opacity: 0,
-    //             scale: 1.08,
-    //         },
-    //         {
-    //             opacity: 1,
-    //             scale: 1,
-    //             duration: 1.2,
-    //             ease: "power3.out",
-    //         }
-    //     );
-
-    //     setActiveIndex(index);
-    // };
 
     useLayoutEffect(() => {
         titleRefs.current.forEach((item, i) => {
@@ -130,28 +111,12 @@ const GalleryImagePreview = () => {
     }, []);
 
 
-    const animateImage = () => {
-        gsap.fromTo(
-            imageRef.current,
-            {
-                opacity: 0,
-                scale: 1,
-            },
-            {
-                opacity: 1,
-                scale: 1,
-                duration: 2.5,
-                ease: "power2.out",
-            }
-        );
-    };
-
     const handleChange = (index) => {
         if (index === activeIndex) return;
 
         gsap.to(imageRef.current, {
             opacity: 0,
-            duration: 2.8,
+            duration: 0.8,
             ease: "power2.inOut",
             onComplete: () => {
                 setActiveIndex(index);
@@ -163,7 +128,7 @@ const GalleryImagePreview = () => {
                     },
                     {
                         opacity: 1,
-                        duration: 2.5,
+                        duration: 1,
                         ease: "power2.inOut",
                     }
                 );
@@ -172,19 +137,21 @@ const GalleryImagePreview = () => {
     };
 
     const handlePrev = () => {
-        animateImage();
+        const newIndex =
+            activeIndex === 0
+                ? galleryItems.length - 1
+                : activeIndex - 1;
 
-        setActiveIndex((prev) =>
-            prev === 0 ? galleryItems.length - 1 : prev - 1
-        );
+        handleChange(newIndex);
     };
 
     const handleNext = () => {
-        animateImage();
+        const newIndex =
+            activeIndex === galleryItems.length - 1
+                ? 0
+                : activeIndex + 1;
 
-        setActiveIndex((prev) =>
-            prev === galleryItems.length - 1 ? 0 : prev + 1
-        );
+        handleChange(newIndex);
     };
 
 
@@ -221,11 +188,6 @@ const GalleryImagePreview = () => {
                         className="gallery-showcase__image"
                     />
 
-                    {/* <img
-                        src="/assets/background/masked-cloud-bg.png"
-                        alt=""
-                        className="gallery-showcase__cloud-overlay cloud-1"
-                    /> */}
 
 
                 </div>
@@ -266,7 +228,7 @@ const GalleryImagePreview = () => {
                                             <path d="M12.2489 11.913C10.7313 7.56178 9.38969 4.07316 9.25347 4.12069C9.11688 4.16859 10.2362 7.73468 11.7548 12.0852C13.2727 16.436 14.6132 19.925 14.7509 19.8778C14.8868 19.8296 13.7667 16.2642 12.2489 11.913Z" fill="#D0E3F1" />
                                             <path d="M15.2226 15.2285C13.4454 17.0057 10.5525 17.0057 8.77494 15.2277C6.99695 13.4501 6.99696 10.5573 8.77457 8.78005C10.5518 7.00244 13.4446 7.0028 15.2223 8.78041C16.9999 10.5584 16.9999 13.4508 15.2226 15.2285ZM8.86626 8.8721C7.13917 10.5992 7.13879 13.4097 8.86626 15.1364C10.593 16.8639 13.4034 16.8635 15.1302 15.1364C16.8572 13.4093 16.8576 10.5992 15.1302 8.8721C13.4034 7.14501 10.5933 7.14538 8.86626 8.8721Z" fill="#D0E3F1" />
                                         </svg>
-                                        {item.title}
+                                        <span>{item.title}</span>
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M12.3315 11.6715C18.1355 17.4755 22.5106 22.5108 22.5106 22.5108C22.5106 22.5108 17.4757 18.1349 11.6717 12.3313C5.8677 6.52727 1.49219 1.49234 1.49219 1.49234C1.49219 1.49234 6.5275 5.86787 12.3315 11.6715Z" fill="#D0E3F1" />
                                             <path d="M12.3315 12.3324C6.52713 18.1364 1.49219 22.5112 1.49219 22.5112C1.49219 22.5112 5.86733 17.4766 11.6717 11.6722C17.4761 5.86825 22.511 1.49234 22.511 1.49234C22.511 1.49234 18.1362 6.52804 12.3315 12.3324Z" fill="#D0E3F1" />
@@ -281,7 +243,7 @@ const GalleryImagePreview = () => {
 
                                     </>
                                 ) : (
-                                    item.title
+                                    <span>{item.title}</span>
                                 )}
                             </button>
                         ))}

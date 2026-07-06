@@ -226,6 +226,13 @@ export default function HomePageWrapper() {
     }, []);
 
 
+    useLayoutEffect(() => {
+        console.log(
+            "HomeServices mounted",
+            document.body.scrollHeight
+        );
+    }, []);
+
 
     return (
         <>

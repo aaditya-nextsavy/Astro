@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { usePopup } from "../Popup/PopupProvider";
 
 const services = [
     "Vedic Astrology",
@@ -14,7 +15,6 @@ const services = [
 const Footer = () => {
 
     const [open, setOpen] = useState(false);
-    const [selected, setSelected] = useState("");
     const dropdownRef = useRef(null);
     const { executeRecaptcha } = useGoogleReCaptcha();
     const [formData, setFormData] = useState({
@@ -24,12 +24,9 @@ const Footer = () => {
         service: "",
     });
     const [errors, setErrors] = useState({});
-    const [popup, setPopup] = useState({
-        open: false,
-        type: "",
-        title: "",
-        message: "",
-    });
+    const { showPopup } = usePopup();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const handleChange = (field, value) => {
         setFormData((prev) => ({
             ...prev,
@@ -76,12 +73,22 @@ const Footer = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (isSubmitting) return;
+
+
         if (!validateForm()) return;
 
-        console.log(formData);
+        // console.log(formData);
+
+        setIsSubmitting(true);
+
 
         if (!executeRecaptcha) {
-            console.log("Recaptcha not ready.");
+            showPopup({
+                type: "error",
+                title: "Captcha loading",
+                message: "Please wait a moment and submit again.",
+            });
             return;
         }
         try {
@@ -95,12 +102,49 @@ const Footer = () => {
                 captchaToken: token,
             });
 
-            // API call goes here
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    ...formData,
+                    captchaToken: token,
+                }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showPopup({
+                    type: "success",
+                    title: "Thanks for Reaching Out!",
+                    message: "We've received your request and will contact you as soon as possible."
+                });
+
+                setFormData({
+                    name: "",
+                    phone: "",
+                    email: "",
+                    service: "",
+                });
+
+
+                setErrors({});
+            } else {
+                showPopup({
+                    type: "error",
+                    title: "Something Went Wrong",
+                    message: result.message || "We were unable to complete your request. Please try again later."
+                });
+            }
 
         } catch (err) {
             console.error(err);
         }
-
+        finally {
+            setIsSubmitting(false);
+        }
 
 
     };
@@ -115,22 +159,6 @@ const Footer = () => {
     }, []);
 
 
-    useEffect(() => {
-        if (!popup.open || popup.type !== "success") return;
-
-        const timer = setTimeout(() => {
-            setPopup((prev) => ({
-                ...prev,
-                open: false,
-            }));
-        }, 3500);
-
-        return () => clearTimeout(timer);
-
-
-
-
-    }, [popup]);
     return (
         <footer className="footer">
             <div className="footer-container">
@@ -141,11 +169,14 @@ const Footer = () => {
                         Aacharya Markand’s background in computer engineering lends precision to spiritual analysis, while Aacharya Shandilya’s expertise in international business brings a global perspective to their counsel.
                     </p>
                 </div>
-                <form className="glass-card footer-form">
+                <form className="glass-card footer-form"
+                    onSubmit={handleSubmit}
+                >
                     <div className="footer-form-row">
                         <div className="footer-input">
                             <label>Hey! My name is</label>
                             <input placeholder="type..."
+                                value={formData.name}
                                 onChange={(e) => handleChange("name", e.target.value)}
                             />
                             {errors.name && (
@@ -179,6 +210,7 @@ const Footer = () => {
                     <div className="footer-input width-full">
                         <label>& my email id</label>
                         <input placeholder="type..."
+                            value={formData.email}
                             onChange={(e) => handleChange("email", e.target.value)}
                         />
                         {errors.email && (
@@ -190,7 +222,7 @@ const Footer = () => {
 
 
                     <div className="footer-input width-full">
-                        <label>I'm looking for</label>
+                        <label>I&apos;m looking for</label>
                         <div
                             className={`glass-dropdown ${open ? "active" : ""}`}
                             ref={dropdownRef}
@@ -201,8 +233,14 @@ const Footer = () => {
                                     className="glass-dropdown-trigger"
                                     onClick={() => setOpen(!open)}
                                 >
-                                    <span className={selected ? "dropdown-selected" : "dropdown-placeholder"}>
-                                        {selected || "Select Service"}
+                                    <span
+                                        className={
+                                            formData.service
+                                                ? "dropdown-selected"
+                                                : "dropdown-placeholder"
+                                        }
+                                    >
+                                        {formData.service || "Select Service"}
                                     </span>
 
                                     <span className="glass-dropdown-arrow">
@@ -228,7 +266,6 @@ const Footer = () => {
                                             className="glass-dropdown-item"
                                             onClick={() => {
                                                 handleChange("service", service);
-                                                setSelected(service);
                                                 setOpen(false);
                                             }}
                                         >
@@ -254,11 +291,11 @@ const Footer = () => {
 
                     <div className="footer-submit-btn-wrapper">
                         <button
-                            type="button"
+                            type="submit"
                             className="footer-btn"
-                            onClick={handleSubmit}
+                            disabled={isSubmitting}
                         >
-                            Get In Touch
+                            {isSubmitting ? "Submitting..." : "Get In Touch"}
                         </button>
                         <span className="sumbit-message">Our team will get back to you with custom package information.</span>
                     </div>
@@ -559,92 +596,6 @@ const Footer = () => {
                 </div>
             </div>
 
-            {popup.open && (
-                <div
-                    className="popup-overlay fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-md px-6"
-                    onClick={() =>
-                        setPopup((prev) => ({
-                            ...prev,
-                            open: false,
-                        }))
-                    }
-                >
-                    <div
-                        className="popup-card glass-effect-card relative w-full max-w-md rounded-[28px] p-8 text-center"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div
-                            className={`mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full ${popup.type === "success"
-                                ? "bg-green-500/15 text-green-400"
-                                : "bg-red-500/15 text-red-400"
-                                }`}
-                        >
-                            {popup.type === "success" ? (
-                                <svg
-                                    width="42"
-                                    height="42"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                >
-                                    <path
-                                        d="M20 6L9 17L4 12"
-                                        stroke="currentColor"
-                                        strokeWidth="2.5"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                </svg>
-                            ) : (
-                                <svg
-                                    width="42"
-                                    height="42"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                >
-                                    <path
-                                        d="M12 8V13"
-                                        stroke="currentColor"
-                                        strokeWidth="2.5"
-                                        strokeLinecap="round"
-                                    />
-                                    <circle
-                                        cx="12"
-                                        cy="17"
-                                        r="1"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        d="M12 3L2 21H22L12 3Z"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinejoin="round"
-                                    />
-                                </svg>
-                            )}
-                        </div>
-
-                        <h3 className="mb-3 text-3xl font-semibold text-white">
-                            {popup.title}
-                        </h3>
-
-                        <p className="mb-8 text-white/70 leading-7">
-                            {popup.message}
-                        </p>
-
-                        <button
-                            onClick={() =>
-                                setPopup((prev) => ({
-                                    ...prev,
-                                    open: false,
-                                }))
-                            }
-                            className="footer-btn"
-                        >
-                            {popup.type === "success" ? "Done" : "Try Again"}
-                        </button>
-                    </div>
-                </div>
-            )}
 
         </footer>
     );

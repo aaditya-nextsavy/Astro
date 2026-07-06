@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 
 const ACHARYA_DATA = [
     {
@@ -55,6 +55,17 @@ export default function HomeHero({ onOpenAcharya }) {
         return () =>
             clearInterval(interval);
     }, []);
+
+
+
+
+    useLayoutEffect(() => {
+        console.log(
+            "HomeHero  mounted",
+            document.body.scrollHeight
+        );
+    }, []);
+
 
 
     return (

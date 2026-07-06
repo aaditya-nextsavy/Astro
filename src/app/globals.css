@@ -3249,11 +3249,12 @@ body.drawer-open {
 
 }
 
-.footer .popup-overlay {
+.popup-overlay {
   animation: popupFade 0.3s ease;
 }
 
-.footer .popup-card {
+.popup-card {
+  padding: 32px;
   animation: popupScale 0.35s cubic-bezier(.22, 1, .36, 1);
 }
 
@@ -3261,6 +3262,30 @@ body.drawer-open {
   visibility: hidden;
 }
 
+
+.footerpopup.popup-overlay {
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.footerpopup .popup-card h3 {
+  font-family: var(--font-heading);
+  font-size: 42px;
+}
+
+.footerpopup .popup-card p {
+  font-family: var(--font-body);
+  font-size: 16px;
+}
+
+
+.footer-btn:disabled {
+  opacity: 0.7;
+  background: rgba(0, 0, 0, 0.521);
+  cursor: not-allowed;
+  pointer-events: none;
+}
 
 @keyframes popupFade {
   from {
@@ -6735,6 +6760,12 @@ body.drawer-open {
   border: 1px solid #D0E3F126;
   background: rgba(255, 255, 255, .05);
   color: #D0E3F1;
+  cursor: pointer;
+}
+
+.gallery-showcase__nav-btn:hover {
+  background: rgba(255, 255, 255, .1);
+
 }
 
 .gallery-showcase__item {
@@ -6750,6 +6781,10 @@ body.drawer-open {
 
 .gallery-showcase__item.is-active {
   color: #d0e3f1;
+}
+
+.gallery-showcase__item span {
+  cursor: pointer;
 }
 
 @media (max-width:1600px) {

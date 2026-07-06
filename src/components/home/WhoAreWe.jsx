@@ -301,6 +301,16 @@ export default function WhoAreWe() {
         ScrollTrigger.refresh();
     }, []);
 
+
+    useLayoutEffect(() => {
+        console.log(
+            "WhoAreWe  mounted",
+            document.body.scrollHeight
+        );
+    }, []);
+
+
+
     return (
         <section ref={sectionReff} className="who-we-are-section">
             <div className="who-we-are-track">

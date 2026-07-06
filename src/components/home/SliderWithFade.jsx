@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useLayoutEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Autoplay, Pagination } from "swiper/modules";
@@ -40,6 +40,16 @@ const SliderWithFade = () => {
     const [active, setActive] = useState(0);
     const swiperRef = useRef(null);
     const [isAnimating, setIsAnimating] = useState(false);
+
+
+    useLayoutEffect(() => {
+        console.log(
+            "SliderWithFade  mounted",
+            document.body.scrollHeight
+        );
+    }, []);
+
+
     return (
         <section className="home-product-slider-section" id="rudaxSection">
 

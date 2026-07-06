@@ -46,7 +46,7 @@ export default function ImageZoom() {
             });
 
 
-            let activeImage  = 3;
+            let activeImage = 3;
 
             const tl = gsap.timeline({
 
@@ -161,6 +161,14 @@ export default function ImageZoom() {
 
         return () => ctx.revert();
     }, []);
+
+    useLayoutEffect(() => {
+        console.log(
+            "ImageZoom  mounted",
+            document.body.scrollHeight
+        );
+    }, []);
+
 
     return (
         <div ref={sectionRef} className="image-zoom-section">
