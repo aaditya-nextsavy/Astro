@@ -51,7 +51,7 @@ const SliderWithFade = () => {
 
 
     return (
-        <section className="home-product-slider-section" id="rudaxSection">
+        <section className="home-product-slider-section" id="rudrakshaSection">
 
 
 

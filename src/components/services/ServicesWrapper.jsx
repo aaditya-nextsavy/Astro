@@ -321,7 +321,11 @@ export default function ServicesWrapper() {
                                 <a href="/about">About</a>
                                 <a href="/services">Services</a>
                                 <a href="/gallery">Gallery</a>
-                                <Link href="/?scroll=rudaxSection">Rudraksha</Link>
+                                <Link
+                                    href="/#rudrakshaSection"
+                                >
+                                    Rudraksha
+                                </Link>
                                 <a href="/contact">Contact</a>
 
                                 <div>

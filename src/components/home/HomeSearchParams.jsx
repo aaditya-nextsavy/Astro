@@ -4,54 +4,47 @@ import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { ScrollTrigger } from "@/lib/gsap";
 import { subscribeAppReady } from "@/lib/appReady";
-
+import { usePathname } from "next/navigation";
 export default function HomeSearchParams({ ready = false } = {}) {
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
+    const pathname = usePathname();
+
 
     useEffect(() => {
-        const id = searchParams.get("scroll");
+        if (pathname !== "/") return;
+
+        const id = window.location.hash.replace("#", "");
 
         if (!id) return;
 
-        let raf1 = null;
-        let raf2 = null;
-
-        const runScroll = () => {
-            raf1 = requestAnimationFrame(() => {
-                raf2 = requestAnimationFrame(() => {
-                    ScrollTrigger.refresh(true);
-
-                    const el = document.getElementById(id);
-
-                    if (el) {
-                        window.lenis?.scrollTo(el, {
-                            offset: -60,
-                            duration: 3,
-                            easing: (t) =>
-                                t < 0.5
-                                    ? 8 * t * t * t * t
-                                    : 1 - Math.pow(-2 * t + 2, 4) / 2,
-                        });
-                    }
-                });
-            });
-        };
-
         const unsubscribe = subscribeAppReady((appReady) => {
             if (!appReady || !ready) return;
-            runScroll();
+
+
+
+            requestAnimationFrame(() => {
+                ScrollTrigger.refresh(true);
+
+                setTimeout(() => {
+                    const el = document.getElementById(id);
+
+                    if (!el) return;
+
+                    window.lenis?.scrollTo(el, {
+                        offset: -60,
+                        duration: 3,
+                        easing: (t) =>
+                            t < 0.5
+                                ? 8 * t * t * t * t
+                                : 1 - Math.pow(-2 * t + 2, 4) / 2,
+                    });
+                }, 200);
+            });
         });
 
-        return () => {
-            unsubscribe();
-            if (raf1 !== null) {
-                cancelAnimationFrame(raf1);
-            }
-            if (raf2 !== null) {
-                cancelAnimationFrame(raf2);
-            }
-        };
-    }, [ready, searchParams]);
+        return unsubscribe;
+    }, [pathname, ready]);
+
 
     return null;
 }

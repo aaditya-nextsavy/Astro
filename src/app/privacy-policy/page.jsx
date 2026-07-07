@@ -1,3 +1,4 @@
+import FloatingNavbar from "@/components/layout/FloatingNavbar";
 import LegalPageShell from "@/components/legal/LegalPageShell";
 
 export const metadata = {
@@ -51,16 +52,23 @@ const sections = [
 
 export default function PrivacyPolicyPage() {
   return (
-    <LegalPageShell
-      eyebrow="Privacy Policy"
-      title="Your privacy is handled with care"
-      intro="This page explains how we handle the information you share with Astro Acharya while browsing the website or requesting spiritual and consultation services."
-      updated="Last updated: July 6, 2026"
-      sections={sections}
-      asideTitle="Need help?"
-      asideText="If you want clarification on any part of this policy, we are happy to discuss it directly."
-      primaryAction={{ href: "/", label: "Return Home" }}
-      secondaryAction={{ href: "/contact", label: "Contact Support" }}
-    />
+
+    <>
+
+      <FloatingNavbar >
+        <LegalPageShell
+          eyebrow="Privacy Policy"
+          title="Your privacy is handled with care"
+          intro="This page explains how we handle the information you share with Astro Acharya while browsing the website or requesting spiritual and consultation services."
+          updated="Last updated: July 6, 2026"
+          sections={sections}
+          asideTitle="Need help?"
+          asideText="If you want clarification on any part of this policy, we are happy to discuss it directly."
+          primaryAction={{ href: "/", label: "Return Home" }}
+          secondaryAction={{ href: "/contact", label: "Contact Support" }}
+        />
+      </FloatingNavbar>
+
+    </>
   );
 }

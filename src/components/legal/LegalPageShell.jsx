@@ -13,16 +13,16 @@ export default function LegalPageShell({
 }) {
   return (
     <main className="legal-page">
-      <section className="section pt-0">
+      <div className="section pt-0">
         <div className="container-custom legal-shell">
           <p className="legal-eyebrow font-body">{eyebrow}</p>
           <h1 className="legal-title font-heading">{title}</h1>
           <p className="legal-intro font-body">{intro}</p>
           {updated ? <p className="legal-updated font-body">{updated}</p> : null}
         </div>
-      </section>
+      </div>
 
-      <section className="section pt-0">
+      <div className="pt-8">
         <div className="container-custom legal-grid">
           <div className="legal-card legal-card--content">
             <div className="legal-section-list">
@@ -49,7 +49,7 @@ export default function LegalPageShell({
             </div>
           </div>
 
-          <aside className="legal-card legal-card--sticky">
+          {/* <aside className="legal-card legal-card--sticky">
             <div className="legal-actions">
               <p className="legal-eyebrow font-body">{asideTitle}</p>
               <p className="legal-actions__copy font-body">{asideText}</p>
@@ -62,9 +62,9 @@ export default function LegalPageShell({
                 </Link>
               </div>
             </div>
-          </aside>
+          </aside> */}
         </div>
-      </section>
+      </div>
     </main>
   );
 }

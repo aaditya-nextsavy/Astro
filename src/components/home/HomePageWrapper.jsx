@@ -28,6 +28,12 @@ export default function HomePageWrapper() {
     const bottomNavRef = useRef(null);
     const takeoverSectionRef = useRef(null);
     const lastlightSection = useRef(null);
+    const lightThemeSources = useRef({ generic: false, takeover: false });
+    const syncNavThemeShared = (nav) => {
+        const { generic, takeover } = lightThemeSources.current;
+        nav.classList.toggle("light-section-active", generic || takeover);
+    };
+
     const [drawerOpen, setDrawerOpen] =
         useState(false);
 
@@ -126,19 +132,28 @@ export default function HomePageWrapper() {
         if (!nav) {
             return undefined;
         }
+        // const lightSections = gsap.utils.toArray(
+        //     ".light-background-zone, .light-background-zone--takeover"
+        // );
         const lightSections = gsap.utils.toArray(
-            ".light-background-zone, .light-background-zone--takeover"
+            ".light-background-zone:not(.light-background-zone--takeover)"
         );
+
         if (!lightSections.length) {
             return undefined;
         }
         const activeSections = new Set();
+        // const syncNavTheme = () => {
+        //     nav.classList.toggle(
+        //         "light-section-active",
+        //         activeSections.size > 0
+        //     );
+        // };
         const syncNavTheme = () => {
-            nav.classList.toggle(
-                "light-section-active",
-                activeSections.size > 0
-            );
+            lightThemeSources.current.generic = activeSections.size > 0;
+            syncNavThemeShared(nav);
         };
+
         const triggers = lightSections.map((section) => {
             const isTakeover = section.classList.contains(
                 "light-background-zone--takeover"
@@ -146,22 +161,24 @@ export default function HomePageWrapper() {
             return ScrollTrigger.create({
                 trigger: section,
                 start: isTakeover ? "top+=50%" : "top 55%",
-                end: isTakeover
-                    ? () => `+=${Math.max(section.offsetHeight, window.innerHeight)}`
-                    : "bottom 100%",
+                end: isTakeover ? "bottom 70%" : "bottom 100%",
                 invalidateOnRefresh: true,
+
                 onEnter: () => {
                     activeSections.add(section);
                     syncNavTheme();
                 },
+
                 onEnterBack: () => {
                     activeSections.add(section);
                     syncNavTheme();
                 },
+
                 onLeave: () => {
                     activeSections.delete(section);
                     syncNavTheme();
                 },
+
                 onLeaveBack: () => {
                     activeSections.delete(section);
                     syncNavTheme();
@@ -321,46 +338,36 @@ export default function HomePageWrapper() {
         const bottomNav = bottomNavRef.current;
         const floatingNav = floatingNavRef.current;
 
-        //
-        // LIGHT THEME
-        //
+        const setTakeover = (val) => {
+            lightThemeSources.current.takeover = val;
+            syncNavThemeShared(floatingNav);
+        };
+
         const enterThemeTrigger = ScrollTrigger.create({
             trigger: takeoverSectionRef.current,
             start: "top 75%",
             invalidateOnRefresh: true,
-
-            onEnter: () => {
-                floatingNav.classList.add("light-section-active");
-            },
-
-            onEnterBack: () => {
-                floatingNav.classList.add("light-section-active");
-            },
+            onEnter: () => setTakeover(true),
+            onEnterBack: () => setTakeover(true),
         });
 
         const leaveThemeTrigger = ScrollTrigger.create({
             trigger: takeoverSectionRef.current,
             start: "top 40%",
             invalidateOnRefresh: true,
-
-            onLeaveBack: () => {
-                floatingNav.classList.remove("light-section-active");
-            },
+            onLeaveBack: () => setTakeover(false),
         });
 
-        //
-        // BOTTOM NAV
-        //
         const hideTrigger = ScrollTrigger.create({
             trigger: takeoverSectionRef.current,
             start: "bottom 70%",
             invalidateOnRefresh: true,
-
             onEnter: () => {
+                setTakeover(false);
                 bottomNav.classList.add("hide-bottom-nav");
             },
-
             onLeaveBack: () => {
+                setTakeover(true);
                 bottomNav.classList.remove("hide-bottom-nav");
             },
         });
@@ -371,6 +378,72 @@ export default function HomePageWrapper() {
             hideTrigger.kill();
         };
     }, [appReady]);
+
+
+    // useLayoutEffect(() => {
+    //     if (!appReady) return;
+    //     if (
+    //         !takeoverSectionRef.current ||
+    //         !bottomNavRef.current ||
+    //         !floatingNavRef.current
+    //     )
+    //         return;
+
+    //     const bottomNav = bottomNavRef.current;
+    //     const floatingNav = floatingNavRef.current;
+
+    //     //
+    //     // LIGHT THEME
+    //     //
+    //     const enterThemeTrigger = ScrollTrigger.create({
+    //         trigger: takeoverSectionRef.current,
+    //         start: "top 75%",
+    //         invalidateOnRefresh: true,
+
+    //         onEnter: () => {
+    //             floatingNav.classList.add("light-section-active");
+    //         },
+
+    //         onEnterBack: () => {
+    //             floatingNav.classList.add("light-section-active");
+    //         },
+    //     });
+
+    //     const leaveThemeTrigger = ScrollTrigger.create({
+    //         trigger: takeoverSectionRef.current,
+    //         start: "top 40%",
+    //         invalidateOnRefresh: true,
+
+    //         onLeaveBack: () => {
+    //             floatingNav.classList.remove("light-section-active");
+    //         },
+    //     });
+
+    //     //
+    //     // BOTTOM NAV
+    //     //
+    //     const hideTrigger = ScrollTrigger.create({
+    //         trigger: takeoverSectionRef.current,
+    //         start: "bottom 70%",
+    //         invalidateOnRefresh: true,
+
+    //         onEnter: () => {
+    //             floatingNav.classList.remove("light-section-active");
+    //             bottomNav.classList.add("hide-bottom-nav");
+    //         },
+
+    //         onLeaveBack: () => {
+    //             floatingNav.classList.add("light-section-active");
+    //             bottomNav.classList.remove("hide-bottom-nav");
+    //         },
+    //     });
+
+    //     return () => {
+    //         enterThemeTrigger.kill();
+    //         leaveThemeTrigger.kill();
+    //         hideTrigger.kill();
+    //     };
+    // }, [appReady]);
 
 
     useEffect(() => {

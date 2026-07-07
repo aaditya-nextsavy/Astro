@@ -66,7 +66,13 @@ img {
 }
 
 .container-custom {
-  width: min(100% - 2rem, var(--container-width));
+  width: calc(100vw - 180px);
+  margin-inline: auto;
+}
+
+
+.legal-page .container-custom {
+  width: calc(100vw - 180px);
   margin-inline: auto;
 }
 
@@ -75,11 +81,20 @@ img {
   position: relative;
   z-index: var(--z-content);
   padding-block: var(--section-padding);
+  padding-top: 90px;
 }
+
+.legal .section {
+  position: relative;
+  z-index: var(--z-content);
+  padding-block: var(--section-padding);
+}
+
+
+
 
 main {
   transition: all 0.35s ease;
-
 }
 
 main.app-loading {
@@ -378,7 +393,7 @@ main.app-ready {
 
 .legal-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  /* grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr); */
   gap: 1.5rem;
   align-items: start;
 }
@@ -388,7 +403,7 @@ main.app-ready {
   overflow: hidden;
   border: 1px solid rgba(208, 227, 241, 0.14);
   border-radius: 1.5rem;
-  background: linear-gradient(180deg, rgba(14, 24, 47, 0.82), rgba(14, 24, 47, 0.66));
+  /* background: linear-gradient(180deg, rgba(14, 24, 47, 0.82), rgba(14, 24, 47, 0.66)); */
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(16px);
 }
@@ -476,13 +491,17 @@ main.app-ready {
 }
 
 .legal-button:hover {
-  transform: translateY(-1px);
+  background: rgba(208, 227, 241, 0.12);
+  border-color: rgba(208, 227, 241, 0.24);
 }
 
 .legal-button--primary {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-  color: #08101d;
-  font-weight: 700;
+  /* background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); */
+  /* color: #08101d; */
+  font-weight: 400;
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(208, 227, 241, 0.16);
+  color: var(--color-text);
 }
 
 .legal-button--secondary {
@@ -1293,6 +1312,12 @@ main.app-ready {
   left: 300px;
 
 }
+
+.navigation-indicator.none {
+  display: none;
+
+}
+
 
 
 
@@ -4732,6 +4757,16 @@ body.drawer-open {
 
 }
 
+
+.why-us-mobile {
+  display: none;
+}
+
+/* .why-us-desktop {
+  display: flex;
+} */
+
+
 @media (max-width: 1650px) {
 
   .why-us-image {
@@ -4834,6 +4869,28 @@ body.drawer-open {
 
   .why-us-content-inner {
     max-width: 100%;
+  }
+}
+
+@media(max-width:991px) {
+
+  .why-us-desktop {
+    display: none;
+  }
+
+  .why-us-mobile {
+    display: block;
+    padding: 0 24px;
+  }
+
+  .why-us-mobile-item .custom-parallax-images {
+    width: 100%;
+    height: 300px;
+  }
+
+  .why-us-mobile-item .cpp-stage {
+    width: 100%;
+    height: 100%;
   }
 }
 
@@ -5518,6 +5575,13 @@ body.drawer-open {
   }
 }
 
+
+@media (max-width:450px) {
+
+  .product-slider-bg-image {
+    bottom: 35%;
+  }
+}
 
 @media (max-width:350px) {
 
@@ -7244,11 +7308,28 @@ body.drawer-open {
 
 }
 
+
+
+
 @media (max-width:500px) {
   .gallery-showcase__visual {
     height: 340px;
   }
 }
+
+
+@media (max-width:768px) {
+
+
+
+  .gallery-showcase__item {
+    font-size: 26px;
+    letter-spacing: 0.6px;
+  }
+
+}
+
+
 
 @media (max-width:991px) {
 
@@ -7578,4 +7659,29 @@ body.drawer-open {
   object-fit: contain;
   z-index: 4;
 
+}
+
+@media (max-width:992px) {
+  .legal-page .container-custom {
+    width: calc(100vw - 48px);
+  }
+
+  .legal-page .section {
+
+    padding-top: 40px;
+    padding-bottom: 60px;
+  }
+
+  .legal-card {
+    -webkit-backdrop-filter: unset;
+    backdrop-filter: unset;
+    border: unset;
+    border-radius: unset;
+    overflow: hidden;
+    box-shadow: unset;
+  }
+
+  .legal-card--content {
+    padding: unset;
+  }
 }

@@ -1,4 +1,7 @@
+
+import FloatingNavbar from "@/components/layout/FloatingNavbar";
 import LegalPageShell from "@/components/legal/LegalPageShell";
+
 
 export const metadata = {
   title: "Terms and Conditions | Astro Acharya",
@@ -50,17 +53,29 @@ const sections = [
 ];
 
 export default function TermsAndConditionsPage() {
+
+
+
+
+
+
   return (
-    <LegalPageShell
-      eyebrow="Terms and Conditions"
-      title="Clear terms for using our site and services"
-      intro="These terms explain the basic rules for using the Astro Acharya website, reading the content, and requesting services or consultations."
-      updated="Last updated: July 6, 2026"
-      sections={sections}
-      asideTitle="Before you continue"
-      asideText="Please read the terms carefully so you know what to expect when using the site or booking a consultation."
-      primaryAction={{ href: "/", label: "Back to Home" }}
-      secondaryAction={{ href: "/privacy-policy", label: "Privacy Policy" }}
-    />
+    <>
+
+      <FloatingNavbar >
+
+        <LegalPageShell
+          eyebrow="Terms and Conditions"
+          title="Clear terms for using our site and services"
+          intro="These terms explain the basic rules for using the Astro Acharya website, reading the content, and requesting services or consultations."
+          updated="Last updated: July 6, 2026"
+          sections={sections}
+          asideTitle="Before you continue"
+          asideText="Please read the terms carefully so you know what to expect when using the site or booking a consultation."
+          primaryAction={{ href: "/", label: "Back to Home" }}
+          secondaryAction={{ href: "/privacy-policy", label: "Privacy Policy" }}
+        />
+      </FloatingNavbar>
+    </>
   );
 }

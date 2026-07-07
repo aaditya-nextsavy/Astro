@@ -1,167 +1,19 @@
 "use client";
 
-import { useState, useEffect, useRef, useLayoutEffect } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
-import Footer from "@/components/footer/Footer";
-import AboutStory from "./AboutStory";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import AboutOperations from "./AboutOperations";
-import { FaChevronRight } from "react-icons/fa6";
-import { subscribeAppReady } from "@/lib/appReady";
+import { FaChevronRight } from "react-icons/fa";
+import LocalTime from "@/components/common/LocalTime";
+import Footer from "../footer/Footer";
 
-export default function AboutWrapper() {
+export default function FloatingNavbar({
+    children,
+}) {
 
-    const heroCloudContainerRef = useRef(null);
-    const floatingNavRef = useRef(null);
-    const bottomNavRef = useRef(null);
-    const aboutFooterSection = useRef(null);
     const [menuOpen, setMenuOpen] = useState(false);
-
-   
-
-
-    useLayoutEffect(() => {
-        if (!heroCloudContainerRef.current) return;
-
-        let ctx;
-
-        const unsubscribe = subscribeAppReady((ready) => {
-            if (!ready || ctx) return;
-
-            ctx = gsap.context(() => {
-                const clouds =
-                    heroCloudContainerRef.current.querySelectorAll(
-                        ".light-background-cloud"
-                    );
-
-                gsap.to(clouds, {
-                    opacity: 0,
-                    y: -100,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: ".light-background-content",
-                        start: "top center",
-                        end: "center center",
-                        scrub: true,
-                    },
-                });
-            }, heroCloudContainerRef);
-        });
-
-        return () => {
-            unsubscribe();
-            ctx?.revert();
-        };
-    }, []);
-
-
-    useLayoutEffect(() => {
-    if (!floatingNavRef.current) return;
-
-    let ctx;
-
-    const unsubscribe = subscribeAppReady((ready) => {
-        if (!ready || ctx) return;
-
-        ctx = gsap.context(() => {
-            const nav = floatingNavRef.current;
-
-            const lightSections = gsap.utils.toArray(
-                ".light-background-zone, .light-background-zone--takeover"
-            );
-
-            if (!lightSections.length) return;
-
-            const activeSections = new Set();
-
-            const syncNavTheme = () => {
-                nav.classList.toggle(
-                    "light-section-active",
-                    activeSections.size > 0
-                );
-            };
-
-            lightSections.forEach((section) => {
-                const isTakeover = section.classList.contains(
-                    "light-background-zone--takeover"
-                );
-
-                ScrollTrigger.create({
-                    trigger: section,
-                    start: isTakeover
-                        ? "top+=30%"
-                        : "bottom 55%",
-                    end: isTakeover
-                        ? "bottom+=50%"
-                        : "bottom 100%",
-
-                    onEnter: () => {
-                        activeSections.add(section);
-                        syncNavTheme();
-                    },
-
-                    onEnterBack: () => {
-                        activeSections.add(section);
-                        syncNavTheme();
-                    },
-
-                    onLeave: () => {
-                        activeSections.delete(section);
-                        syncNavTheme();
-                    },
-
-                    onLeaveBack: () => {
-                        activeSections.delete(section);
-                        syncNavTheme();
-                    },
-                });
-            });
-
-            syncNavTheme();
-        }, floatingNavRef);
-    });
-
-    return () => {
-        unsubscribe();
-        ctx?.revert();
-    };
-}, []);
-
-
-
-
-
-
-
-    const [time, setTime] = useState("");
-
-    useEffect(() => {
-        const updateTime = () => {
-            const formatted = new Intl.DateTimeFormat(
-                "en-IN",
-                {
-                    timeZone: "Asia/Kolkata",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                }
-            ).format(new Date());
-
-            setTime(formatted);
-        };
-
-        updateTime();
-
-        const interval = setInterval(
-            updateTime,
-            1000
-        );
-
-        return () =>
-            clearInterval(interval);
-    }, []);
-
-
+    const bottomNavRef = useRef(null);
+    const floatingNavRef = useRef(null);
+    const aboutFooterSection = useRef(null);
 
     useEffect(() => {
         if (!aboutFooterSection.current || !bottomNavRef.current) return;
@@ -188,19 +40,16 @@ export default function AboutWrapper() {
         return () => observer.disconnect();
     }, []);
 
+
+
     return (
-
-
         <>
-
-
-            <main className="relative min-h-screen">
+            <div className="relative">
                 <div
                     className={`transition-opacity duration-1000 opacity-100
                         }`}
                 >
 
-                    {/* move to global layout */}
 
                     <div
                         ref={floatingNavRef}
@@ -251,26 +100,14 @@ export default function AboutWrapper() {
                         </div>
 
 
-                        <div ref={bottomNavRef}
+                        <div
+                            ref={bottomNavRef}
                             className="astroHeroBottomSection">
-                            <div className="astroHeroTimeBlock">
-                                <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
-                                    <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
-                                </svg>
-                                <span>
-                                    ( IST {time} )
-                                </span>
-                                <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
-                                    <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
-                                </svg>
-
-                            </div>
+                            <LocalTime />
 
                             <nav className="astroHeroNavigation glass-effect-card">
 
-                                <div className="navigation-indicator about">
+                                <div className="navigation-indicator none">
                                     <div className="blurred-bg">
                                         <svg width="173" height="56" viewBox="0 0 173 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <g filter="url(#filter0_f_41_11276)">
@@ -371,26 +208,16 @@ export default function AboutWrapper() {
                             </Link>
                         </div>
                     </div>
-                    <div className="hero-stack-sequence-wrapper min-h-[250vh]">
-                        <AboutStory />
-                        <AboutOperations />
-
-                    </div>
 
                 </div>
+            </div>
 
-            </main>
-
-
+            {children}
 
             <div ref={aboutFooterSection} className="about-footer-takeover-zone">
                 <Footer />
             </div>
 
-
-
-
         </>
-
     );
 }

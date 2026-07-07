@@ -523,7 +523,7 @@ const Footer = () => {
                                 Gallery
                             </Link>
 
-                            <Link href="/?scroll=rudaxSection">
+                            <Link href="/#rudrakshaSection">
                                 Rudraksha
                             </Link>
 
