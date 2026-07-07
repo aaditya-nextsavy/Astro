@@ -223,7 +223,8 @@ const AboutStory = () => {
 
                             gsap.set(cloudRef.current, {
                                 opacity: gsap.utils.clamp(0, 1, cloudOpacity),
-                                xPercent: p > 0.95 ? -100 : 0,
+                                // xPercent: p > 0.95 ? -100 : 0,
+                                xPercent: 0,
                                 scale: 1.08,
                             });
                         }
@@ -270,11 +271,19 @@ const AboutStory = () => {
 
                         // Swap src exactly at the index boundary — lands inside the
                         // invisible window on both sides, so it's never seen.
-                        if (index !== previousIndex) {
+                        // if (index !== previousIndex) {
+                        //     previousIndex = index;
+                        //     setActiveIndex(index);
+                        //     setDisplayImage(storyTimeline[index].image);
+                        // }
+                        const isNewIndex = index !== previousIndex;
+
+                        if (isNewIndex) {
                             previousIndex = index;
                             setActiveIndex(index);
                             setDisplayImage(storyTimeline[index].image);
                         }
+
 
                         // ---- CONTENT FADE (last regular item's text) ----
                         if (index === heartIndex) {
@@ -284,7 +293,7 @@ const AboutStory = () => {
                                 (p - 0.5) / 0.4
                             );
                             gsap.set(contentRef.current, { opacity: 1 - fadeProgress });
-                        } else {
+                        } else if (!isNewIndex) {
                             gsap.set(contentRef.current, { opacity: 1 });
                         }
                     },
