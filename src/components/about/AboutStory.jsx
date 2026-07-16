@@ -94,6 +94,11 @@ const AboutStory = () => {
 
     const [displayImage, setDisplayImage] = useState(storyTimeline[0].image);
     const [isDesktop, setIsDesktop] = useState(null);
+    const imageTransitioning = useRef(false);
+    const heartTransitioning = useRef(false);
+
+
+
 
     useEffect(() => {
         const checkScreen = () => setIsDesktop(window.innerWidth > 1300);
@@ -102,8 +107,6 @@ const AboutStory = () => {
         return () => window.removeEventListener("resize", checkScreen);
     }, []);
 
-    // Text-only entrance animation. Image opacity is NOT touched here —
-    // it belongs entirely to the scroll handler below now.
     useEffect(() => {
         gsap.fromTo(
             ".about-story-animate",
@@ -130,6 +133,62 @@ const AboutStory = () => {
                 const FADE_OUT_START = 0.78;
 
                 let previousIndex = -1;
+
+                const transitionImage = (newIndex) => {
+                    if (imageTransitioning.current) return;
+
+                    imageTransitioning.current = true;
+
+                    gsap.killTweensOf(personRef.current);
+
+                    gsap.to(personRef.current, {
+                        opacity: 0,
+                        duration: 1,
+                        ease: "power2.inOut",
+                        onComplete: () => {
+                            setDisplayImage(storyTimeline[newIndex].image);
+
+                            requestAnimationFrame(() => {
+                                gsap.to(personRef.current, {
+                                    opacity: 1,
+                                    duration: 1,
+                                    ease: "power2.out",
+                                    onComplete: () => {
+                                        imageTransitioning.current = false;
+                                    },
+                                });
+                            });
+                        },
+                    });
+                };
+
+                const transitionHeartLegacy = (newIndex) => {
+                    if (heartTransitioning.current) return;
+                    heartTransitioning.current = true;
+
+                    gsap.killTweensOf([personRef.current, cloudRef.current]);
+
+                    const tl = gsap.timeline({
+                        onComplete: () => {
+                            heartTransitioning.current = false;
+                        },
+                    });
+
+                    tl.to([personRef.current, cloudRef.current], {
+                        opacity: 0,
+                        duration: 0.4,
+                        ease: "power2.inOut",
+                        onComplete: () => {
+                            setDisplayImage(storyTimeline[newIndex].image);
+                        },
+                    }).to([personRef.current, cloudRef.current], {
+                        opacity: 1,
+                        duration: 0.7,
+                        ease: "power2.out",
+                    });
+                };
+
+
 
                 ScrollTrigger.create({
                     trigger: wrapperRef.current,
@@ -158,42 +217,40 @@ const AboutStory = () => {
                         // ---- IMAGE + CLOUD CROSSFADE ----
                         let personOpacity = 1;
 
-                        if (index < heartIndex) {
 
-                            // Normal sections
-                            if (p < FADE_IN_END) {
-                                personOpacity = p / FADE_IN_END;
-                            } else if (p > FADE_OUT_START) {
-                                personOpacity = 1 - (p - FADE_OUT_START) / (1 - FADE_OUT_START);
-                            }
 
-                        } else if (index === heartIndex) {
 
-                            // Last regular section
-                            if (p < FADE_IN_END) {
-                                personOpacity = p / FADE_IN_END;
-                            } else if (p > 0.55) {
-                                personOpacity = 1 - ((p - 0.55) / 0.20);
-                            }
 
-                        } else {
 
-                            // Legacy section
-                            if (p < 0.25) {
-                                // Fade in once
-                                personOpacity = p / 0.25;
-                            } else {
-                                // Stay visible
-                                personOpacity = 1;
-                            }
+                        // gsap.set(personRef.current, {
+                        //     opacity: personOpacity,
+                        // });
 
-                        }
 
-                        personOpacity = gsap.utils.clamp(0, 1, personOpacity);
 
-                        gsap.set(personRef.current, {
-                            opacity: personOpacity,
-                        });
+
+                        // const isLegacy = storyTimeline[index].type === "legacy";
+
+                        // if (isLegacy) {
+
+                        //     if (!imageTransitioning.current) {
+                        //         gsap.set(personRef.current, {
+                        //             opacity: personOpacity,
+                        //         });
+                        //     }
+                        // }
+
+                        // if (!imageTransitioning.current) {
+                        //     gsap.set(personRef.current, {
+                        //         opacity: personOpacity,
+                        //     });
+                        // }
+
+                        // if (index === heartIndex && !imageTransitioning.current) {
+                        //     gsap.set(personRef.current, {
+                        //         opacity: personOpacity,
+                        //     });
+                        // }
 
                         // Flip only around heartIndex -> legacy, snapped while invisible.
                         // const flipped =
@@ -205,14 +262,19 @@ const AboutStory = () => {
 
 
                         if (index < heartIndex) {
-                            // Never fade the cloud before the legacy transition
-                            gsap.set(cloudRef.current, {
-                                opacity: 1,
-                                xPercent: 0,
-                                scale: 1.08,
-                            });
+                            personOpacity = 1;
                         }
                         else if (index === heartIndex) {
+
+                            if (p < FADE_IN_END) {
+                                personOpacity = p / FADE_IN_END;
+                            }
+                            else if (p > 0.55) {
+                                personOpacity = 1 - ((p - 0.55) / 0.20);
+                            }
+                            else {
+                                personOpacity = 1;
+                            }
 
                             // Cloud only starts fading during the final transition
                             let cloudOpacity = 1;
@@ -227,27 +289,41 @@ const AboutStory = () => {
                                 xPercent: 0,
                                 scale: 1.08,
                             });
+
+                            if (personOpacity <= 0.05 &&
+                                displayImage !== storyTimeline[heartIndex + 1].image) {
+
+                                setDisplayImage(storyTimeline[heartIndex + 1].image);
+                            }
                         }
                         else if (index > heartIndex) {
 
+                            // Legacy image fades in with scroll
                             if (p < 0.25) {
-
-                                gsap.set(cloudRef.current, {
-                                    opacity: p / 0.25,
-                                    xPercent: -0,
-                                    scale: 1
-                                });
-
+                                personOpacity = p / 0.25;
                             } else {
-
-                                gsap.set(cloudRef.current, {
-                                    opacity: 1,
-                                    xPercent: -0,
-                                    scale: 1
-                                });
-
+                                personOpacity = 1;
                             }
 
+                            if (p < 0.25) {
+                                gsap.set(cloudRef.current, {
+                                    opacity: p / 0.25,
+                                    xPercent: 0,
+                                    scale: 1
+                                });
+                            } else {
+                                gsap.set(cloudRef.current, {
+                                    opacity: 1,
+                                    xPercent: 0,
+                                    scale: 1
+                                });
+                            }
+
+                            if (personOpacity <= 0.05 &&
+                                displayImage !== storyTimeline[heartIndex].image) {
+
+                                setDisplayImage(storyTimeline[heartIndex].image);
+                            }
                         }
                         else {
 
@@ -262,13 +338,22 @@ const AboutStory = () => {
                                 xPercent: -100,
                                 scale: 1.08
                             });
-
-                            gsap.set(personRef.current, {
-                                opacity: 1
-                            });
-
+                            // if (!imageTransitioning.current) {
+                            //     gsap.set(personRef.current, {
+                            //         opacity: 1
+                            //     });
+                            // }
                         }
 
+
+
+                        personOpacity = gsap.utils.clamp(0, 1, personOpacity);
+
+                        if (!imageTransitioning.current) {
+                            gsap.set(personRef.current, {
+                                opacity: personOpacity,
+                            });
+                        }
                         // Swap src exactly at the index boundary — lands inside the
                         // invisible window on both sides, so it's never seen.
                         // if (index !== previousIndex) {
@@ -278,10 +363,45 @@ const AboutStory = () => {
                         // }
                         const isNewIndex = index !== previousIndex;
 
+                        // if (isNewIndex) {
+                        //     previousIndex = index;
+                        //     // setActiveIndex(index);
+                        //     // setDisplayImage(storyTimeline[index].image);
+                        //     transitionImage(index);
+                        //     setActiveIndex(index);
+                        // }
+
                         if (isNewIndex) {
                             previousIndex = index;
+
+                            const previousItem = storyTimeline[activeIndex];
+                            const nextItem = storyTimeline[index];
+
+                            const shouldAnimate =
+                                previousItem?.type === "standard" &&
+                                nextItem?.type === "standard";
+
+                            // if (shouldAnimate) {
+                            //     transitionImage(index);
+                            // } else {
+                            //     setDisplayImage(storyTimeline[index].image);
+                            //     const isHeartLegacyTransition =
+                            //         (previousItem?.type === "standard" && nextItem?.type === "legacy") ||
+                            //         (previousItem?.type === "legacy" && nextItem?.type === "standard");
+                            // }
+
+                            const isHeartLegacy =
+                                (previousItem?.type === "standard" && nextItem?.type === "legacy") ||
+                                (previousItem?.type === "legacy" && nextItem?.type === "standard");
+
+                            if (shouldAnimate) {
+                                transitionImage(index);
+                            }
+                            else if (!isHeartLegacy) {
+                                setDisplayImage(storyTimeline[index].image);
+                            }
+
                             setActiveIndex(index);
-                            setDisplayImage(storyTimeline[index].image);
                         }
 
 
@@ -436,9 +556,11 @@ const AboutStory = () => {
                             <Image
 
                                 ref={personRef}
-                                key={current.image}
-                                src={current.image}
-                                alt={current.title}
+                                // key={current.image}
+                                // src={current.image}
+                                src={displayImage}
+                                // alt={current.title}
+                                alt={storyTimeline[activeIndex].title}
                                 fill
                                 className="about-story-person about-story-animate-image"
                             />

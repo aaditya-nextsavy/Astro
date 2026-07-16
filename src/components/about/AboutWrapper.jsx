@@ -17,7 +17,7 @@ export default function AboutWrapper() {
     const aboutFooterSection = useRef(null);
     const [menuOpen, setMenuOpen] = useState(false);
 
-   
+
 
 
     useLayoutEffect(() => {
@@ -56,76 +56,76 @@ export default function AboutWrapper() {
 
 
     useLayoutEffect(() => {
-    if (!floatingNavRef.current) return;
+        if (!floatingNavRef.current) return;
 
-    let ctx;
+        let ctx;
 
-    const unsubscribe = subscribeAppReady((ready) => {
-        if (!ready || ctx) return;
+        const unsubscribe = subscribeAppReady((ready) => {
+            if (!ready || ctx) return;
 
-        ctx = gsap.context(() => {
-            const nav = floatingNavRef.current;
+            ctx = gsap.context(() => {
+                const nav = floatingNavRef.current;
 
-            const lightSections = gsap.utils.toArray(
-                ".light-background-zone, .light-background-zone--takeover"
-            );
-
-            if (!lightSections.length) return;
-
-            const activeSections = new Set();
-
-            const syncNavTheme = () => {
-                nav.classList.toggle(
-                    "light-section-active",
-                    activeSections.size > 0
-                );
-            };
-
-            lightSections.forEach((section) => {
-                const isTakeover = section.classList.contains(
-                    "light-background-zone--takeover"
+                const lightSections = gsap.utils.toArray(
+                    ".light-background-zone, .light-background-zone--takeover"
                 );
 
-                ScrollTrigger.create({
-                    trigger: section,
-                    start: isTakeover
-                        ? "top+=30%"
-                        : "bottom 55%",
-                    end: isTakeover
-                        ? "bottom+=50%"
-                        : "bottom 100%",
+                if (!lightSections.length) return;
 
-                    onEnter: () => {
-                        activeSections.add(section);
-                        syncNavTheme();
-                    },
+                const activeSections = new Set();
 
-                    onEnterBack: () => {
-                        activeSections.add(section);
-                        syncNavTheme();
-                    },
+                const syncNavTheme = () => {
+                    nav.classList.toggle(
+                        "light-section-active",
+                        activeSections.size > 0
+                    );
+                };
 
-                    onLeave: () => {
-                        activeSections.delete(section);
-                        syncNavTheme();
-                    },
+                lightSections.forEach((section) => {
+                    const isTakeover = section.classList.contains(
+                        "light-background-zone--takeover"
+                    );
 
-                    onLeaveBack: () => {
-                        activeSections.delete(section);
-                        syncNavTheme();
-                    },
+                    ScrollTrigger.create({
+                        trigger: section,
+                        start: isTakeover
+                            ? "top+=30%"
+                            : "bottom 55%",
+                        end: isTakeover
+                            ? "bottom+=50%"
+                            : "bottom 100%",
+
+                        onEnter: () => {
+                            activeSections.add(section);
+                            syncNavTheme();
+                        },
+
+                        onEnterBack: () => {
+                            activeSections.add(section);
+                            syncNavTheme();
+                        },
+
+                        onLeave: () => {
+                            activeSections.delete(section);
+                            syncNavTheme();
+                        },
+
+                        onLeaveBack: () => {
+                            activeSections.delete(section);
+                            syncNavTheme();
+                        },
+                    });
                 });
-            });
 
-            syncNavTheme();
-        }, floatingNavRef);
-    });
+                syncNavTheme();
+            }, floatingNavRef);
+        });
 
-    return () => {
-        unsubscribe();
-        ctx?.revert();
-    };
-}, []);
+        return () => {
+            unsubscribe();
+            ctx?.revert();
+        };
+    }, []);
 
 
 

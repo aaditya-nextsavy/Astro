@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-
 import { gsap } from "@/lib/gsap";
 
 export default function LoaderCenter({ progress }) {
     const wheelRef = useRef(null);
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     useEffect(() => {
         gsap.to(wheelRef.current, {
@@ -19,7 +19,6 @@ export default function LoaderCenter({ progress }) {
 
     return (
         <div className="loader-center">
-
             <div
                 ref={wheelRef}
                 className="loader-wheel"
@@ -28,14 +27,17 @@ export default function LoaderCenter({ progress }) {
                     src="/assets/loader/zodiac.svg"
                     alt="Zodiac Wheel"
                     fill
+                    priority
+                    onLoad={() => setImageLoaded(true)}
                 />
             </div>
 
-            <div className="loader-percent">
-                {progress}
-                <span className="loader-span-percent">%</span>
-            </div>
-
+            {imageLoaded && (
+                <div className="loader-percent">
+                    {progress}
+                    <span className="loader-span-percent">%</span>
+                </div>
+            )}
         </div>
     );
 }

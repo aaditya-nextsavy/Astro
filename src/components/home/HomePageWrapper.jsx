@@ -232,100 +232,6 @@ export default function HomePageWrapper() {
         return () =>
             clearInterval(interval);
     }, []);
-    // useLayoutEffect(() => {
-    //     if (!appReady) return;
-
-    //     if (!takeoverSectionRef.current || !bottomNavRef.current) return;
-    //     const nav = bottomNavRef.current;
-    //     const takeoverTrigger = ScrollTrigger.create({
-    //         trigger: takeoverSectionRef.current,
-    //         start: "bottom 30%",
-    //         onEnter: () => {
-    //             nav.classList.add("hide-bottom-nav");
-    //         },
-    //         onLeaveBack: () => {
-    //             nav.classList.remove("hide-bottom-nav");
-    //         },
-    //         invalidateOnRefresh: true,
-    //     });
-
-    //     const footerTrigger = ScrollTrigger.create({
-    //         trigger: lastlightSection.current,
-    //         start: "top 50%",
-    //         onEnter: () => {
-    //             nav.classList.add("hide-bottom-nav");
-    //         },
-    //         onLeaveBack: () => {
-    //             nav.classList.remove("hide-bottom-nav");
-    //         },
-    //         invalidateOnRefresh: true,
-    //     });
-
-    //     return () => {
-    //         takeoverTrigger.kill();
-    //         footerTrigger.kill();
-    //     };
-    // }, [appReady]);
-
-
-    // useLayoutEffect(() => {
-    //     if (!appReady) return;
-    //     if (!takeoverSectionRef.current || !bottomNavRef.current || !floatingNavRef.current)
-    //         return;
-
-    //     const bottomNav = bottomNavRef.current;
-    //     const floatingNav = floatingNavRef.current;
-
-    //     //
-    //     // LIGHT THEME
-    //     //
-    //     const themeTrigger = ScrollTrigger.create({
-    //         trigger: takeoverSectionRef.current,
-    //         start: "top 75%", // section is 25% into viewport
-    //         end: "bottom top",
-    //         invalidateOnRefresh: true,
-
-    //         onEnter: () => {
-    //             floatingNav.classList.add("light-section-active");
-    //         },
-
-    //         onLeave: () => {
-    //             floatingNav.classList.remove("light-section-active");
-    //         },
-
-    //         onEnterBack: () => {
-    //             floatingNav.classList.add("light-section-active");
-    //         },
-
-    //         onLeaveBack: () => {
-    //             floatingNav.classList.remove("light-section-active");
-    //         },
-    //     });
-
-    //     //
-    //     // BOTTOM NAV
-    //     //
-    //     const hideTrigger = ScrollTrigger.create({
-    //         trigger: takeoverSectionRef.current,
-    //         start: "bottom 70%", // bottom is 30% above bottom edge
-    //         invalidateOnRefresh: true,
-
-    //         onEnter: () => {
-    //             bottomNav.classList.add("hide-bottom-nav");
-    //         },
-
-    //         onLeaveBack: () => {
-    //             bottomNav.classList.remove("hide-bottom-nav");
-    //         },
-    //     });
-
-    //     return () => {
-    //         themeTrigger.kill();
-    //         hideTrigger.kill();
-    //     };
-    // }, [appReady]);
-
-
     useLayoutEffect(() => {
         if (!appReady) return;
         if (
@@ -378,72 +284,6 @@ export default function HomePageWrapper() {
             hideTrigger.kill();
         };
     }, [appReady]);
-
-
-    // useLayoutEffect(() => {
-    //     if (!appReady) return;
-    //     if (
-    //         !takeoverSectionRef.current ||
-    //         !bottomNavRef.current ||
-    //         !floatingNavRef.current
-    //     )
-    //         return;
-
-    //     const bottomNav = bottomNavRef.current;
-    //     const floatingNav = floatingNavRef.current;
-
-    //     //
-    //     // LIGHT THEME
-    //     //
-    //     const enterThemeTrigger = ScrollTrigger.create({
-    //         trigger: takeoverSectionRef.current,
-    //         start: "top 75%",
-    //         invalidateOnRefresh: true,
-
-    //         onEnter: () => {
-    //             floatingNav.classList.add("light-section-active");
-    //         },
-
-    //         onEnterBack: () => {
-    //             floatingNav.classList.add("light-section-active");
-    //         },
-    //     });
-
-    //     const leaveThemeTrigger = ScrollTrigger.create({
-    //         trigger: takeoverSectionRef.current,
-    //         start: "top 40%",
-    //         invalidateOnRefresh: true,
-
-    //         onLeaveBack: () => {
-    //             floatingNav.classList.remove("light-section-active");
-    //         },
-    //     });
-
-    //     //
-    //     // BOTTOM NAV
-    //     //
-    //     const hideTrigger = ScrollTrigger.create({
-    //         trigger: takeoverSectionRef.current,
-    //         start: "bottom 70%",
-    //         invalidateOnRefresh: true,
-
-    //         onEnter: () => {
-    //             floatingNav.classList.remove("light-section-active");
-    //             bottomNav.classList.add("hide-bottom-nav");
-    //         },
-
-    //         onLeaveBack: () => {
-    //             floatingNav.classList.add("light-section-active");
-    //             bottomNav.classList.remove("hide-bottom-nav");
-    //         },
-    //     });
-
-    //     return () => {
-    //         enterThemeTrigger.kill();
-    //         leaveThemeTrigger.kill();
-    //         hideTrigger.kill();
-    //     };
-    // }, [appReady]);
 
 
     useEffect(() => {
@@ -538,7 +378,7 @@ export default function HomePageWrapper() {
                                 <a href="/about">About</a>
                                 <a href="/services">Services</a>
                                 <a href="/gallery">Gallery</a>
-                                <Link href="/?scroll=rudaxSection">
+                                <Link href="/#rudaxSection">
                                     Rudraksha
                                 </Link>
                                 <a href="/contact">Contact</a>

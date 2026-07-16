@@ -6,7 +6,7 @@ import { useState, useEffect, useLayoutEffect } from "react";
 const ACHARYA_DATA = [
     {
         id: "acharya-markand",
-        image: "/assets/drawer/DRAWER-TEMP.png",
+        image: "/assets/drawer/drawer-temp.png",
         title: "Vedic Astrology Specialist",
         name: "Acharya Markand",
         description:
@@ -17,7 +17,7 @@ const ACHARYA_DATA = [
     },
     {
         id: "acharya-shandilya",
-        image: "/assets/drawer/DRAWER-TEMP.png",
+        image: "/assets/drawer/drawer-temp.png",
         title: "Vedic Astrology Specialist",
         name: "Acharya Shandilya",
         role: "Vastu & Spiritual Guidance Expert",

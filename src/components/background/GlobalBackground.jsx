@@ -4,6 +4,7 @@ import Stars from "./Stars";
 import Beam from "./Beam";
 import LightRays from "./LightRays";
 import LightRayAnimation from "./LightRayAnimation";
+import Image from "next/image";
 
 export default function GlobalBackground() {
 
@@ -12,12 +13,15 @@ export default function GlobalBackground() {
 
       {/* <div className="background-sky" /> */}
 
-      <Stars />
+      <Stars />   
 
       <Clouds />
 
 
       <div className="background-noise" />
+      <div className="loader-noise">
+        
+      </div>
 
       <div className="background-color-layer-temp"></div>
 
@@ -54,7 +58,7 @@ export default function GlobalBackground() {
         </svg>
 
       </div>
-     
+
 
       <div className="background-bottom-dark-temp">
 
@@ -62,8 +66,8 @@ export default function GlobalBackground() {
 
       <div className="background-leftRight-dark-temp">
         {/* <div className="relative w-full h-full"> */}
-          <div className="info-sticky-card-section__card-noise-bg">
-              
+        <div className="info-sticky-card-section__card-noise-bg">
+
           {/* </div> */}
         </div>
 

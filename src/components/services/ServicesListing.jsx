@@ -5,7 +5,7 @@ import { useState } from "react";
 const SERVICES_DATA = [
     {
         id: "01",
-        image: "/assets/drawer/DRAWER-TEMP.png",
+        image: "/assets/drawer/drawer-temp.png",
         title: "Vastu Consultation",
         description:
             `Create harmony between your living spaces and the natural energies that influence your well-being. Our Vastu consultations evaluate residential and commercial properties to identify imbalances and recommend practical corrections that support health, prosperity, and peace of mind.`,
@@ -15,7 +15,7 @@ const SERVICES_DATA = [
     },
     {
         id: "02",
-        image: "/assets/drawer/DRAWER-TEMP.png",
+        image: "/assets/drawer/drawer-temp.png",
         title: "Personalized Birth Chart Analysis",
         description:
             `Gain deeper insight into your life's purpose through a comprehensive study of your natal chart. We examine planetary placements, houses, yogas, and karmic influences to reveal your strengths, challenges, and opportunities for personal growth.`,
@@ -25,7 +25,7 @@ const SERVICES_DATA = [
     },
     {
         id: "03",
-        image: "/assets/drawer/DRAWER-TEMP.png",
+        image: "/assets/drawer/drawer-temp.png",
         title: "Astrological Predictions & Effective Remedies",
         description:
             `Understand upcoming life cycles and planetary influences through detailed astrological forecasting. Alongside predictions, we provide practical and spiritual remedies designed to minimize challenges and amplify favorable opportunities.`,
@@ -35,7 +35,7 @@ const SERVICES_DATA = [
     },
     {
         id: "04",
-        image: "/assets/drawer/DRAWER-TEMP.png",
+        image: "/assets/drawer/drawer-temp.png",
         title: "Relationship and Career Guidance",
         description:
             `Whether you are seeking harmony in relationships or direction in your professional journey, our astrological consultations provide valuable insights into compatibility, timing, and personal strengths. We analyze key planetary influences to support informed decision-making.`,
@@ -45,7 +45,7 @@ const SERVICES_DATA = [
     },
     {
         id: "05",
-        image: "/assets/drawer/DRAWER-TEMP.png",
+        image: "/assets/drawer/drawer-temp.png",
         title: "Custom Solutions for Prosperity and Growth",
         description:
             `Every individual faces unique challenges and aspirations. We create tailored spiritual and astrological solutions that address specific concerns related to finances, business growth, personal development, and overall prosperity.`,
@@ -55,7 +55,7 @@ const SERVICES_DATA = [
     },
     {
         id: "06",
-        image: "/assets/drawer/DRAWER-TEMP.png",
+        image: "/assets/drawer/drawer-temp.png",
         title: "Spiritual Counseling and Life Path Direction",
         description:
             `Find clarity during periods of uncertainty through compassionate spiritual counseling. By combining astrological wisdom with practical guidance, we help you understand life lessons, overcome obstacles, and reconnect with your higher purpose.`,
@@ -65,7 +65,7 @@ const SERVICES_DATA = [
     },
     {
         id: "07",
-        image: "/assets/drawer/DRAWER-TEMP.png",
+        image: "/assets/drawer/drawer-temp.png",
         title: "Authentic Puja Services",
         description:
             `Experience traditional Vedic Rudraksha performed with devotion and precision. Our puja services are conducted according to authentic scriptural practices and can be arranged for blessings, protection, prosperity, health, and spiritual upliftment.`,
@@ -75,7 +75,7 @@ const SERVICES_DATA = [
     },
     {
         id: "08",
-        image: "/assets/drawer/DRAWER-TEMP.png",
+        image: "/assets/drawer/drawer-temp.png",
         title: "Sarvabadha Nivaran Homa",
         description:
             `This powerful Vedic fire ritual is performed to remove obstacles, negative influences, and persistent difficulties affecting various aspects of life. The homa invokes divine energies to restore harmony, protection, and positive momentum.`,

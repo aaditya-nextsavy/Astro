@@ -12,27 +12,81 @@ import "swiper/css";
 const slides = [
     {
         id: 1,
-        image: "/assets/home/Rudraksha1.png",
-        title: "Five Mukhi Rudraksha",
-        description: "The deity of the Five Mukhi Rudraksha is Kalagni Rudra (form of Shiva). Which is the most common and auspicious. Which can be used for mental peace, health benefits, blood pressure control.",
+        image: "/assets/rudraksha/One-Mukhi-Rudraksha.png",
+        title: "One Mukhi Rudraksha",
+        description: "The deity of the One Mukhi Rudraksha is Kalagni Rudra (a form of Lord Shiva). It is believed to bring mental peace, spiritual growth, good health, and relief from stress while helping to control blood pressure and improve concentration.",
     },
     {
         id: 2,
-        image: "/assets/home/Rudraksha1.png",
-        title: "Seven Mukhi Rudraksha",
-        description: "The deity of the Five Mukhi Rudraksha is Kalagni Rudra (form of Shiva). Which is the most common and auspicious. Which can be used for mental peace, health benefits, blood pressure control.",
+        image: "/assets/rudraksha/Two-Mukhi-Rudraksha.png",
+        title: "Two Mukhi Rudraksha",
+        description: "The deity of the Two Mukhi Rudraksha is Ardhanarishvara, the unified form of Lord Shiva and Goddess Parvati. It symbolizes harmony, unity, and balance in relationships while promoting emotional stability, inner peace, and mutual understanding.",
     },
     {
         id: 3,
-        image: "/assets/home/Rudraksha1.png",
-        title: "Ten",
-        description: "The deity of the Five Mukhi Rudraksha is Kalagni Rudra (form of Shiva). Which is the most common and auspicious. Which can be used for mental peace, health benefits, blood pressure control.",
+        image: "/assets/rudraksha/Three-Mukhi-Rudraksha.png",
+        title: "Three Mukhi Rudraksha",
+        description: "The deity of the Three Mukhi Rudraksha is Lord Agni, the god of fire. It is believed to remove past karmic burdens, boost self-confidence, increase energy, and inspire positivity, courage, and personal transformation.",
     },
     {
         id: 4,
-        image: "/assets/home/Rudraksha1.png",
-        title: "Rudraksha",
-        description: "The deity of the Five Mukhi Rudraksha is Kalagni Rudra (form of Shiva). Which is the most common and auspicious. Which can be used for mental peace, health benefits, blood pressure control.",
+        image: "/assets/rudraksha/Four-Mukhi-Rudraksha.png",
+        title: "Four Mukhi Rudraksha",
+        description: "The deity of the Four Mukhi Rudraksha is Lord Brahma, the creator of the universe. It is associated with wisdom, knowledge, creativity, and improved communication, making it beneficial for students, teachers, and professionals.",
+    },
+    {
+        id: 5,
+        image: "/assets/rudraksha/Five-Mukhi-Rudraksha.png",
+        title: "Five Mukhi Rudraksha",
+        description: "The deity of the Five Mukhi Rudraksha is Kalagni Rudra, a form of Lord Shiva. It is the most commonly worn Rudraksha and is believed to promote peace of mind, good health, spiritual awareness, and protection from negative energies.",
+    },
+    {
+        id: 6,
+        image: "/assets/rudraksha/Six-Mukhi-Rudraksha.png",
+        title: "Six Mukhi Rudraksha",
+        description: "The deity of the Six Mukhi Rudraksha is Lord Kartikeya. It is believed to enhance confidence, courage, discipline, and intellectual abilities while promoting emotional balance and physical vitality.",
+    },
+    {
+        id: 7,
+        image: "/assets/rudraksha/Seven-Mukhi-Rudraksha.png",
+        title: "Seven Mukhi Rudraksha",
+        description: "The deity of the Seven Mukhi Rudraksha is Goddess Mahalakshmi. It is believed to attract wealth, prosperity, financial stability, and abundance while removing obstacles related to success and happiness.",
+    },
+    {
+        id: 8,
+        image: "/assets/rudraksha/Eight-Mukhi-Rudraksha.png",
+        title: "Eight Mukhi Rudraksha",
+        description: "The deity of the Eight Mukhi Rudraksha is Lord Ganesha. It is believed to remove obstacles, bring success in new ventures, enhance wisdom, and provide protection from negative influences.",
+    },
+    {
+        id: 9,
+        image: "/assets/rudraksha/Nine-Mukhi-Rudraksha.png",
+        title: "Nine Mukhi Rudraksha",
+        description: "The deity of the Nine Mukhi Rudraksha is Goddess Durga. It is believed to provide strength, courage, protection, and fearlessness while helping the wearer overcome challenges and negative energies.",
+    },
+    {
+        id: 10,
+        image: "/assets/rudraksha/Ten-Mukhi-Rudraksha.png",
+        title: "Ten Mukhi Rudraksha",
+        description: "The deity of the Ten Mukhi Rudraksha is Lord Vishnu. It is believed to protect the wearer from negative energies, evil influences, and obstacles while promoting peace, confidence, and spiritual well-being.",
+    },
+    {
+        id: 11,
+        image: "/assets/rudraksha/Eleven-Mukhi-Rudraksha.png",
+        title: "Eleven Mukhi Rudraksha",
+        description: "The deity of the Eleven Mukhi Rudraksha is Lord Hanuman. It is believed to grant courage, strength, wisdom, protection, and success while enhancing self-confidence and spiritual discipline.",
+    },
+    {
+        id: 12,
+        image: "/assets/rudraksha/Twelve-Mukhi-Rudraksha.png",
+        title: "Twelve Mukhi Rudraksha",
+        description: "The deity of the Twelve Mukhi Rudraksha is Lord Surya, the Sun God. It is believed to increase leadership qualities, confidence, vitality, and personal power while bringing success and recognition.",
+    },
+    {
+        id: 13,
+        image: "/assets/rudraksha/Thirteen-Mukhi-Rudraksha.png",
+        title: "Thirteen Mukhi Rudraksha",
+        description: "The deity of the Thirteen Mukhi Rudraksha is Lord Kamadeva and it is blessed by Lord Indra. It is believed to enhance charm, confidence, creativity, and attraction while bringing prosperity, success, harmonious relationships, and fulfillment of desires.",
     },
 ];
 
@@ -96,7 +150,7 @@ const SliderWithFade = () => {
 
                 </div>
 
-                <h2>Discover Sacred Rudraksha Energies</h2>
+                <h2 className="mb-4 lg:mb-8 ">Discover Sacred Rudraksha Energies</h2>
 
             </div>
 
