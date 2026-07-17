@@ -92,8 +92,9 @@ export default function HomePageWrapper() {
 
         gsap.to(pageRef.current, {
             autoAlpha: 1,
-            duration: 1.2,
-            ease: "expo.out",
+            duration: 2,
+            delay: 0.5,
+            ease: "power2.out",
         });
     }, [appReady, navBootstrapReady]);
 

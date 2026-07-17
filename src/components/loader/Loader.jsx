@@ -12,14 +12,7 @@ import Clouds from "../background/Clouds";
 import Image from "next/image";
 export default function Loader({ onComplete }) {
     const [progress, setProgress] = useState(0);
-    const [booting, setBooting] = useState(true);
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setBooting(false);
-        }, 500);
 
-        return () => clearTimeout(timer);
-    }, []);
 
     useEffect(() => {
         let current = 0;
@@ -97,15 +90,7 @@ export default function Loader({ onComplete }) {
     const wrapperRef = useRef(null);
 
 
-    if (booting) {
-        return (
-            <div className="about-story-loader">
-                <div className="loader-ring">
-                    <div className="loader-ring-inner" />
-                </div>
-            </div>
-        );
-    }
+
 
     return (
         <div

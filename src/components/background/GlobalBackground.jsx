@@ -13,14 +13,19 @@ export default function GlobalBackground() {
 
       {/* <div className="background-sky" /> */}
 
-      <Stars />   
+      <Stars />
 
       <Clouds />
 
 
       <div className="background-noise" />
       <div className="loader-noise">
-        
+        {/* <Image
+          src="/assets/loader/noise-bg.png"
+          alt=""
+          fill
+          priority
+        /> */}
       </div>
 
       <div className="background-color-layer-temp"></div>

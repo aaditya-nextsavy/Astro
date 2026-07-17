@@ -160,7 +160,7 @@ const HomeServices = () => {
                     </h2>
 
 
-                    <a href="./service" className="info-sticky-card-section__button ">
+                    <a href="./services" className="info-sticky-card-section__button ">
                         View All Services
                     </a>
 

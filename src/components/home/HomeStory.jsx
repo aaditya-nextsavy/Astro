@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
+import Link from "next/link";
 
 const homeStoryData = {
 
@@ -19,7 +20,8 @@ const homeStoryData = {
     image: "/assets/home/who-are-we-2.png",
     imagePosition: "right",
     theme: "dark",
-
+    buttonLink: "/contact",
+    buttonLink2: "/contact",
 };
 
 export default function HomeStory() {
@@ -135,13 +137,13 @@ export default function HomeStory() {
                         ))}
 
                         <div className="home-story-buttons">
-                            <button className="home-story-button">
+                            <Link href={buttonLink} className="home-story-button">
                                 {homeStoryData.buttonText}
-                            </button>
+                            </Link>
 
-                            <button className="home-story-button">
+                            <Link href={buttonLink2} className="home-story-button">
                                 {homeStoryData.buttonText2}
-                            </button>
+                            </Link>
                         </div>
                     </div>
 

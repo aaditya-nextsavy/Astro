@@ -194,6 +194,7 @@ const SliderWithFade = () => {
                     pagination={{
                         clickable: true,
                         el: ".custom-pagination",
+
                     }}
                     spaceBetween={10}
                     autoplay={{

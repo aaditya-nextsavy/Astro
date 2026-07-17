@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { subscribeAppReady } from "@/lib/appReady";
-
+import Link from "next/link";
 const whoWeAreData = [
     {
         id: 1,
@@ -14,6 +14,7 @@ const whoWeAreData = [
             `With hearts rooted in ancient traditions and minds enlightened by modern knowledge, these spiritual guides have woven a unique fabric of Vastu and astrology.`,
         ],
         buttonText: "More About Us",
+        buttonLink: "/about",
         image: "/assets/home/who-are-we-1.png",
         imagePosition: "left",
         theme: "dark",
@@ -278,13 +279,13 @@ function WhoAreWePanel({ item, index }) {
                         ))}
 
                         <div className="who-we-are-buttons-wrapper">
-                            <button className="who-we-are-button">
+                            <Link href="/about" className="who-we-are-button">
                                 {item.buttonText}
-                            </button>
+                            </Link>
                             {item?.buttonText2 ? (
-                                <button className="who-we-are-button">
+                                <Link href="/contact" className="who-we-are-button">
                                     {item.buttonText2}
-                                </button>
+                                </Link>
                             ) : null}
                         </div>
                     </div>

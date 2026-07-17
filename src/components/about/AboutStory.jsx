@@ -93,11 +93,15 @@ const AboutStory = () => {
     const contentRef = useRef(null);
 
     const [displayImage, setDisplayImage] = useState(storyTimeline[0].image);
-    const [isDesktop, setIsDesktop] = useState(null);
     const imageTransitioning = useRef(false);
     const heartTransitioning = useRef(false);
+    const [isReady, setIsReady] = useState(false);
 
-
+    const [isDesktop, setIsDesktop] = useState(
+        typeof window !== "undefined"
+            ? window.innerWidth > 1300
+            : true
+    );
 
 
     useEffect(() => {
@@ -159,6 +163,7 @@ const AboutStory = () => {
                                 });
                             });
                         },
+
                     });
                 };
 
@@ -216,50 +221,6 @@ const AboutStory = () => {
 
                         // ---- IMAGE + CLOUD CROSSFADE ----
                         let personOpacity = 1;
-
-
-
-
-
-
-                        // gsap.set(personRef.current, {
-                        //     opacity: personOpacity,
-                        // });
-
-
-
-
-                        // const isLegacy = storyTimeline[index].type === "legacy";
-
-                        // if (isLegacy) {
-
-                        //     if (!imageTransitioning.current) {
-                        //         gsap.set(personRef.current, {
-                        //             opacity: personOpacity,
-                        //         });
-                        //     }
-                        // }
-
-                        // if (!imageTransitioning.current) {
-                        //     gsap.set(personRef.current, {
-                        //         opacity: personOpacity,
-                        //     });
-                        // }
-
-                        // if (index === heartIndex && !imageTransitioning.current) {
-                        //     gsap.set(personRef.current, {
-                        //         opacity: personOpacity,
-                        //     });
-                        // }
-
-                        // Flip only around heartIndex -> legacy, snapped while invisible.
-                        // const flipped =
-                        //     index > heartIndex || (index === heartIndex && p > 0.80);
-                        // gsap.set(cloudRef.current, {
-                        //     xPercent: flipped ? -100 : 0,
-                        //     scale: 1.08, // preserve the CSS zoom — gsap's transform write would drop it otherwise
-                        // });
-
 
                         if (index < heartIndex) {
                             personOpacity = 1;
@@ -354,25 +315,16 @@ const AboutStory = () => {
                                 opacity: personOpacity,
                             });
                         }
-                        // Swap src exactly at the index boundary — lands inside the
-                        // invisible window on both sides, so it's never seen.
-                        // if (index !== previousIndex) {
-                        //     previousIndex = index;
-                        //     setActiveIndex(index);
-                        //     setDisplayImage(storyTimeline[index].image);
-                        // }
+
                         const isNewIndex = index !== previousIndex;
 
-                        // if (isNewIndex) {
-                        //     previousIndex = index;
-                        //     // setActiveIndex(index);
-                        //     // setDisplayImage(storyTimeline[index].image);
-                        //     transitionImage(index);
-                        //     setActiveIndex(index);
-                        // }
+
 
                         if (isNewIndex) {
                             previousIndex = index;
+                            if (activeIndex === index) {
+                                return;
+                            }
 
                             const previousItem = storyTimeline[activeIndex];
                             const nextItem = storyTimeline[index];
@@ -380,15 +332,6 @@ const AboutStory = () => {
                             const shouldAnimate =
                                 previousItem?.type === "standard" &&
                                 nextItem?.type === "standard";
-
-                            // if (shouldAnimate) {
-                            //     transitionImage(index);
-                            // } else {
-                            //     setDisplayImage(storyTimeline[index].image);
-                            //     const isHeartLegacyTransition =
-                            //         (previousItem?.type === "standard" && nextItem?.type === "legacy") ||
-                            //         (previousItem?.type === "legacy" && nextItem?.type === "standard");
-                            // }
 
                             const isHeartLegacy =
                                 (previousItem?.type === "standard" && nextItem?.type === "legacy") ||
@@ -427,6 +370,7 @@ const AboutStory = () => {
                         { opacity: 0, y: 30 },
                         { opacity: 1, y: 0, duration: 0.3, stagger: 0.25, ease: "power2.out" }
                     );
+                    setIsReady(true);
                 });
             }, wrapperRef);
         });
@@ -437,13 +381,13 @@ const AboutStory = () => {
         };
     }, [isDesktop]);
 
-    if (isDesktop === null) {
-        return (
-            <div className="about-story-loader">
-                <div className="loader-ring"><div className="loader-ring-inner"></div></div>
-            </div>
-        );
-    }
+    // if (isDesktop === null) {
+    //     return (
+    //         <div className="about-story-loader">
+    //             <div className="loader-ring"><div className="loader-ring-inner"></div></div>
+    //         </div>
+    //     );
+    // }
 
     if (!isDesktop) return <AboutStoryMobile storyTimeline={storyTimeline} />;
 
@@ -457,6 +401,12 @@ const AboutStory = () => {
 
             <div className="about-story-sticky">
 
+                {!isReady && (
+                    <div className="about-story-loader">
+                        <div className="loader-ring"><div className="loader-ring-inner"></div></div>
+                    </div>
+                )}
+
 
 
                 <div
@@ -464,6 +414,9 @@ const AboutStory = () => {
                         ? "about-story-grid--legacy"
                         : ""
                         }`}
+                    style={{
+                        visibility: isReady ? "visible" : "hidden",
+                    }}
                 >
 
                     {/* LEFT */}

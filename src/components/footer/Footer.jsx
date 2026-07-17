@@ -265,7 +265,7 @@ const Footer = () => {
                                             type="button"
                                             className="glass-dropdown-item"
                                             onClick={() => {
-                                                handleChange("service", service);
+                                                handleChange("services", service);
                                                 setOpen(false);
                                             }}
                                         >

@@ -39,16 +39,75 @@ export const metadata = {
       "Discover ancient wisdom, spiritual guidance, and transformative experiences to help you achieve inner harmony and personal growth.",
   },
 };
+
+
+<head>
+  <link
+    rel="preload"
+    href="/assets/background/cloud1.png"
+    as="image"
+  />
+
+  <link
+    rel="preload"
+    href="/assets/background/cloud2.svg"
+    as="image"
+  />
+
+  <link
+    rel="preload"
+    href="/assets/background/cloud3.png"
+    as="image"
+  />
+
+  <link
+    rel="preload"
+    href="/assets/background/cloud4.svg"
+    as="image"
+  />
+
+
+  <link
+    rel="preload"
+    href="/assets/background/cloud5.png"
+    as="image"
+  />
+
+  <link
+    rel="preload"
+    href="/assets/home/card-noise.png"
+    as="image"
+  />
+
+  <link
+    rel="preload"
+    href="/assets/loader/zodiac.svg"
+    as="image"
+  />
+
+  <link
+    rel="preload"
+    href="/assets/loader/noise-bg.png"
+    as="image"
+  />
+
+
+
+</head>
+
+
+
 export default function RootLayout({ children }) {
   return (
-  <html
+    <html
       lang="en"
       className={`${newYork.variable} ${satoshi.variable}`}
     >
       <body className="min-h-full flex flex-col">
-        <SessionLoader />
+
         <GlobalBackground />
         <SmoothScroll />
+        <SessionLoader />
         <Providers>
           {children}
         </Providers>
