@@ -7,10 +7,10 @@ const ACHARYA_DATA = [
     {
         id: "acharya-markand",
         image: "/assets/drawer/drawer-temp.png",
-        title: "Vedic Astrology Specialist",
+        title: "Acharya Markand",
         name: "Acharya Markand",
         description:
-            `Acharya Markand is known for deep expertise in predictive astrology, horoscope decoding, and karmic pattern analysis. His approach blends classical Vedic principles with practical life guidance.`,
+            `Clarity in the Chaos Whether you are navigating a complex career transition or seeking harmony in a partnership, we provide data-driven spiritual insights. We analyze "Guna Milan" with overall Chart Analysis of couple for relationships and "Dashas" for career timing to ensure you are moving with the cosmic tide, not against it.`,
         highlight:
             `Focused on clarity in relationships, career direction, and timing-based decisions using Dashas and planetary transits.`,
         link: "/contact"
@@ -18,11 +18,11 @@ const ACHARYA_DATA = [
     {
         id: "acharya-shandilya",
         image: "/assets/drawer/drawer-temp.png",
-        title: "Vedic Astrology Specialist",
+        title: "Acharya Shandilya",
         name: "Acharya Shandilya",
         role: "Vastu & Spiritual Guidance Expert",
         description:
-            `Acharya Shandilya specializes in Vastu correction, energy alignment, and spiritual counseling for home and business spaces.`,
+            `Clarity in the Chaos Whether you are navigating a complex career transition or seeking harmony in a partnership, we provide data-driven spiritual insights. We analyze "Guna Milan" with overall Chart Analysis of couple for relationships and "Dashas" for career timing to ensure you are moving with the cosmic tide, not against it.`,
         highlight:
             `Helps harmonize living spaces and life decisions through ancient Vastu principles and energetic balancing.`,
         link: "/contact"

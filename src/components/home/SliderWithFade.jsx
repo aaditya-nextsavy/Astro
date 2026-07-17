@@ -95,6 +95,20 @@ const SliderWithFade = () => {
     const swiperRef = useRef(null);
     const [isAnimating, setIsAnimating] = useState(false);
 
+    const VISIBLE = 5;
+    const HALF = Math.floor(VISIBLE / 2);
+
+    const start = Math.max(
+        0,
+        Math.min(
+            active - HALF,
+            slides.length - VISIBLE
+        )
+    );
+
+    const visibleBullets = slides.slice(start, start + VISIBLE);
+
+
 
     useLayoutEffect(() => {
         console.log(
@@ -168,6 +182,7 @@ const SliderWithFade = () => {
                 <div className="side-fade right" />
 
                 <Swiper
+                    initialSlide={5}
                     modules={[Autoplay, Pagination]}
                     centeredSlides
                     loop={false}
@@ -191,11 +206,11 @@ const SliderWithFade = () => {
                             slidesPerView: 3,
                         },
                     }}
-                    pagination={{
-                        clickable: true,
-                        el: ".custom-pagination",
+                    // pagination={{
+                    //     clickable: true,
+                    //     el: ".custom-pagination",
 
-                    }}
+                    // }}
                     spaceBetween={10}
                     autoplay={{
                         delay: 2500000000000,
@@ -240,7 +255,24 @@ const SliderWithFade = () => {
 
                 </button>
 
-                <div className="custom-pagination" />
+                <div className="custom-pagination">
+                    {visibleBullets.map((_, i) => {
+                        const index = start + i;
+
+                        return (
+                            <button
+                                key={index}
+                                onClick={() => swiperRef.current?.slideTo(index)}
+                                className={`bullet ${index === active
+                                    ? "active"
+                                    : index === active - 1 || index === active + 1
+                                        ? "near"
+                                        : "far"
+                                    }`}
+                            />
+                        );
+                    })}
+                </div>
 
 
                 <button

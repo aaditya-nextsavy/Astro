@@ -4,7 +4,6 @@ import { useLayoutEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { subscribeAppReady } from "@/lib/appReady";
 
-
 const sectionData = [
     {
         id: 1,
@@ -31,12 +30,12 @@ with opportunities meant for you.`,
         image: "/assets/home/main-image-2.png",
     },
 ];
+
 export default function MainImageInfoSection() {
     const sectionRef = useRef(null);
 
     useLayoutEffect(() => {
         if (!sectionRef.current) return;
-
 
         let ctx;
 
@@ -46,7 +45,7 @@ export default function MainImageInfoSection() {
             ctx = gsap.context(() => {
                 const rows = gsap.utils.toArray(".info-row");
 
-                rows.forEach((row, i) => {
+                rows.forEach((row) => {
                     const image = row.querySelector(".info-image");
                     const content = row.querySelector(".info-content");
 
@@ -54,11 +53,12 @@ export default function MainImageInfoSection() {
                     const subtitle = row.querySelector("span");
                     const paragraph = row.querySelector("p");
 
+                    // Fade in text
                     gsap.fromTo(
                         [title, subtitle, paragraph],
                         {
                             opacity: 0,
-                            y: 40,
+                            y: 80,
                         },
                         {
                             opacity: 1,
@@ -74,38 +74,34 @@ export default function MainImageInfoSection() {
                         }
                     );
 
-                    gsap.set(image, {
-                        scale: 1,
-                        y: 60,
-                    });
+                    // Initial positions
+                    gsap.set(image, { y: 20 });      // Almost no offset
+                    gsap.set(content, { y: 180 });   // Start well below
 
-                    gsap.set(content, {
-                        y: 40,
-                    });
-
+                    // IMAGE → Barely moves
                     gsap.to(image, {
+                        y: -20,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: row,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: true,
+                        },
+                    });
+
+                    // CONTENT → Travels a long distance upward
+                    gsap.to(content, {
                         y: -180,
                         ease: "none",
                         scrollTrigger: {
                             trigger: row,
                             start: "top bottom",
                             end: "bottom top",
-                            scrub: 1,
-                        },
-                    });
-
-                    gsap.to(content, {
-                        y: -250,
-                        ease: "none",
-                        scrollTrigger: {
-                            trigger: row,
-                            start: "top bottom",
-                            end: "bottom top",
-                            scrub: 1.2,
+                            scrub: true,
                         },
                     });
                 });
-
             }, sectionRef);
         });
 
@@ -115,20 +111,8 @@ export default function MainImageInfoSection() {
         };
     }, []);
 
-
-    useLayoutEffect(() => {
-        console.log(
-            "MainImageInfoSection  mounted",
-            document.body.scrollHeight
-        );
-    }, []);
-
     return (
         <section ref={sectionRef} className="main-image-info-section">
-
-
-
-
             {sectionData.map((item, index) => (
                 <div
                     key={item.id}
@@ -153,4 +137,4 @@ export default function MainImageInfoSection() {
             ))}
         </section>
     );
-}   
+}

@@ -1860,7 +1860,7 @@ al stars */
 }
 
 .acharyaDrawerContent img {
-  max-height: 30%;
+  max-height: 50%;
   width: 80%;
   object-fit: contain;
 }
@@ -1871,6 +1871,8 @@ al stars */
   line-height: 42px;
   letter-spacing: -1px;
   text-transform: capitalize;
+  text-align: start;
+  margin-right: auto;
 
 }
 
@@ -1880,6 +1882,8 @@ al stars */
   line-height: 27px;
   letter-spacing: 0%;
   text-align: justify;
+  text-align: start;
+
 
 }
 
@@ -3190,6 +3194,14 @@ body.drawer-open {
 }
 
 
+
+@media (min-width: 1400px) {
+  .who-we-are-content {
+    max-width: 40%;
+
+  }
+}
+
 @media (max-width: 400px) {
   .who-we-are-button {
     padding: 12px 26px;
@@ -3822,6 +3834,7 @@ body.drawer-open {
 
 .dropdown-placeholder {
   color: #D0E3F180;
+  font-size: 42px;
 }
 
 .dropdown-selected {
@@ -5288,7 +5301,7 @@ body.drawer-open {
   gap: 12px;
 }
 
-.home-product-slider-section .custom-pagination .swiper-pagination-bullet {
+.home-product-slider-section .custom-pagination .bullet {
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -5304,7 +5317,7 @@ body.drawer-open {
   position: relative;
 }
 
-.home-product-slider-section .custom-pagination .swiper-pagination-bullet-active {
+.home-product-slider-section .custom-pagination .bullet-active {
   transform: scale(1);
   opacity: 1;
 
@@ -5315,16 +5328,57 @@ body.drawer-open {
 }
 
 
-.home-product-slider-section .custom-pagination .swiper-pagination-bullet-active-next,
-.home-product-slider-section .custom-pagination .swiper-pagination-bullet-active-prev {
+.home-product-slider-section .custom-pagination .bullet-active-next,
+.home-product-slider-section .custom-pagination .bullet-active-prev {
   transform: scale(1.25);
   opacity: 0.75;
 }
 
-.home-product-slider-section .custom-pagination .swiper-pagination-bullet-active-next-next,
-.home-product-slider-section .custom-pagination .swiper-pagination-bullet-active-prev-prev {
+.home-product-slider-section .custom-pagination .bullet-active-next-next,
+.home-product-slider-section .custom-pagination .bullet-active-prev-prev {
   transform: scale(0.9);
   opacity: 0.4;
+}
+
+
+
+
+.custom-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.custom-pagination .bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+
+  background: #17374f;
+  opacity: .3;
+  transform: scale(.6);
+
+  transition: .35s;
+}
+
+.custom-pagination .bullet.far {
+  transform: scale(.55);
+  opacity: .25;
+}
+
+.custom-pagination .bullet.near {
+  transform: scale(.85);
+  opacity: .6;
+}
+
+.custom-pagination .bullet.active {
+  width: 12px;
+  height: 12px;
+  transform: scale(1);
+  opacity: 1;
 }
 
 

@@ -12,59 +12,50 @@ import Clouds from "../background/Clouds";
 import Image from "next/image";
 export default function Loader({ onComplete }) {
     const [progress, setProgress] = useState(0);
-
+    const [loaderReady, setLoaderReady] = useState(false);
 
     useEffect(() => {
+        if (!loaderReady) return;
+
         let current = 0;
+        let timeout;
 
-        const startDelay = setTimeout(() => {
+        const updateProgress = () => {
+            setProgress(prev => {
+                if (prev >= 100) return 100;
 
-            const updateProgress = () => {
+                let increment;
 
-                setProgress(prev => {
-
-                    if (prev >= 100) {
-                        return 100;
-                    }
-
-                    let increment;
-
-                    if (prev < 20) {
-                        increment = Math.floor(Math.random() * 6) + 2;
-                    } else if (prev < 50) {
-                        increment = Math.floor(Math.random() * 5) + 1;
-                    } else if (prev < 80) {
-                        increment = Math.floor(Math.random() * 4) + 1;
-                    } else if (prev < 95) {
-                        increment = Math.floor(Math.random() * 2) + 1;
-                    } else {
-                        increment = 1;
-                    }
-
-                    current = Math.min(prev + increment, 100);
-
-                    return current;
-                });
-
-                if (current < 100) {
-
-                    const nextDelay =
-                        current < 60
-                            ? Math.random() * 250 + 100
-                            : Math.random() * 500 + 200;
-
-                    setTimeout(updateProgress, nextDelay);
-
+                if (prev < 20) {
+                    increment = Math.floor(Math.random() * 6) + 2;
+                } else if (prev < 50) {
+                    increment = Math.floor(Math.random() * 5) + 1;
+                } else if (prev < 80) {
+                    increment = Math.floor(Math.random() * 4) + 1;
+                } else if (prev < 95) {
+                    increment = Math.floor(Math.random() * 2) + 1;
+                } else {
+                    increment = 1;
                 }
-            };
 
-            updateProgress();
+                current = Math.min(prev + increment, 100);
+                return current;
+            });
 
-        }, 80);
+            if (current < 100) {
+                const nextDelay =
+                    current < 60
+                        ? Math.random() * 250 + 100
+                        : Math.random() * 500 + 200;
 
-        return () => clearTimeout(startDelay);
+                timeout = setTimeout(updateProgress, nextDelay);
+            }
+        };
 
-    }, []);
+        timeout = setTimeout(updateProgress, 100);
+
+        return () => clearTimeout(timeout);
+    }, [loaderReady]);
 
     useEffect(() => {
         if (progress < 100) return;
@@ -110,7 +101,10 @@ export default function Loader({ onComplete }) {
                         priority
                     />
                 </div>
-                <LoaderCenter progress={progress} />
+                <LoaderCenter
+                    progress={progress}
+                    onReady={() => setLoaderReady(true)}
+                />
 
                 <div className="loader-bottom">
                     <LoaderQuotes isComplete={progress >= 100} />

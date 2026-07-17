@@ -4,7 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/gsap";
 
-export default function LoaderCenter({ progress }) {
+export default function LoaderCenter({
+    progress,
+    onReady,
+}) {
     const wheelRef = useRef(null);
     const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -17,6 +20,11 @@ export default function LoaderCenter({ progress }) {
         });
     }, []);
 
+    const handleLoad = () => {
+        setImageLoaded(true);
+        onReady?.();
+    };
+
     return (
         <div className="loader-center">
             <div
@@ -28,7 +36,7 @@ export default function LoaderCenter({ progress }) {
                     alt="Zodiac Wheel"
                     fill
                     priority
-                    onLoad={() => setImageLoaded(true)}
+                    onLoad={handleLoad}
                 />
             </div>
 

@@ -180,7 +180,7 @@ const Footer = () => {
                                 onChange={(e) => handleChange("name", e.target.value)}
                             />
                             {errors.name && (
-                                <span className=" form-error-span block text-sm text-red-500">
+                                <span className=" form-error-span block text-sm text-red-400">
                                     {errors.name}
                                 </span>
                             )}
@@ -201,7 +201,7 @@ const Footer = () => {
                                 }
                             />
                             {errors.phone && (
-                                <span className="form-error-span block text-sm text-red-500">
+                                <span className="form-error-span block text-sm text-red-400">
                                     {errors.phone}
                                 </span>
                             )}
@@ -214,7 +214,7 @@ const Footer = () => {
                             onChange={(e) => handleChange("email", e.target.value)}
                         />
                         {errors.email && (
-                            <span className="form-error-span block text-sm text-red-500">
+                            <span className="form-error-span block text-sm text-red-400">
                                 {errors.email}
                             </span>
                         )}
@@ -240,7 +240,7 @@ const Footer = () => {
                                                 : "dropdown-placeholder"
                                         }
                                     >
-                                        {formData.service || "Select Service"}
+                                        {formData.service || "select service"}
                                     </span>
 
                                     <span className="glass-dropdown-arrow">
@@ -265,7 +265,7 @@ const Footer = () => {
                                             type="button"
                                             className="glass-dropdown-item"
                                             onClick={() => {
-                                                handleChange("services", service);
+                                                handleChange("service", service);
                                                 setOpen(false);
                                             }}
                                         >
@@ -278,7 +278,7 @@ const Footer = () => {
 
                             </div>
                             {errors.service && (
-                                <span className="form-error-span block text-sm text-red-500">
+                                <span className="form-error-span block text-sm text-red-400">
                                     {errors.service}
                                 </span>
                             )}
