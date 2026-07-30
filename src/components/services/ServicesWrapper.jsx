@@ -14,6 +14,7 @@ export default function ServicesWrapper() {
 
     const heroCloudContainerRef = useRef(null);
     const floatingNavRef = useRef(null);
+    const topNavRef = useRef(null);
     const bottomNavRef = useRef(null);
     const lastlightSection = useRef(null);
     const [loading, setLoading] = useState(false);
@@ -60,9 +61,10 @@ export default function ServicesWrapper() {
 
 
     useLayoutEffect(() => {
-        const nav = floatingNavRef.current;
+        const topNav = topNavRef.current;
+        const bottomNav = bottomNavRef.current;
 
-        if (!nav) {
+        if (!topNav || !bottomNav) {
             return undefined;
         }
 
@@ -74,59 +76,62 @@ export default function ServicesWrapper() {
             return undefined;
         }
 
-        const activeSections = new Set();
+        // The top bar sits at the very top of the viewport, the bottom bar
+        // at the very bottom, so the light background passes under each at
+        // a different scroll position — each needs its own thresholds.
+        const NAV_CONFIG = [
+            { nav: topNav, start: "top 15%", end: "bottom 2%" },
+            { nav: bottomNav, start: "top 95%", end: "bottom 75%" },
+        ];
 
-        const syncNavTheme = () => {
-            nav.classList.toggle(
-                "light-section-active",
-                activeSections.size > 0
-            );
-        };
+        const allTriggers = [];
 
-        const triggers = lightSections.map((section) => {
-            const isTakeover = section.classList.contains(
-                "light-background-zone--takeover"
-            );
+        NAV_CONFIG.forEach(({ nav, start, end }) => {
+            const activeSections = new Set();
 
-            return ScrollTrigger.create({
-                trigger: section,
+            const syncNavTheme = () => {
+                nav.classList.toggle(
+                    "light-section-active",
+                    activeSections.size > 0
+                );
+            };
 
-                // First light section behaves normally
-                start: isTakeover ? "top+=30%" : "top 100%",
+            lightSections.forEach((section) => {
+                allTriggers.push(
+                    ScrollTrigger.create({
+                        trigger: section,
+                        start,
+                        end,
+                        invalidateOnRefresh: true,
 
-                // Keep your existing end position
-                // end: "bottom 100%",
-                end: isTakeover ? "bottom+=50%" : "bottom+=0%",
+                        onEnter: () => {
+                            activeSections.add(section);
+                            syncNavTheme();
+                        },
 
-                // markers: true,
+                        onEnterBack: () => {
+                            activeSections.add(section);
+                            syncNavTheme();
+                        },
 
-                onEnter: () => {
-                    activeSections.add(section);
-                    syncNavTheme();
-                },
+                        onLeave: () => {
+                            activeSections.delete(section);
+                            syncNavTheme();
+                        },
 
-                onEnterBack: () => {
-                    activeSections.add(section);
-                    syncNavTheme();
-                },
-
-                onLeave: () => {
-                    activeSections.delete(section);
-                    syncNavTheme();
-                },
-
-                onLeaveBack: () => {
-                    activeSections.delete(section);
-                    syncNavTheme();
-                },
+                        onLeaveBack: () => {
+                            activeSections.delete(section);
+                            syncNavTheme();
+                        },
+                    })
+                );
             });
+
+            syncNavTheme();
         });
 
-        syncNavTheme();
-
         return () => {
-            triggers.forEach((trigger) => trigger.kill());
-            activeSections.clear();
+            allTriggers.forEach((trigger) => trigger.kill());
         };
     }, []);
 
@@ -216,7 +221,7 @@ export default function ServicesWrapper() {
                         ref={floatingNavRef}
                         className="site-floating-navbars"
                     >
-                        <div className="astroHeroTopBar">
+                        <div className="astroHeroTopBar" ref={topNavRef}>
                             <Link href="/" className="astroHeroBrand">
                                 <div className="astroHeroBrandLogo" >
                                     <img src="/assets/icons/home-title-icon.jpg" alt="Astro Acharya Logo" />
