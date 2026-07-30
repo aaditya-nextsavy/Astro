@@ -85,6 +85,7 @@ With hearts rooted in ancient traditions and minds enlightened by modern knowled
 
 const AboutStory = () => {
     const [activeIndex, setActiveIndex] = useState(0);
+    const activeIndexRef = useRef(0);
     const wrapperRef = useRef(null);
     const current = storyTimeline[activeIndex] ?? storyTimeline[0];
     const [timelineProgress, setTimelineProgress] = useState(0);
@@ -323,11 +324,11 @@ const AboutStory = () => {
 
                         if (isNewIndex) {
                             previousIndex = index;
-                            if (activeIndex === index) {
+                            if (activeIndexRef.current === index) {
                                 return;
                             }
 
-                            const previousItem = storyTimeline[activeIndex];
+                            const previousItem = storyTimeline[activeIndexRef.current];
                             const nextItem = storyTimeline[index];
 
                             const shouldAnimate =
@@ -345,6 +346,7 @@ const AboutStory = () => {
                                 setDisplayImage(storyTimeline[index].image);
                             }
 
+                            activeIndexRef.current = index;
                             setActiveIndex(index);
                         }
 
