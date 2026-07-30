@@ -10,7 +10,9 @@ const whoWeAreData = [
         label: "Who We Are",
         title: "A Tale of Spiritual Legacy and Divine Guidance",
         paragraphs: [
-            `In a small town blessed by the sacred vibrations of Shri Mai Mandir in Nadiad, a lineage of wisdom began, nurtured by the blessings of the revered H.H. 1008 Shri Bhagwati Keshavbhai Maharaj. This legacy, carried forward with grace and devotion by his grandsons, Acharya Markand and Acharya Shandilya, is now a beacon of hope for those seeking balance and purpose in life.`,
+            `In a small town blessed by the sacred vibrations of Shri Mai Mandir in Nadiad, a lineage of wisdom began, nurtured by the blessings of the revered H.H. 1008 Shri Bhagawati Keshavbhavani Maharaj. This legacy, carried forward with grace and devotion by his grandsons, Aacharya Markand and Aacharya Shandilya, is now a beacon of hope for those seeking balance and purpose in life.
+With hearts rooted in ancient traditions and minds enlightened by modern knowledge, these spiritual guides have woven a unique fabric of Vastu and astrology—a blend of timeless wisdom and contemporary understanding. Their journey is not just about predictions and remedies but about empowering lives with the cosmic truth and helping souls align with the universe’s rhythm.
+`,
         ],
         buttonText: "More About Us",
         buttonLink: "/about",

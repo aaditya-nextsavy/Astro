@@ -12,7 +12,7 @@ const homeStoryData = {
     label: "Our Vision",
     title: "Guiding Souls Towards Harmony and Success",
     paragraphs: [
-        `Every home, workplace, and journey carries a unique energy. Our mission is to help individuals understand and align with these energies. Through Vastu Shastra, Astrology, and Numerology, we provide practical guidance rooted in timeless wisdom.`,
+        `Every home, workplace, and journey carries a unique energy. Our mission is to help individuals understand and align with these energies. Through Vastu Shastra and Astrology, we provide practical guidance rooted in timeless wisdom.`,
         `Our vision is not merely to predict outcomes but to empower people with clarity, confidence, and spiritual balance.`,
     ],
     buttonText: "View More Details",

@@ -7,9 +7,18 @@ import { subscribeAppReady } from "@/lib/appReady";
 gsap.registerPlugin(ScrollTrigger);
 
 const cards = [
-    { title: "Vastu Consultation", description: "From strengthening relationships to unlocking career potential, their insights empower you to embrace your destiny with clarity." },
-    { title: "Personalized Birth Chart Analysis", description: "From strengthening relationships to unlocking career potential, their insights empower you to embrace your destiny with clarity." },
-    { title: "Astrological Predictions & Effective Remedies", description: "From strengthening relationships to unlocking career potential, their insights empower you to embrace your destiny with clarity." },
+    {
+        title: "Vastu Consultation",
+        description: "Transform your home or workplace with expert Vastu guidance that promotes harmony, prosperity, and positive energy."
+    },
+    {
+        title: "Personalized Birth Chart Analysis",
+        description: "Decode your unique karmic blueprint to understand your strengths, life purpose, and future opportunities."
+    },
+    {
+        title: "Astrological Predictions & Effective Remedies",
+        description: "Receive accurate predictions and personalized Vedic remedies to overcome challenges and maximize favorable planetary influences."
+    },
     // { title: "Relationship and Career Guidance", description: "Description 4" },
     // { title: "Custom Solutions for Prosperity and Growth", description: "Description 5" },
     // { title: "Spiritual Counseling and Life Path Direction", description: "Description 6" },

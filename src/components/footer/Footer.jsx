@@ -4,13 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { usePopup } from "../Popup/PopupProvider";
-
-const services = [
-    "Vedic Astrology",
-    "Vastu Shastra",
-    "Spiritual Guidance",
-    "Astrology Experts",
-];
+import { FOOTER_SERVICES as services } from "@/data/siteData";
 
 const Footer = () => {
 

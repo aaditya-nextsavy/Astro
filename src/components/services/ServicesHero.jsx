@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function ServicesHero() {
 
-// Check if its in use or not (02-07-26)
+    // Check if its in use or not (02-07-26)
     const [time, setTime] = useState("");
 
     useEffect(() => {
@@ -44,7 +44,7 @@ export default function ServicesHero() {
             {/* Hero Content */}
             <div className="astroHeroContentArea">
                 <h1 className="astroHeroMainHeading">
-                    Bridging the Earth & <br /> the Cosmos
+                    Our Offerings: Bridging  <br /> the Earth and the Cosmos
                 </h1>
 
                 <div className="astroHeroSubLine">

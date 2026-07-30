@@ -14,7 +14,7 @@ const sectionData = [
     },
     {
         id: 2,
-        subTitle: "A Marriage of Tradition & Modernity",
+        subTitle: "A Marriage of Tradition and Modernity",
         description:
             "Aacharya Markand’s background in computer engineering lends precision to spiritual analysis, while Aacharya Shandilya’s expertise in international business brings a global perspective to their counsel. Together, they balance the ancient with the contemporary.",
         image: "/assets/home/why-2.png",

@@ -19,7 +19,7 @@ export const storyTimeline = [
 
     {
         year: "1950 - Present",
-        sectionTitle: "A Century of Divine Lineage",
+        sectionTitle: "The Chronicle of Grace:  A Century of Divine Lineage",
         title: "Divine Lineage",
         subtitle: "The Sacred Story of Shri Mai Mandir, Nadiad",
         description:
@@ -59,8 +59,9 @@ For nearly seven decades, until the age of 83, his voice resonated across contin
         title: "The Heart",
         subtitle: "Pillar of Absolute Surrender",
         badge: "Maidharmacharya Shri Vishvesh Bhagawati Keshavbhavani Maharaj",
-        description: `While the world looked to the global stage, the internal sanctity of the lineage was guarded by the selfless devotion of Maidharmacharya Shri Vishvesh Bhagawati Keshavbhavani Maharaj. His life stands as a rare testament to the power of Sharanagati—total surrender. As a son and a disciple, he walked step-by-step in the shadow of his Father-Guru, Shri Bhagawati Keshavbhavani Maharaj.
-He was the quiet, immovable force that managed the temple's sacred activities and ensured that spiritual knowledge was spread with absolute integrity. Remaining steadfast by his Guru’s side until his very last breath, he became the "Bridge of Purity," ensuring that the wisdom of the ancestors reached the next generation without losing a single drop of its essence.
+        description: `While the world looked to the global stage, the internal sanctity of the lineage was guarded by the selfless devotion of Maidharmacharya Shri Vishvesh Bhagawati Keshavbhavani Maharaj. His life stands as a rare testament to the power of Sharanagati—total surrender.
+As a son and a disciple, he walked step-by-step in the shadow of his Father-Guru, Shri Bhagawati Keshavbhavani Maharaj. He was the quiet, immovable force that managed the temple's sacred activities and ensured that spiritual knowledge was spread with absolute integrity. Remaining steadfast by his Guru’s side until his very last breath, he became the "Bridge of Purity," ensuring that the wisdom of the ancestors reached the next generation without losing a single drop of its essence.
+
 `,
         image: "/assets/gallery/g-1.png",
         type: "standard",
@@ -72,7 +73,7 @@ He was the quiet, immovable force that managed the temple's sacred activities an
         title: "The Living Legacy",
         description: `Today, this triple-distilled wisdom—the Vision of the Great-Grandfather, the Global Oratory of the Grandfather, and the Selfless Devotion of the Father—culminates in the mission of Aacharya Markand and Aacharya Shandilya.
 
-They do not just practice Astrology and Vastu; they serve as the modern custodians of a 100-year-old spiritual current. In their hands, the ancient Bhrigu Nandi Nadi and the principles of Vastu Shastra are applied with the same purity and power that have defined their family for over a century.
+        They do not just practice Astrology and Vastu; they serve as the modern custodians of a 100-year-old spiritual current. In their hands, the ancient Bhrigu Nandi Nadi and the principles of Vastu Shastra are applied with the same purity and power that have defined their family for over a century.
 
 With hearts rooted in ancient traditions and minds enlightened by modern knowledge, these spiritual guides have woven a unique fabric of Vastu and astrology—a blend of timeless wisdom and contemporary understanding. Their journey is not just about predictions and remedies but about empowering lives with the cosmic truth and helping souls align with the universe’s rhythm.
 `,
