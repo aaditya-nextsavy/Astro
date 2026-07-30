@@ -25,12 +25,16 @@ export default function HomePageWrapper() {
     const [navBootstrapReady, setNavBootstrapReady] = useState(false);
     const heroCloudContainerRef = useRef(null);
     const floatingNavRef = useRef(null);
+    const topNavRef = useRef(null);
     const bottomNavRef = useRef(null);
     const takeoverSectionRef = useRef(null);
     const lastlightSection = useRef(null);
-    const lightThemeSources = useRef({ generic: false, takeover: false });
-    const syncNavThemeShared = (nav) => {
-        const { generic, takeover } = lightThemeSources.current;
+    const lightThemeSources = useRef({
+        top: { generic: false, takeover: false },
+        bottom: { generic: false, takeover: false },
+    });
+    const syncNavThemeShared = (nav, position) => {
+        const { generic, takeover } = lightThemeSources.current[position];
         nav.classList.toggle("light-section-active", generic || takeover);
     };
 
@@ -129,13 +133,11 @@ export default function HomePageWrapper() {
     useLayoutEffect(() => {
         if (!appReady) return;
 
-        const nav = floatingNavRef.current;
-        if (!nav) {
+        const topNav = topNavRef.current;
+        const bottomNav = bottomNavRef.current;
+        if (!topNav || !bottomNav) {
             return undefined;
         }
-        // const lightSections = gsap.utils.toArray(
-        //     ".light-background-zone, .light-background-zone--takeover"
-        // );
         const lightSections = gsap.utils.toArray(
             ".light-background-zone:not(.light-background-zone--takeover)"
         );
@@ -143,53 +145,60 @@ export default function HomePageWrapper() {
         if (!lightSections.length) {
             return undefined;
         }
-        const activeSections = new Set();
-        // const syncNavTheme = () => {
-        //     nav.classList.toggle(
-        //         "light-section-active",
-        //         activeSections.size > 0
-        //     );
-        // };
-        const syncNavTheme = () => {
-            lightThemeSources.current.generic = activeSections.size > 0;
-            syncNavThemeShared(nav);
-        };
 
-        const triggers = lightSections.map((section) => {
-            const isTakeover = section.classList.contains(
-                "light-background-zone--takeover"
-            );
-            return ScrollTrigger.create({
-                trigger: section,
-                start: isTakeover ? "top+=50%" : "top 55%",
-                end: isTakeover ? "bottom 70%" : "bottom 100%",
-                invalidateOnRefresh: true,
+        // The top bar sits at the very top of the viewport, the bottom bar
+        // at the very bottom, so the light background passes under each at
+        // a different scroll position — each needs its own thresholds.
+        const NAV_CONFIG = [
+            { nav: topNav, position: "top", start: "top 15%", end: "bottom 5%" },
+            { nav: bottomNav, position: "bottom", start: "top 95%", end: "bottom 80%" },
+        ];
 
-                onEnter: () => {
-                    activeSections.add(section);
-                    syncNavTheme();
-                },
+        const allTriggers = [];
 
-                onEnterBack: () => {
-                    activeSections.add(section);
-                    syncNavTheme();
-                },
+        NAV_CONFIG.forEach(({ nav, position, start, end }) => {
+            const activeSections = new Set();
+            const syncNavTheme = () => {
+                lightThemeSources.current[position].generic = activeSections.size > 0;
+                syncNavThemeShared(nav, position);
+            };
 
-                onLeave: () => {
-                    activeSections.delete(section);
-                    syncNavTheme();
-                },
+            lightSections.forEach((section) => {
+                allTriggers.push(
+                    ScrollTrigger.create({
+                        trigger: section,
+                        start,
+                        end,
+                        invalidateOnRefresh: true,
 
-                onLeaveBack: () => {
-                    activeSections.delete(section);
-                    syncNavTheme();
-                },
+                        onEnter: () => {
+                            activeSections.add(section);
+                            syncNavTheme();
+                        },
+
+                        onEnterBack: () => {
+                            activeSections.add(section);
+                            syncNavTheme();
+                        },
+
+                        onLeave: () => {
+                            activeSections.delete(section);
+                            syncNavTheme();
+                        },
+
+                        onLeaveBack: () => {
+                            activeSections.delete(section);
+                            syncNavTheme();
+                        },
+                    })
+                );
             });
+
+            syncNavTheme();
         });
-        syncNavTheme();
+
         return () => {
-            triggers.forEach((trigger) => trigger.kill());
-            activeSections.clear();
+            allTriggers.forEach((trigger) => trigger.kill());
         };
     }, [appReady]);
     useEffect(() => {
@@ -237,52 +246,74 @@ export default function HomePageWrapper() {
         if (!appReady) return;
         if (
             !takeoverSectionRef.current ||
-            !bottomNavRef.current ||
-            !floatingNavRef.current
+            !topNavRef.current ||
+            !bottomNavRef.current
         )
             return;
 
+        const topNav = topNavRef.current;
         const bottomNav = bottomNavRef.current;
-        const floatingNav = floatingNavRef.current;
+        const section = takeoverSectionRef.current;
 
-        const setTakeover = (val) => {
-            lightThemeSources.current.takeover = val;
-            syncNavThemeShared(floatingNav);
+        const setTakeover = (position, val) => {
+            lightThemeSources.current[position].takeover = val;
+            syncNavThemeShared(position === "top" ? topNav : bottomNav, position);
         };
 
-        const enterThemeTrigger = ScrollTrigger.create({
-            trigger: takeoverSectionRef.current,
-            start: "top 75%",
-            invalidateOnRefresh: true,
-            onEnter: () => setTakeover(true),
-            onEnterBack: () => setTakeover(true),
-        });
+        // Bottom bar sits near the edge the takeover section slides up from,
+        // so it reaches its thresholds sooner (larger % values) than the top
+        // bar, which only needs the theme once the light background has
+        // covered nearly the whole viewport (smaller % values).
+        const NAV_CONFIG = [
+            { position: "top", enter: "top 5%", leave: "top 15%", hide: "bottom 5%" },
+            { position: "bottom", enter: "top 95%", leave: "top 95%", hide: "bottom 80%" },
+        ];
 
-        const leaveThemeTrigger = ScrollTrigger.create({
-            trigger: takeoverSectionRef.current,
-            start: "top 40%",
-            invalidateOnRefresh: true,
-            onLeaveBack: () => setTakeover(false),
-        });
+        const triggers = [];
 
-        const hideTrigger = ScrollTrigger.create({
-            trigger: takeoverSectionRef.current,
-            start: "bottom 70%",
-            invalidateOnRefresh: true,
-            onEnter: () => {
-                setTakeover(false);
-                bottomNav.classList.add("hide-bottom-nav");
-            },
-            onLeaveBack: () => {
-                setTakeover(true);
-                bottomNav.classList.remove("hide-bottom-nav");
-            },
+        NAV_CONFIG.forEach(({ position, enter, leave, hide }) => {
+            triggers.push(
+                ScrollTrigger.create({
+                    trigger: section,
+                    start: enter,
+                    invalidateOnRefresh: true,
+                    onEnter: () => setTakeover(position, true),
+                    onEnterBack: () => setTakeover(position, true),
+                })
+            );
+
+            triggers.push(
+                ScrollTrigger.create({
+                    trigger: section,
+                    start: leave,
+                    invalidateOnRefresh: true,
+                    onLeaveBack: () => setTakeover(position, false),
+                })
+            );
+
+            triggers.push(
+                ScrollTrigger.create({
+                    trigger: section,
+                    start: hide,
+                    invalidateOnRefresh: true,
+                    onEnter: () => {
+                        setTakeover(position, false);
+                        if (position === "bottom") {
+                            bottomNav.classList.add("hide-bottom-nav");
+                        }
+                    },
+                    onLeaveBack: () => {
+                        setTakeover(position, true);
+                        if (position === "bottom") {
+                            bottomNav.classList.remove("hide-bottom-nav");
+                        }
+                    },
+                })
+            );
         });
 
         return () => {
-            enterThemeTrigger.kill();
-            leaveThemeTrigger.kill();
-            hideTrigger.kill();
+            triggers.forEach((trigger) => trigger.kill());
         };
     }, [appReady]);
 
@@ -316,7 +347,7 @@ export default function HomePageWrapper() {
                     <div className="site-floating-navbars"
                         ref={floatingNavRef}
                     >
-                        <div className="astroHeroTopBar">
+                        <div className="astroHeroTopBar" ref={topNavRef}>
                             <Link href="/" className="astroHeroBrand">
                                 <div className="astroHeroBrandLogo" >
                                     <img src="/assets/icons/home-title-icon.jpg" alt="Astro Acharya Logo" />
