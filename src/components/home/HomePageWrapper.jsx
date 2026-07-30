@@ -410,7 +410,7 @@ export default function HomePageWrapper() {
                                 <a href="/about">About</a>
                                 <a href="/services">Services</a>
                                 <a href="/gallery">Gallery</a>
-                                <Link href="/#rudaxSection">
+                                <Link href="/#rudrakshaSection">
                                     Rudraksha
                                 </Link>
                                 <a href="/contact">Contact</a>

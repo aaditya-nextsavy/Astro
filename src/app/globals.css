@@ -99,6 +99,7 @@ main {
 
 main.app-loading {
   position: relative;
+  z-index: 1;
   opacity: 0;
   visibility: hidden;
   transition:
@@ -122,6 +123,7 @@ main.app-loading::after {
 
 
 main.app-ready {
+  z-index: 1;
   opacity: 1;
   transition: opacity 0.35s ease;
   visibility: visible;
