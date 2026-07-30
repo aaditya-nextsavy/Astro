@@ -328,6 +328,7 @@ export default function ServicesWrapper() {
                                 <a href="/gallery">Gallery</a>
                                 <Link
                                     href="/#rudrakshaSection"
+                                    scroll={false}
                                 >
                                     Rudraksha
                                 </Link>

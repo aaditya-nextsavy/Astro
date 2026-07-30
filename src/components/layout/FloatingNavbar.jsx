@@ -148,7 +148,7 @@ export default function FloatingNavbar({
                                 <a href="/about">About</a>
                                 <a href="/services">Services</a>
                                 <a href="/gallery">Gallery</a>
-                                <Link href="/#rudrakshaSection">Rudraks</Link>
+                                <Link href="/#rudrakshaSection" scroll={false}>Rudraks</Link>
                                 <a href="/contact">Contact</a>
 
                                 <div>
