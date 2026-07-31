@@ -149,7 +149,7 @@ const AboutStory = () => {
 
                     gsap.to(personRef.current, {
                         opacity: 0,
-                        duration: 1.3,
+                        duration: 1,
                         ease: "power2.inOut",
                         onComplete: () => {
                             setDisplayImage(storyTimeline[newIndex].image);
@@ -157,8 +157,8 @@ const AboutStory = () => {
                             requestAnimationFrame(() => {
                                 gsap.to(personRef.current, {
                                     opacity: 1,
-                                    duration: 1.3,
-                                    ease: "power2.out",
+                                    duration: 1,
+                                    ease: "power2.inOut",
                                     onComplete: () => {
                                         imageTransitioning.current = false;
                                     },
@@ -191,7 +191,7 @@ const AboutStory = () => {
                     }).to([personRef.current, cloudRef.current], {
                         opacity: 1,
                         duration: 0.7,
-                        ease: "power2.out",
+                        ease: "power2.inOut",
                     });
                 };
 

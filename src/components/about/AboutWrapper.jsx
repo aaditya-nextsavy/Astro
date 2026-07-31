@@ -311,7 +311,7 @@ export default function AboutWrapper() {
                                 <a href="/about">About</a>
                                 <a href="/services">Services</a>
                                 <a href="/gallery">Gallery</a>
-                                <Link href="/#rudrakshaSection" scroll={false}>Rudraks</Link>
+                                <Link href="/#rudrakshaSection" scroll={false}>Rudraksha</Link>
                                 <a href="/contact">Contact</a>
 
                                 <div>
