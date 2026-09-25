@@ -976,6 +976,38 @@ al stars */
   z-index: 100;
 }
 
+/* Instagram-style scrolled header: full-width band behind the bar that blurs and
+   slightly darkens whatever passes underneath, fading out at its bottom edge.
+   Only visible once scrolled (html.header-scrolled, see HeaderScrollState). */
+.astroHeroTopBar::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  /* stretch past the bar's insets to the full viewport width / top edge */
+  top: -12px;
+  left: -92px;
+  right: -92px;
+  height: calc(100% + 12px + 28px + 15px);
+  background: linear-gradient(to bottom, rgba(8, 18, 36, 0.45), rgba(8, 18, 36, 0.15));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 65%, transparent);
+  mask-image: linear-gradient(to bottom, #000 65%, transparent);
+  opacity: 0;
+  transition: opacity 0.35s ease, background 0.35s ease;
+}
+
+html.header-scrolled .astroHeroTopBar::before {
+  opacity: 1;
+}
+
+/* Over light (cream) sections the header text turns dark, so tint light instead of dark */
+.astroHeroTopBar.light-section-active::before,
+.light-section-active .astroHeroTopBar::before {
+  background: linear-gradient(to bottom, rgba(243, 233, 216, 0.7), rgba(243, 233, 216, 0.3));
+}
+
 
 
 .astroHeroBrand {
@@ -1428,6 +1460,11 @@ al stars */
   .astroHeroTopBar {
     left: 24px;
     right: 24px;
+  }
+
+  .astroHeroTopBar::before {
+    left: -24px;
+    right: -24px;
   }
 
   .astroHeroBrandText {

@@ -1,5 +1,6 @@
 import "./globals.css";
 import SmoothScroll from "@/components/shared/SmoothScroll";
+import HeaderScrollState from "@/components/shared/HeaderScrollState";
 import GlobalBackground from "@/components/background/GlobalBackground";
 import { newYork, satoshi } from "./fonts";
 import SessionLoader from "@/components/loader/SessionLoader";
@@ -107,6 +108,7 @@ export default function RootLayout({ children }) {
 
         <GlobalBackground />
         <SmoothScroll />
+        <HeaderScrollState />
         <SessionLoader />
         <Providers>
           {children}
