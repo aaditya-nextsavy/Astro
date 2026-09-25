@@ -97,7 +97,8 @@ export const RUDRAKSHA_ITEMS = [
 export const SERVICES = [
     {
         id: "01",
-        image: "/assets/drawer/drawer-temp.png",
+        image: "/assets/services/vastu-consultation.png",
+        masked: true, // soft oval mask in the drawer
         title: "Vastu Consultation",
         description:
             `Residential, office, and commercial spaces—your environment is a silent partner in your success or struggle. We provide deep-dive Vastu audits that go beyond simple "directions." By analyzing your home or workplace, we identify blockages that hinder health, wealth, and peace.`,
@@ -107,7 +108,8 @@ export const SERVICES = [
     },
     {
         id: "02",
-        image: "/assets/drawer/drawer-temp.png",
+        image: "/assets/services/personalized-birth-chart-analysis.png",
+        masked: true, // soft oval mask in the drawer
         title: "Personalized Birth Chart Analysis",
         description:
             `Using the profound wisdom of traditional Vedic systems and modern analysis, we decode your unique karmic blueprint. We don't just look at where the planets are—we uncover the story they are telling about your soul's journey.`,
@@ -117,7 +119,8 @@ export const SERVICES = [
     },
     {
         id: "03",
-        image: "/assets/drawer/drawer-temp.png",
+        image: "/assets/services/astrological-predictions-effective-remedies.png",
+        masked: true, // soft oval mask in the drawer
         title: "Astrological Predictions & Effective Remedies",
         description:
             `Knowledge of the future is most valuable when paired with the power to improve it. We offer precise timing for life events—from marriage and childbirth to financial shifts—combined with authentic Vedic remedies.`,
@@ -127,7 +130,8 @@ export const SERVICES = [
     },
     {
         id: "04",
-        image: "/assets/drawer/drawer-temp.png",
+        image: "/assets/services/relationship-and-career-guidance.png",
+        masked: true, // soft oval mask in the drawer
         title: "Relationship and Career Guidance",
         description:
             `Whether you are navigating a career transition or seeking harmony in a relationship, we provide data-driven spiritual insights. We analyze Guna Milan with complete chart matching for couples and Dashas for career timing to help you move with the cosmic tide.`,
@@ -137,7 +141,8 @@ export const SERVICES = [
     },
     {
         id: "05",
-        image: "/assets/drawer/drawer-temp.png",
+        image: "/assets/services/custom-solutions-for-prosperity-and-growth.png",
+        masked: true, // soft oval mask in the drawer
         title: "Custom Solutions for Prosperity and Growth",
         description:
             `Success is rarely an accident—it is the result of being in the right energy at the right time. This service is designed for entrepreneurs, professionals, and families seeking a meaningful edge in growth and prosperity.`,
@@ -147,7 +152,8 @@ export const SERVICES = [
     },
     {
         id: "06",
-        image: "/assets/drawer/drawer-temp.png",
+        image: "/assets/services/spiritual-counseling-and-life-path-direction.png",
+        masked: true, // soft oval mask in the drawer
         title: "Spiritual Counseling and Life Path Direction",
         description:
             `In a world filled with distractions, discovering your Dharma (life purpose) can be challenging. Drawing from our roots at Shri Mai Mandir, we provide a safe and grounded space to explore life's deeper questions and reconnect with your inner self.`,
@@ -157,7 +163,8 @@ export const SERVICES = [
     },
     {
         id: "07",
-        image: "/assets/drawer/drawer-temp.png",
+        image: "/assets/services/authentic-puja-services.png",
+        masked: true, // soft oval mask in the drawer
         title: "Authentic Puja Services",
         description:
             `Ritual is the bridge between the human and the Divine. We perform authentic Vedic Pujas with strict adherence to the Shastras, ensuring purity of intention, tradition, and spiritual vibration.`,
@@ -167,7 +174,8 @@ export const SERVICES = [
     },
     {
         id: "08",
-        image: "/assets/drawer/drawer-temp.png",
+        image: "/assets/services/sarvabadha-nivaran-homa.png",
+        masked: true, // soft oval mask in the drawer
         title: "Sarvabadha Nivaran Homa",
         description:
             `Conducted every Amavasya, this powerful Vedic fire ritual is dedicated to removing deep-seated obstacles, ancestral burdens, and negative energies affecting finances, health, relationships, and spiritual growth.`,

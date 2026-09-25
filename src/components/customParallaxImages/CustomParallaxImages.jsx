@@ -16,8 +16,27 @@ export default function CustomParallaxImages({
     showBgMask = true,
     glowColor = "#5DA4D9",
     bgLight = false,
+    // optional per-image masks, e.g. { "/assets/home/x.png": "/assets/background/circular-mask.png" }
+    imageMasks = {},
 
 }) {
+
+    const perImageMask = images.some((img) => imageMasks[img]);
+    const maskStyle = (src) => ({
+        WebkitMaskImage: `url(${src})`,
+        maskImage: `url(${src})`,
+    });
+
+    // per-image masks carry their own fit (same as .cpp-mask) so they don't depend on extra CSS
+    const imageMaskStyle = (src) => ({
+        ...maskStyle(src),
+        WebkitMaskSize: "contain",
+        maskSize: "contain",
+        WebkitMaskRepeat: "no-repeat",
+        maskRepeat: "no-repeat",
+        WebkitMaskPosition: "center",
+        maskPosition: "center",
+    });
 
     const sectionRef = useRef(null);
     const imageRefs = useRef([]);
@@ -74,10 +93,8 @@ export default function CustomParallaxImages({
 
                 <div
                     className="cpp-mask"
-                    style={{
-                        WebkitMaskImage: `url(${maskImage})`,
-                        maskImage: `url(${maskImage})`,
-                    }}
+                    // with per-image masks each image carries its own mask instead of the shared one
+                    style={perImageMask ? undefined : maskStyle(maskImage)}
                 >
 
                     {images.map((img, index) => (
@@ -86,7 +103,8 @@ export default function CustomParallaxImages({
                             key={index}
                             ref={(el) => (imageRefs.current[index] = el)}
                             src={img}
-                            className="cpp-subject"
+                            className={`cpp-subject ${perImageMask ? "cpp-subject-masked" : ""}`}
+                            style={perImageMask ? imageMaskStyle(imageMasks[img] ?? maskImage) : undefined}
                             alt=""
                         />
 

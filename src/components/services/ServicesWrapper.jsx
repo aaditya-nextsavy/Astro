@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import AcharyaDrawer from "@/components/drawer/AcharyaDrawer";
+import AcharyaDrawer, { preloadDrawerImages } from "@/components/drawer/AcharyaDrawer";
+import { SERVICES } from "@/data/siteData";
 import Footer from "@/components/footer/Footer";
 import Link from "next/link";
 import ServicesListing from "./ServicesListing";
@@ -22,6 +23,11 @@ export default function ServicesWrapper() {
     const [selectedService, setSelectedService] = useState(null);
     const [activeServiceIndex, setActiveServiceIndex] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
+    // Fetch the drawer photos in the background so opening a service is instant
+    useEffect(() => {
+        preloadDrawerImages(SERVICES.map(({ image }) => image), { priority: "low" });
+    }, []);
+
     const handleDrawerClose = () => {
         setDrawerOpen(false);
         setSelectedService(null);

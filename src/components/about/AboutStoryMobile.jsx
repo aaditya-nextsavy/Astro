@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { STORY_MASK_STYLE } from "@/lib/maskStyles";
 
 export default function AboutStoryMobile({ storyTimeline }) {
     return (
@@ -65,8 +66,13 @@ export default function AboutStoryMobile({ storyTimeline }) {
                         <Image
                             src={item.image}
                             alt={item.title}
-                            width={800}
-                            height={900}
+                            className={item.masked ? "about-story-image-masked" : ""}
+                            style={{
+                                ...(item.masked ? STORY_MASK_STYLE : {}),
+                                ...(item.objectPosition ? { objectPosition: item.objectPosition } : {}),
+                            }}
+                            width={item.masked ? 476 : 800}
+                            height={item.masked ? 463 : 900}
                             priority={index === 0}
                         />
 

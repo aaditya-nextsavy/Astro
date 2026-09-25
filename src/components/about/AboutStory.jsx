@@ -9,8 +9,13 @@ import React, {
 
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { subscribeAppReady } from "@/lib/appReady";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import AboutStoryMobile from "./AboutStoryMobile";
+import { STORY_MASK_STYLE } from "@/lib/maskStyles";
+export { STORY_MASK_STYLE }; // re-exported for older imports
+
+// The person image is shown at ~476px — request that size, not full viewport width
+const PERSON_SIZES = "600px";
 
 
 
@@ -24,7 +29,8 @@ export const storyTimeline = [
         subtitle: "The Sacred Story of Shri Mai Mandir, Nadiad",
         description:
             "To consult with the current Aacharyas is to step into a century-old tapestry woven by three extraordinary souls. The story of this lineage is a history of spiritual awakening that began in the heart of Gujarat and eventually touched the global stage.",
-        image: "/assets/gallery/g-1.png",
+        image: "/assets/about/a-century-of-divine-lineage.png",
+        masked: true, // soft oval mask, 476x463 frame
         type: "standard",
     },
 
@@ -36,7 +42,8 @@ export const storyTimeline = [
         badge: "H.H. 1008 Shri Kanishtha Keshav Maharaj",
         description: `The spiritual geography of Nadiad was forever transformed when H.H. 1008 Shri Kanishtha Keshav Maharaj established the Shri Mai Mandir. He was a visionary who did not merely build a temple; he anchored a divine frequency. Through intense penance (Tapasya) and a deep connection with the Divine Mother, he created a sanctuary where the ancient Vedas could breathe in the modern world.
 He serves as the "Root" of this lineage—the one who planted the seeds of Loka-Kalyan (universal welfare) and established the strict standards of Vedic purity that remain the temple’s hallmark to this day.`,
-        image: "/assets/gallery/g-1.png",
+        image: "/assets/about/the-foundation.png",
+        masked: true, // soft oval mask, 476x463 frame
         type: "standard",
     },
 
@@ -49,7 +56,7 @@ He serves as the "Root" of this lineage—the one who planted the seeds of Loka-
         description: `If the foundation was an act of creation, the next chapter was one of magnificent expansion. H.H. 1008 Shri Bhagawati Keshavbhavani Maharaj was the "Sun" that carried the light of Shri Mai to the world. A legendary spiritual orator, his journey began at the tender age of 16, when he first took the Vyaspeeth to preach the Shrimad Devi Bhagavat Katha.
 For nearly seven decades, until the age of 83, his voice resonated across continents, translating esoteric wisdom into a universal language of peace. Beyond his global travels, he was a master of ritual, conducting numerous Yagnas specifically designed for the welfare of humanity and the healing of the world. He brought international recognition to Nadiad, proving that the grace of the Divine Mother knows no borders.
 `,
-        image: "/assets/gallery/g-2.png",
+        image: "/assets/gallery/g-1.png",
         type: "standard",
     },
 
@@ -63,7 +70,9 @@ For nearly seven decades, until the age of 83, his voice resonated across contin
 As a son and a disciple, he walked step-by-step in the shadow of his Father-Guru, Shri Bhagawati Keshavbhavani Maharaj. He was the quiet, immovable force that managed the temple's sacred activities and ensured that spiritual knowledge was spread with absolute integrity. Remaining steadfast by his Guru’s side until his very last breath, he became the "Bridge of Purity," ensuring that the wisdom of the ancestors reached the next generation without losing a single drop of its essence.
 
 `,
-        image: "/assets/gallery/g-1.png",
+        image: "/assets/about/the-heart.png",
+        masked: true, // soft oval mask, 476x463 frame
+        objectPosition: "top",
         type: "standard",
     },
 
@@ -83,6 +92,7 @@ With hearts rooted in ancient traditions and minds enlightened by modern knowled
 ];
 
 
+
 const AboutStory = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const activeIndexRef = useRef(0);
@@ -95,6 +105,14 @@ const AboutStory = () => {
     const contentRef = useRef(null);
 
     const [displayImage, setDisplayImage] = useState(storyTimeline[0].image);
+    // live copy of displayImage for scroll callbacks (state is stale inside them)
+    const displayImageRef = useRef(storyTimeline[0].image);
+    const showImage = (src) => {
+        if (displayImageRef.current === src) return;
+        displayImageRef.current = src;
+        setDisplayImage(src);
+    };
+    const displayItem = storyTimeline.find((item) => item.image === displayImage);
     const imageTransitioning = useRef(false);
     const heartTransitioning = useRef(false);
     const [isReady, setIsReady] = useState(false);
@@ -105,6 +123,17 @@ const AboutStory = () => {
             : true
     );
 
+
+    // Warm the cache with every timeline image (same URLs next/image will request)
+    useEffect(() => {
+        storyTimeline.forEach(({ image }) => {
+            const { props } = getImageProps({ src: image, alt: "", fill: true, sizes: PERSON_SIZES });
+            const img = new window.Image();
+            img.sizes = props.sizes;
+            img.srcset = props.srcSet;
+            img.src = props.src;
+        });
+    }, []);
 
     useEffect(() => {
         const checkScreen = () => setIsDesktop(window.innerWidth > 1300);
@@ -140,8 +169,36 @@ const AboutStory = () => {
 
                 let previousIndex = -1;
 
-                const transitionImage = (newIndex) => {
+                // Fade out → swap → fade in. A running fade is never interrupted:
+                // if the user scrolls on meanwhile, the swap uses the latest item
+                // and, once the fade-in completes, it re-runs if the target moved again.
+                let desiredImage = storyTimeline[0].image;
+
+                const whenPersonImageReady = (cb) => {
+                    let frames = 0;
+                    const tick = () => {
+                        const el = personRef.current;
+                        const wanted = encodeURIComponent(displayImageRef.current);
+                        const ready =
+                            el?.complete &&
+                            el.naturalWidth > 0 &&
+                            (el.currentSrc || el.src).includes(wanted);
+
+                        // give up waiting after ~3s so it can never get stuck
+                        if (ready || frames++ > 180) {
+                            (el?.decode ? el.decode() : Promise.resolve())
+                                .catch(() => { })
+                                .then(cb);
+                        } else {
+                            requestAnimationFrame(tick);
+                        }
+                    };
+                    requestAnimationFrame(tick);
+                };
+
+                const transitionImage = () => {
                     if (imageTransitioning.current) return;
+                    if (desiredImage === displayImageRef.current) return;
 
                     imageTransitioning.current = true;
 
@@ -152,15 +209,20 @@ const AboutStory = () => {
                         duration: 1,
                         ease: "power2.inOut",
                         onComplete: () => {
-                            setDisplayImage(storyTimeline[newIndex].image);
+                            // latest target, even if the user scrolled on during the fade-out
+                            showImage(desiredImage);
 
-                            requestAnimationFrame(() => {
+                            // fade in only once the NEW image is loaded + decoded,
+                            // otherwise the old bitmap fades back in and then swaps
+                            whenPersonImageReady(() => {
                                 gsap.to(personRef.current, {
                                     opacity: 1,
                                     duration: 1,
                                     ease: "power2.inOut",
                                     onComplete: () => {
                                         imageTransitioning.current = false;
+                                        // caught up? if not, go again to the current target
+                                        transitionImage();
                                     },
                                 });
                             });
@@ -186,7 +248,7 @@ const AboutStory = () => {
                         duration: 0.4,
                         ease: "power2.inOut",
                         onComplete: () => {
-                            setDisplayImage(storyTimeline[newIndex].image);
+                            showImage(storyTimeline[newIndex].image);
                         },
                     }).to([personRef.current, cloudRef.current], {
                         opacity: 1,
@@ -253,11 +315,6 @@ const AboutStory = () => {
                                 scale: 1.08,
                             });
 
-                            if (personOpacity <= 0.05 &&
-                                displayImage !== storyTimeline[heartIndex + 1].image) {
-
-                                setDisplayImage(storyTimeline[heartIndex + 1].image);
-                            }
                         }
                         else if (index > heartIndex) {
 
@@ -282,11 +339,6 @@ const AboutStory = () => {
                                 });
                             }
 
-                            if (personOpacity <= 0.05 &&
-                                displayImage !== storyTimeline[heartIndex].image) {
-
-                                setDisplayImage(storyTimeline[heartIndex].image);
-                            }
                         }
                         else {
 
@@ -318,6 +370,23 @@ const AboutStory = () => {
                             });
                         }
 
+                        // ---- WHICH IMAGE SHOULD BE SHOWING ----
+                        // Heart hands over to Legacy only once it has fully faded out (p >= 0.75)
+                        desiredImage =
+                            index === heartIndex && p >= 0.75
+                                ? storyTimeline[heartIndex + 1].image
+                                : storyTimeline[index].image;
+
+                        if (!imageTransitioning.current && displayImageRef.current !== desiredImage) {
+                            if (personOpacity <= 0.05) {
+                                // already invisible (Heart ↔ Legacy scrub): swap silently
+                                showImage(desiredImage);
+                            } else {
+                                // visible: full fade out → swap → fade in
+                                transitionImage();
+                            }
+                        }
+
                         const isNewIndex = index !== previousIndex;
 
 
@@ -328,24 +397,7 @@ const AboutStory = () => {
                                 return;
                             }
 
-                            const previousItem = storyTimeline[activeIndexRef.current];
-                            const nextItem = storyTimeline[index];
-
-                            const shouldAnimate =
-                                previousItem?.type === "standard" &&
-                                nextItem?.type === "standard";
-
-                            const isHeartLegacy =
-                                (previousItem?.type === "standard" && nextItem?.type === "legacy") ||
-                                (previousItem?.type === "legacy" && nextItem?.type === "standard");
-
-                            if (shouldAnimate) {
-                                transitionImage(index);
-                            }
-                            else if (!isHeartLegacy) {
-                                setDisplayImage(storyTimeline[index].image);
-                            }
-
+                            // image swaps are handled above (desiredImage), text follows the index
                             activeIndexRef.current = index;
                             setActiveIndex(index);
                         }
@@ -518,7 +570,13 @@ const AboutStory = () => {
                                 // alt={current.title}
                                 alt={storyTimeline[activeIndex].title}
                                 fill
-                                className="about-story-person about-story-animate-image"
+                                sizes={PERSON_SIZES}
+                                loading="eager"
+                                className={`about-story-person about-story-animate-image ${displayItem?.masked ? "about-story-image-masked" : ""}`}
+                                style={{
+                                    ...(displayItem?.masked ? STORY_MASK_STYLE : {}),
+                                    ...(displayItem?.objectPosition ? { objectPosition: displayItem.objectPosition } : {}),
+                                }}
                             />
 
 

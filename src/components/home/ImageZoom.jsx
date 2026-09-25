@@ -11,7 +11,6 @@ export default function ImageZoom() {
     const leftTextRef = useRef(null);
     const rightTextRef = useRef(null);
     const image1Ref = useRef(null); // zoom1
-    const image2Ref = useRef(null); // zoom2
     const image3Ref = useRef(null); // zoom3
 
 
@@ -46,6 +45,10 @@ export default function ImageZoom() {
             });
 
 
+            // Initial state: zoom3 visible, zoom1 hidden (otherwise zoom1, being on top, shows until the first switch)
+            gsap.set(image3Ref.current, { opacity: 1 });
+            gsap.set(image1Ref.current, { opacity: 0 });
+
             let activeImage = 3;
 
             const tl = gsap.timeline({
@@ -66,8 +69,8 @@ export default function ImageZoom() {
 
                         let nextImage;
 
-                        if (p < 0.13) nextImage = 3;
-                        else if (p < 0.43) nextImage = 2;
+                        // zoom3 stays visible (zooming out via the timeline) until the switch to zoom1
+                        if (p < 0.65) nextImage = 3;
                         else nextImage = 1;
 
                         if (nextImage === activeImage) return;
@@ -77,13 +80,7 @@ export default function ImageZoom() {
                         gsap.to(image3Ref.current, {
                             opacity: nextImage === 3 ? 1 : 0,
                             duration: 0.5,
-                            overwrite: true,
-                        });
-
-                        gsap.to(image2Ref.current, {
-                            opacity: nextImage === 2 ? 1 : 0,
-                            duration: 0.5,
-                            overwrite: true,
+                            overwrite: "auto",
                         });
 
                         gsap.to(image1Ref.current, {
@@ -157,6 +154,16 @@ export default function ImageZoom() {
                 },
                 0
             );
+
+            // Start zoomed in on the center of zoom3, then scale back to 1
+            // as the wrapper expands, revealing the full image (no fade).
+            // Timeline length is 0.5 (default tween duration), so this ends at ~65% progress.
+            tl.fromTo(
+                image3Ref.current,
+                { scale: 3, transformOrigin: "50% 50%" },
+                { scale: 1, ease: "none", duration: 0.5 * 0.65 },
+                0
+            );
         }, sectionRef);
 
         return () => ctx.revert();
@@ -224,14 +231,7 @@ export default function ImageZoom() {
                 <div ref={imageRef} className="zoom-image-wrapper">
                     <img
                         ref={image3Ref}
-                        src="/assets/home/imageZoom3.png"
-                        className="zoom-image"
-                        alt=""
-                    />
-
-                    <img
-                        ref={image2Ref}
-                        src="/assets/home/imageZoom2.png"
+                        src="/assets/home/Zoom3-2.png"
                         className="zoom-image"
                         alt=""
                     />

@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useState, useEffect, useLayoutEffect } from "react";
+import { preload } from "react-dom";
+import { preloadDrawerImages } from "@/components/drawer/AcharyaDrawer";
 
 const ACHARYA_DATA = [
     {
         id: "acharya-markand",
-        image: "/assets/drawer/drawer-temp.png",
+        image: "/assets/drawer/aacharya-markand.png",
         title: "Acharya Markand",
         name: "Acharya Markand",
         description:
@@ -17,7 +19,7 @@ const ACHARYA_DATA = [
     },
     {
         id: "acharya-shandilya",
-        image: "/assets/drawer/drawer-temp.png",
+        image: "/assets/drawer/aacharya-shandilya.png",
         title: "Acharya Shandilya",
         name: "Acharya Shandilya",
         role: "Vastu & Spiritual Guidance Expert",
@@ -32,6 +34,13 @@ const ACHARYA_DATA = [
 
 export default function HomeHero({ onOpenAcharya }) {
 
+    // Drawer photos: high-priority <link rel="preload"> in the page head (runs during SSR),
+    // then marked as loaded for the session so the drawer skips its loader
+    ACHARYA_DATA.forEach(({ image }) => preload(image, { as: "image", fetchPriority: "high" }));
+
+    useEffect(() => {
+        preloadDrawerImages(ACHARYA_DATA.map(({ image }) => image));
+    }, []);
 
     const [time, setTime] = useState("");
     useEffect(() => {

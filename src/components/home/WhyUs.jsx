@@ -10,31 +10,39 @@ const sectionData = [
         id: 1,
         label: "Why Us",
         title: "What Makes Us Your Trusted Spiritual Partners?",
-        image: "/assets/home/why-1.png",
+        image: "/assets/home/why-us-1.png",
     },
     {
         id: 2,
         subTitle: "A Marriage of Tradition and Modernity",
         description:
             "Aacharya Markand’s background in computer engineering lends precision to spiritual analysis, while Aacharya Shandilya’s expertise in international business brings a global perspective to their counsel. Together, they balance the ancient with the contemporary.",
-        image: "/assets/home/why-2.png",
-        showGlow: true,
+        image: "/assets/home/why-us-1.png", // same as block 1: first image stays until block 3
     },
     {
         id: 3,
         subTitle: "A Heritage of Sacred Knowledge",
         description:
             "Born into a lineage of spiritual luminaries, their teachings are steeped in the eternal truths passed down by their grandfather, a towering figure of faith and wisdom.",
-        image: "/assets/home/why-3.png",
+        image: "/assets/home/why-us-2.png",
     },
     {
         id: 4,
         subTitle: "Solutions Designed for You",
         description:
             "Life is as unique as the stars above. Their consultations are personalized, offering practical remedies tailored to your individual journey—whether a simple Vastu adjustment, an intricate astrological insight, or compassionate spiritual counselling.",
-        image: "/assets/home/why-4.png",
+        image: "/assets/home/why-us-3.png",
     },
 ];
+
+// Blocks sharing an image keep it on screen (no fade) while scrolling between them
+const uniqueImages = [...new Set(sectionData.map((item) => item.image))];
+
+// Images that use the soft oval mask instead of the default circle
+const imageMasks = {
+    "/assets/home/why-us-3.png": "/assets/background/circular-mask.png",
+};
+
 
 export default function WhyUs() {
 
@@ -176,8 +184,9 @@ export default function WhyUs() {
 
                             <CustomParallaxImages
 
-                                images={sectionData.map(item => item.image)}
-                                activeIndex={activeImage - 1}
+                                images={uniqueImages}
+                                imageMasks={imageMasks}
+                                activeIndex={uniqueImages.indexOf(sectionData[activeImage - 1]?.image)}
                                 showGlow={sectionData[activeImage - 1]?.showGlow ?? false}
                                 showBgMask={true}
                                 bgLight={true}
@@ -264,16 +273,20 @@ export default function WhyUs() {
             </section >
 
             <section className="why-us-section why-us-mobile">
-                {sectionData.map((item) => (
+                {sectionData.map((item, index) => (
                     <div key={item.id} className="why-us-mobile-item">
 
-                        <CustomParallaxImages
-                            images={[item?.image]}
-                            activeIndex={0}
-                            showGlow={item.showGlow}
-                            showBgMask
-                            bgLight
-                        />
+                        {/* skip repeating the image when this block shares it with the previous one */}
+                        {item.image !== sectionData[index - 1]?.image && (
+                            <CustomParallaxImages
+                                images={[item?.image]}
+                                imageMasks={imageMasks}
+                                activeIndex={0}
+                                showGlow={item.showGlow}
+                                showBgMask
+                                bgLight
+                            />
+                        )}
 
                         <div className="why-us-content-inner">
 

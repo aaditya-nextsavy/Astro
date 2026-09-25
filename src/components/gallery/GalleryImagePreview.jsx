@@ -1,41 +1,50 @@
 "use client";
 
 import { useState, useRef, useLayoutEffect, useEffect } from "react";
+import Image, { getImageProps } from "next/image";
 import { gsap } from "@/lib/gsap";
+import { STORY_MASK_STYLE } from "@/lib/maskStyles";
 
+// Each item is either an `image` or a `video`, shown in the same 476x463 masked frame
+// TODO: titles for items 6–9 are placeholders
 const galleryItems = [
-    {
-        id: 1,
-        title: "Rudra Abhishek",
-        image: "/assets/gallery/g-1.png",
-    },
-    {
-        id: 2,
-        title: "Sacred Rudraksha",
-        image: "/assets/gallery/g-2.png",
-    },
-    {
-        id: 3,
-        title: "Temple Ceremonies",
-        image: "/assets/gallery/g-1.png",
-    },
-    {
-        id: 4,
-        title: "Vedic Pooja",
-        image: "/assets/gallery/g-2.png",
-    },
-    {
-        id: 5,
-        title: "Shiva Aradhana",
-        image: "/assets/gallery/g-1.png",
-    },
+    { id: 1, title: "Rudra Abhishek", image: "/assets/gallery/g-6.png" },
+    { id: 2, title: "Sacred Rudraksha", image: "/assets/gallery/g-3.png" },
+    { id: 3, title: "Temple Ceremonies", image: "/assets/gallery/g-5.png" },
+    { id: 4, title: "Vedic Pooja", image: "/assets/gallery/g-4.png" },
+    { id: 5, title: "Shiva Aradhana", image: "/assets/gallery/g-2.png" },
+    { id: 6, title: "Divine Darshan", image: "/assets/gallery/g-1.png" },
+    { id: 7, title: "Sacred Rituals", video: "/assets/gallery/g-7.mp4" },
+    { id: 8, title: "Aarti", video: "/assets/gallery/g-8.mp4" },
+    { id: 9, title: "Blessings", video: "/assets/gallery/g-9.mp4" },
 ];
+
+// Frame is 476px wide at most — request that size, not the 3–6MB originals
+const MEDIA_SIZES = "(max-width: 991px) 80vw, 476px";
 
 const GalleryImagePreview = () => {
     const [activeIndex, setActiveIndex] = useState(2);
+    // src of the media that has finished loading (hides the loader)
+    const [loadedSrc, setLoadedSrc] = useState(null);
+
+    const activeItem = galleryItems[activeIndex];
+    const activeSrc = activeItem.video ?? activeItem.image;
+    const isMediaLoaded = loadedSrc === activeSrc;
 
     const imageRef = useRef(null);
     const trackRef = useRef(null);
+
+    // Warm the cache with every gallery image (same URLs next/image will request)
+    useEffect(() => {
+        galleryItems.forEach(({ image }) => {
+            if (!image) return;
+            const { props } = getImageProps({ src: image, alt: "", fill: true, sizes: MEDIA_SIZES });
+            const img = new window.Image();
+            img.sizes = props.sizes;
+            img.srcset = props.srcSet;
+            img.src = props.src;
+        });
+    }, []);
     const navRef = useRef(null);
     const titleRefs = useRef([]);
 
@@ -181,12 +190,43 @@ const GalleryImagePreview = () => {
 
 
                 <div className="gallery-showcase__cloud-mask">
-                    <img
+                    {/* 476x463 frame with the soft oval mask; the whole frame fades between items */}
+                    <div
                         ref={imageRef}
-                        src={galleryItems[activeIndex].image}
-                        alt=""
-                        className="gallery-showcase__image"
-                    />
+                        className="gallery-showcase__media"
+                        style={STORY_MASK_STYLE}
+                    >
+                        {!isMediaLoaded && (
+                            <div className="gallery-showcase__loader">
+                                <span />
+                            </div>
+                        )}
+
+                        {activeItem.video ? (
+                            <video
+                                key={activeItem.video}
+                                src={activeItem.video}
+                                className={`gallery-showcase__media-el ${isMediaLoaded ? "is-loaded" : ""}`}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                preload="auto"
+                                onLoadedData={() => setLoadedSrc(activeItem.video)}
+                            />
+                        ) : (
+                            <Image
+                                key={activeItem.image}
+                                src={activeItem.image}
+                                alt={activeItem.title}
+                                fill
+                                sizes={MEDIA_SIZES}
+                                loading="eager"
+                                className={`gallery-showcase__media-el ${isMediaLoaded ? "is-loaded" : ""}`}
+                                onLoad={() => setLoadedSrc(activeItem.image)}
+                            />
+                        )}
+                    </div>
 
 
 

@@ -1855,7 +1855,8 @@ al stars */
   gap: 24px;
   justify-content: space-between;
   align-items: center;
-  padding: 0 64px 32px;
+  /* 24px top padding for the card */
+  padding: 24px 64px 32px;
   color: #d0e3f1 !important;
 }
 
@@ -1863,10 +1864,79 @@ al stars */
   color: #17374F !important;
 }
 
-.acharyaDrawerContent img {
-  max-height: 50%;
+/* Image group: max 45% of the card height, can shrink on short screens */
+.acharyaDrawerImage {
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 45%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Reserves the photo's space (535x543) so the loader and image occupy the same box */
+.acharyaDrawerImageFrame {
+  /* 45% of the card (card = 100vh - 48px); capping width keeps the aspect ratio */
+  --drawer-image-max-h: calc((100vh - 48px) * 0.45);
+  position: relative;
   width: 80%;
+  max-width: calc(var(--drawer-image-max-h) * 535 / 543);
+  aspect-ratio: 535 / 543;
+}
+
+/* Masked (services) photos: same 476x463 frame as About/Gallery; mask + cover are inline */
+.acharyaDrawerImageFrame.is-masked {
+  max-width: min(476px, calc(var(--drawer-image-max-h) * 476 / 463));
+  aspect-ratio: 476 / 463;
+}
+
+.acharyaDrawerImageFrame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  opacity: 0;
+}
+
+.acharyaDrawerImageFrame img.loaded {
+  opacity: 1;
+}
+
+.acharyaDrawerImageLoader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.acharyaDrawerImageLoader span {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #ffffff;
+  animation: acharyaDrawerSpin 0.8s linear infinite;
+}
+
+@keyframes acharyaDrawerSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Content group: sits at the bottom (free space goes between image and content via
+   .acharyaDrawerContent's space-between); shrinks + scrolls instead of overflowing */
+.acharyaDrawerBody {
+  flex: 0 1 auto;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 24px;
+  overflow-y: auto;
 }
 
 .acharyaDrawerContent h5 {
@@ -1953,7 +2023,7 @@ body.drawer-open {
 
 @media (max-width: 1440px) {
   .acharyaDrawerContent {
-    padding: 0 44px 32px;
+    padding: 24px 44px 32px;
   }
 
   .acharyaDrawerContent h5 {
@@ -1961,7 +2031,7 @@ body.drawer-open {
     font-weight: 1;
   }
 
-  .acharyaDrawerContent img {
+  .acharyaDrawerImageFrame {
     width: 50%;
   }
 
@@ -1977,7 +2047,7 @@ body.drawer-open {
   }
 
   .acharyaDrawerContent {
-    padding: 0 44px 32px;
+    padding: 24px 44px 32px;
   }
 
   .acharyaDrawerContent h5 {
@@ -1985,7 +2055,7 @@ body.drawer-open {
     font-weight: 1;
   }
 
-  .acharyaDrawerContent img {
+  .acharyaDrawerImageFrame {
     width: 50%;
   }
 
@@ -2013,7 +2083,7 @@ body.drawer-open {
   }
 
   .acharyaDrawerContent {
-    padding: 0 24px 32px;
+    padding: 24px 24px 32px;
   }
 }
 
@@ -2033,7 +2103,7 @@ body.drawer-open {
     font-size: 28px;
   }
 
-  .acharyaDrawerContent img {
+  .acharyaDrawerImageFrame {
     width: 100%;
   }
 
@@ -2268,6 +2338,33 @@ body.drawer-open {
   object-fit: cover;
   display: block;
   will-change: transform;
+}
+
+/* Layered (background + masked subject) version, same footprint as the old main-image-1 (1130x1031) */
+.info-image.info-image-layered {
+  height: auto;
+  aspect-ratio: 1130 / 1031;
+}
+
+/* Per-image mask (CustomParallaxImages imageMasks) — same fit as .cpp-mask */
+.cpp-subject.cpp-subject-masked {
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+}
+
+/* Subject size for this section only */
+.info-image-layered .cpp-mask {
+  z-index: 3;
+  width: 45%;
+  height: 55%;
+}
+
+.info-image-layered .cpp-mask img {
+  object-position: top;
 }
 
 /* CONTENT SIDE */
@@ -5895,6 +5992,22 @@ body.drawer-open {
 
 
 
+/* Masked timeline images: fixed 476x463 frame so none look too small/large (mask is inline, stretched to this frame) */
+.about-story-person.about-story-image-masked {
+  width: 476px !important;
+  height: 463px !important;
+  max-width: 100%;
+  object-fit: cover;
+}
+
+.about-story-mobile-image img.about-story-image-masked {
+  width: 100%;
+  max-width: 476px;
+  height: auto;
+  aspect-ratio: 476 / 463;
+  object-fit: cover;
+}
+
 .about-story-person.is-active {
   opacity: 1;
 
@@ -7072,6 +7185,54 @@ body.drawer-open {
   opacity: 1;
   object-fit: contain;
   z-index: 1;
+}
+
+/* Masked media frame: same 476x463 as the About timeline (mask is inline, stretched to this frame) */
+.gallery-showcase__media {
+  position: relative;
+  width: 476px;
+  max-width: 100%;
+  aspect-ratio: 476 / 463;
+  max-height: 100%;
+  z-index: 1;
+}
+
+.gallery-showcase__media-el {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.gallery-showcase__media-el.is-loaded {
+  opacity: 1;
+}
+
+.gallery-showcase__loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.gallery-showcase__loader span {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #ffffff;
+  animation: gallerySpin 0.8s linear infinite;
+}
+
+@keyframes gallerySpin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* cloud frame */
