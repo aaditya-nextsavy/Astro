@@ -2238,7 +2238,8 @@ body.drawer-open {
   position: relative;
   height: auto;
   margin-top: 150px;
-  margin-bottom: 150px;
+  /* no bottom margin: GSAP copies it onto the pin-spacer, adding a gap before Vastu */
+  margin-bottom: 0;
   overflow: hidden;
 }
 
@@ -2329,16 +2330,28 @@ body.drawer-open {
   width: 100%;
   /* overflow: hidden; */
   position: relative;
+  /* Pull-ups that eat the faded (empty-looking) edge of the circular image.
+     Make these more negative to tighten further. */
+  --info-section-pull: -0vw;
+  /* zoom → Vastu */
+  --info-row-pull: -6vw;
+  /* Vastu → Astrology (and between later rows) */
+  margin-top: var(--info-section-pull);
 }
 
 /* SECTION ROW */
 .info-row {
   display: flex;
   align-items: center;
-  min-height: 100vh;
+  /* sized by its image, not forced to a full screen */
+  min-height: auto;
 
   position: relative;
 
+}
+
+.info-row+.info-row {
+  margin-top: var(--info-row-pull);
 }
 
 .info-row-reverse {
@@ -2364,6 +2377,20 @@ body.drawer-open {
 .info-image.info-image-layered {
   height: auto;
   aspect-ratio: 1130 / 1031;
+}
+
+/* Enlarge the image (bg clouds + mask + subject together) without changing the
+   row layout, so the text keeps its size and position. Scale lives on this inner
+   block because GSAP owns the transform of .info-image (parallax). */
+.info-image-layered .custom-parallax-images {
+  scale: var(--info-image-scale, 1.25);
+  transform-origin: center;
+}
+
+/* keep the text above the enlarged image's faded edge */
+.main-image-info-section .info-content-wrapper {
+  position: relative;
+  z-index: 2;
 }
 
 /* Per-image mask (CustomParallaxImages imageMasks) — same fit as .cpp-mask */
@@ -2663,6 +2690,14 @@ body.drawer-open {
 /* TABLET */
 @media (max-width: 991px) {
 
+  /* rows stack here, so pulling them up would overlap the text above */
+  .main-image-info-section {
+    --info-section-pull: 0px;
+    --info-row-pull: 0px;
+    /* image is already full width here; scaling would push it off-screen */
+    --info-image-scale: 1;
+  }
+
   .info-row,
   .info-row-reverse {
     flex-direction: column;
@@ -2948,6 +2983,13 @@ body.drawer-open {
     margin-bottom: 20px;
   }
 }
+
+@media (max-width:1600px) {
+  .info-sticky-card-section__cards {
+    right: 8%;
+  }
+}
+
 
 
 @media (max-width:1200px) {
@@ -7240,14 +7282,14 @@ body.drawer-open {
 }
 
 .gallery-showcase__heading h2 {
-  font-size: clamp(54px, 4vw, 72px);
-  line-height: 1;
   font-weight: 400;
-  font-size: 72px;
-  line-height: 72px;
+  /* 72px on large screens, eases down toward 1600px so it stays clear of the bigger image */
+  font-size: clamp(56px, 3.8vw, 72px);
+  line-height: 1;
   letter-spacing: -1.5px;
   text-transform: capitalize;
-
+  /* always exactly the two lines set by the <br> */
+  white-space: nowrap;
 }
 
 .gallery-showcase__visual {
@@ -7272,29 +7314,16 @@ body.drawer-open {
   z-index: 1;
 }
 
+/* Sized like the Figma: ~36% of the screen width / ~70% of its height (whichever is
+   smaller), mask shape kept, centred in the middle column */
 .gallery-showcase__media {
   position: relative;
-  width: 450px;
+  width: min(36vw, 70vh * 476 / 463);
   max-width: 100%;
   aspect-ratio: 476 / 463;
-  max-height: 100%;
   z-index: 1;
-}
-
-@media (min-width:1440px) {
-
-  .gallery-showcase__media {
-    margin-left: 120px;
-    width: 500px;
-  }
-}
-
-@media (min-width:1680px) {
-
-  .gallery-showcase__media {
-    width: 550px;
-    margin-left: 150px;
-  }
+  /* nudge right so it sits near the page centre, as in the Figma */
+  translate: 4vw 0;
 }
 
 .gallery-showcase__media {}
@@ -7579,6 +7608,13 @@ body.drawer-open {
   .gallery-showcase__cloud-mask {
     max-width: 60%;
     margin: 0 auto;
+  }
+
+  /* stacked layout keeps its previous fixed size */
+  .gallery-showcase__media {
+    width: 450px;
+    max-height: 100%;
+    translate: none;
   }
 
   .gallery-showcase__image {

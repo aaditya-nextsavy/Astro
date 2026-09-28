@@ -13,14 +13,14 @@ const galleryItems = [
     { id: 3, title: "Temple Ceremonies", image: "/assets/gallery/g-5.png" },
     { id: 4, title: "Vedic Pooja", image: "/assets/gallery/g-4.png" },
     { id: 5, title: "Shiva Aradhana", image: "/assets/gallery/g-2.png" },
-    { id: 6, title: "Divine Darshan", image: "/assets/gallery/g-1.png" },
+    // { id: 6, title: "Divine Darshan", image: "/assets/gallery/g-1.png" },
     { id: 7, title: "Sacred Rituals", video: "/assets/gallery/g-7.mp4" },
     { id: 8, title: "Aarti", video: "/assets/gallery/g-8.mp4" },
-    { id: 9, title: "Blessings", video: "/assets/gallery/g-9.mp4" },
+    // { id: 9, title: "Blessings", video: "/assets/gallery/g-9.mp4" },
 ];
 
 // Frame is 476px wide at most — request that size, not the 3–6MB originals
-const MEDIA_SIZES = "(max-width: 991px) 80vw, 476px";
+const MEDIA_SIZES = "(max-width: 991px) 80vw, 36vw";
 
 const GalleryImagePreview = () => {
     const [activeIndex, setActiveIndex] = useState(2);
