@@ -2865,7 +2865,7 @@ body.drawer-open {
 .info-sticky-card-section__cards {
   position: absolute;
   top: 50%;
-  right: 15%;
+  right: 8%;
   width: 475px;
   height: 628px;
   transform: translateY(-50%);
@@ -6274,9 +6274,11 @@ body.drawer-open {
 
 
 
+/* Small top (the timeline above already ends with space), larger bottom before the footer */
 .about-operations-wrapper {
-  padding: 80px 5.2vw;
-  padding-bottom: 140px;
+  --about-ops-space: 140px; /* gap between the two groups */
+  --about-ops-bottom: 200px;
+  padding: 40px 5.2vw var(--about-ops-bottom);
 }
 
 .about-operations-wrapper:first-child {
@@ -6288,9 +6290,15 @@ body.drawer-open {
   flex-direction: column;
   justify-content: center;
   color: #D0E3F1;
-  min-height: 100vh;
+  /* sized by content (a full-screen min-height centred it, adding space above the title) */
+  min-height: auto;
   width: 100%;
 
+}
+
+/* gap between the two groups, matching the outer spacing */
+.about-operations-items-wrapper + div {
+  margin-top: var(--about-ops-space);
 }
 
 .about-operations-item.middle-element {
@@ -7174,7 +7182,7 @@ body.drawer-open {
 
 
   .about-operations-wrapper {
-    padding-bottom: 140px;
+    padding-bottom: var(--about-ops-bottom);
   }
 
 }
@@ -7191,6 +7199,7 @@ body.drawer-open {
   }
 
   .about-operations-wrapper {
+    --about-ops-space: 60px;
     padding: 20px 24px;
     padding-bottom: 60px;
   }
