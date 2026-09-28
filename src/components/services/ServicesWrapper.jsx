@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import AcharyaDrawer, { preloadDrawerImages } from "@/components/drawer/AcharyaDrawer";
+import { MASK_2_STYLE } from "@/lib/maskStyles";
 import { SERVICES } from "@/data/siteData";
 import Footer from "@/components/footer/Footer";
 import Link from "next/link";
@@ -507,6 +508,7 @@ export default function ServicesWrapper() {
                 service={selectedService}
                 onClose={handleDrawerClose}
                 isLight={true}
+                maskStyle={MASK_2_STYLE}
             />
 
 

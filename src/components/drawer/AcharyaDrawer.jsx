@@ -34,8 +34,11 @@ export default function AcharyaDrawer({
     onClose,
     service,
     isLight = false,
+    maskStyle = STORY_MASK_STYLE,
+    forceMask = false, // mask every photo, not just `service.masked` ones
 }) {
 
+    const isMasked = forceMask || service?.masked;
     const [, rerender] = useState(0);
 
     useEffect(() => {
@@ -89,7 +92,7 @@ export default function AcharyaDrawer({
 
 
                     <div className="acharyaDrawerImage">
-                        <div className={`acharyaDrawerImageFrame ${service?.masked ? "is-masked" : ""}`}>
+                        <div className="acharyaDrawerImageFrame">
                             {!isImageLoaded && (
                                 <div className="acharyaDrawerImageLoader">
                                     <span />
@@ -106,7 +109,7 @@ export default function AcharyaDrawer({
                                 src={service?.image}
                                 alt={service?.title}
                                 className={isImageLoaded ? "loaded" : ""}
-                                style={service?.masked ? STORY_MASK_STYLE : undefined}
+                                style={isMasked ? maskStyle : undefined}
                                 onLoad={() => markLoaded(service?.image)}
                             />
                         </div>

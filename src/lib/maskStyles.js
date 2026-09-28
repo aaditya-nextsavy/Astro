@@ -12,3 +12,17 @@ export const STORY_MASK_STYLE = {
     maskPosition: "center",
     objectFit: "cover",
 };
+
+// mask-4.png (Gallery page, Home drawer).
+export const MASK_4_STYLE = {
+    ...STORY_MASK_STYLE,
+    WebkitMaskImage: "url(/assets/background/mask-4.png)",
+    maskImage: "url(/assets/background/mask-4.png)",
+};
+
+// Services page drawer mask.
+export const MASK_2_STYLE = {
+    ...STORY_MASK_STYLE,
+    WebkitMaskImage: "url(/assets/background/mask-4.png)",
+    maskImage: "url(/assets/background/mask-4.png)",
+};

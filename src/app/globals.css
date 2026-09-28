@@ -1901,30 +1901,19 @@ html.header-scrolled .astroHeroTopBar::before {
   color: #17374F !important;
 }
 
-/* Image group: max 45% of the card height, can shrink on short screens */
+/* Image group: takes whatever height .acharyaDrawerBody leaves free */
 .acharyaDrawerImage {
-  flex: 0 1 auto;
+  flex: 1 1 0;
   min-height: 0;
-  max-height: 45%;
   width: 100%;
   display: flex;
-  justify-content: center;
 }
 
-/* Reserves the photo's space (535x543) so the loader and image occupy the same box */
+/* Full width, stretched to the image group's height (no fixed aspect ratio);
+   the loader and image share this box */
 .acharyaDrawerImageFrame {
-  /* 45% of the card (card = 100vh - 48px); capping width keeps the aspect ratio */
-  --drawer-image-max-h: calc((100vh - 48px) * 0.45);
   position: relative;
-  width: 80%;
-  max-width: calc(var(--drawer-image-max-h) * 535 / 543);
-  aspect-ratio: 535 / 543;
-}
-
-/* Masked (services) photos: same 476x463 frame as About/Gallery; mask + cover are inline */
-.acharyaDrawerImageFrame.is-masked {
-  max-width: min(476px, calc(var(--drawer-image-max-h) * 476 / 463));
-  aspect-ratio: 476 / 463;
+  width: 100%;
 }
 
 .acharyaDrawerImageFrame img {
@@ -2064,15 +2053,19 @@ body.drawer-open {
   }
 
   .acharyaDrawerContent h5 {
-    font-size: 38px;
+    font-size: 36px;
+    line-height: 36px;
     font-weight: 1;
   }
 
-  .acharyaDrawerImageFrame {
-    width: 50%;
+  .acharyaDrawerBody {
+    gap: 20px;
   }
 
-  .acharyaDrawerContent p {}
+  .acharyaDrawerContent p {
+    font-size: 16px;
+    line-height: 24px;
+  }
 
 }
 
@@ -2088,15 +2081,9 @@ body.drawer-open {
   }
 
   .acharyaDrawerContent h5 {
-    font-size: 38px;
+    font-size: 36px;
     font-weight: 1;
   }
-
-  .acharyaDrawerImageFrame {
-    width: 50%;
-  }
-
-  .acharyaDrawerContent p {}
 }
 
 @media (max-width: 991px) {
@@ -2138,10 +2125,6 @@ body.drawer-open {
 
   .acharyaDrawerContent h5 {
     font-size: 28px;
-  }
-
-  .acharyaDrawerImageFrame {
-    width: 100%;
   }
 
   .acharyaDrawerContent p {
@@ -3764,6 +3747,25 @@ body.drawer-open {
 
 
 
+/* Browser autofill: keep the field transparent and the text in the form's colour.
+   The autofill background can't be overridden directly, so its transition is
+   delayed indefinitely. */
+.footer-input input:-webkit-autofill,
+.footer-input input:-webkit-autofill:hover,
+.footer-input input:-webkit-autofill:focus,
+.footer-input input:-webkit-autofill:active {
+  -webkit-text-fill-color: #D0E3F1;
+  caret-color: #D0E3F1;
+  -webkit-box-shadow: 0 0 0 1000px transparent inset;
+  box-shadow: 0 0 0 1000px transparent inset;
+  transition: background-color 99999s ease-in-out 0s, color 99999s ease-in-out 0s;
+}
+
+.footer-input input:autofill {
+  background: transparent;
+  color: #D0E3F1;
+}
+
 .footer-input input::placeholder,
 .footer-input select::placeholder {
   color: #D0E3F180;
@@ -3910,8 +3912,11 @@ body.drawer-open {
   backdrop-filter: blur(20px);
   padding: 8px;
   font-size: 32px;
-  /* max-height: 300px; */
-  /* overflow-y: scroll; */
+  /* show 4 items, scroll the rest: item = 2 x padding + 26px line + 1px border */
+  --dropdown-item-pad-y: 16px;
+  max-height: calc(4 * (2 * var(--dropdown-item-pad-y) + 27px) + 16px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .glass-dropdown-content::after {
@@ -3930,7 +3935,8 @@ body.drawer-open {
 
 .glass-dropdown-item {
   width: 100%;
-  padding: 16px 18px;
+  padding: var(--dropdown-item-pad-y) 18px;
+  line-height: 26px;
   display: flex;
   align-items: center;
   background: transparent;
@@ -3984,13 +3990,40 @@ body.drawer-open {
 
 /*Scrollbar*/
 
-.glass-dropdown-menu::-webkit-scrollbar {
+/* Site palette: #d0e3f1 on dark, #17374F on light */
+.glass-dropdown-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(208, 227, 241, .45) transparent;
+}
+
+.glass-dropdown-content::-webkit-scrollbar {
   width: 6px;
 }
 
-.glass-dropdown-menu::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, .25);
+.glass-dropdown-content::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 12px 0;
+}
+
+.glass-dropdown-content::-webkit-scrollbar-thumb {
+  background: rgba(208, 227, 241, .45);
   border-radius: 999px;
+}
+
+.glass-dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: #d0e3f1;
+}
+
+.light-section-active .glass-dropdown-content {
+  scrollbar-color: rgba(23, 55, 79, .45) transparent;
+}
+
+.light-section-active .glass-dropdown-content::-webkit-scrollbar-thumb {
+  background: rgba(23, 55, 79, .45);
+}
+
+.light-section-active .glass-dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: #17374F;
 }
 
 .footer-submit-btn-wrapper {
@@ -4308,8 +4341,12 @@ body.drawer-open {
     font-size: 24px;
   }
 
+  .glass-dropdown-content {
+    --dropdown-item-pad-y: 14px;
+  }
+
   .glass-dropdown-item {
-    padding: 14px 14px;
+    padding: var(--dropdown-item-pad-y) 14px;
     font-size: 22px;
   }
 }
@@ -6198,6 +6235,7 @@ body.drawer-open {
 
 .about-operations-wrapper {
   padding: 80px 5.2vw;
+  padding-bottom: 140px;
 }
 
 .about-operations-wrapper:first-child {
@@ -7091,6 +7129,16 @@ body.drawer-open {
 }
 
 
+@media(max-width:1680px) {
+
+
+  .about-operations-wrapper {
+    padding-bottom: 140px;
+  }
+
+}
+
+
 @media(max-width:991px) {
 
   .footer-takeover-zone {
@@ -7103,6 +7151,7 @@ body.drawer-open {
 
   .about-operations-wrapper {
     padding: 20px 24px;
+    padding-bottom: 60px;
   }
 
 }
@@ -7224,15 +7273,32 @@ body.drawer-open {
   z-index: 1;
 }
 
-/* Masked media frame: same 476x463 as the About timeline (mask is inline, stretched to this frame) */
 .gallery-showcase__media {
   position: relative;
-  width: 476px;
+  width: 450px;
   max-width: 100%;
   aspect-ratio: 476 / 463;
   max-height: 100%;
   z-index: 1;
 }
+
+@media (min-width:1440px) {
+
+  .gallery-showcase__media {
+    margin-left: 120px;
+    width: 500px;
+  }
+}
+
+@media (min-width:1680px) {
+
+  .gallery-showcase__media {
+    width: 550px;
+    margin-left: 150px;
+  }
+}
+
+.gallery-showcase__media {}
 
 .gallery-showcase__media-el {
   position: absolute;

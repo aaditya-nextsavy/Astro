@@ -252,7 +252,7 @@ const Footer = () => {
                             </div>
                             <div className="glass-dropdown-menu">
                                 <div className="glass-dropdown-backdrop"></div>
-                                <div className="glass-dropdown-content">
+                                <div className="glass-dropdown-content" data-lenis-prevent>
                                     {services.map((service) => (
                                         <button
                                             key={service}

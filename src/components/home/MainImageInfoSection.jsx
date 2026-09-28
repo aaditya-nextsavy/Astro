@@ -22,6 +22,8 @@ const sectionData = [
         description: `The stars have a story to tell—your story. Through meticulous analysis of your birth chart, the Aacharyas illuminate the celestial pathways shaping your life. Their consultations dive deep into your life's purpose, challenges, and opportunities, offering remedies rooted in ancient wisdom yet adaptable to the modern age. From strengthening relationships to unlocking career potential, their insights empower you to embrace your destiny with clarity and confidence.
 `,
         image: "/assets/home/main-image-2.png",
+        // same layered treatment as Vastu: background + masked subject on top
+        parallaxImage: "/assets/home/main-image-2.png",
     },
 ];
 

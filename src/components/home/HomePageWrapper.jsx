@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import HomeHero from "@/components/home/Hero";
 import AcharyaDrawer from "@/components/drawer/AcharyaDrawer";
+import { MASK_4_STYLE } from "@/lib/maskStyles";
 import ImageZoom from "@/components/home/ImageZoom";
 import MainImageInfoSection from "@/components/home/MainImageInfoSection";
 import HomeServices from "@/components/home/HomeServices";
@@ -469,6 +470,8 @@ export default function HomePageWrapper() {
                             isOpen={drawerOpen}
                             onClose={() => setDrawerOpen(false)}
                             service={selectedAcharya}
+                            maskStyle={MASK_4_STYLE}
+                            forceMask
                         />
                         <div className="light-background-zone">
                             <svg className="light-background-content-top curve-1" width="1926" height="86" viewBox="0 0 1926 86" fill="none" xmlns="http://www.w3.org/2000/svg">

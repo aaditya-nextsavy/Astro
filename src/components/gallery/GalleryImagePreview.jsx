@@ -3,7 +3,7 @@
 import { useState, useRef, useLayoutEffect, useEffect } from "react";
 import Image, { getImageProps } from "next/image";
 import { gsap } from "@/lib/gsap";
-import { STORY_MASK_STYLE } from "@/lib/maskStyles";
+import { MASK_4_STYLE } from "@/lib/maskStyles";
 
 // Each item is either an `image` or a `video`, shown in the same 476x463 masked frame
 // TODO: titles for items 6–9 are placeholders
@@ -194,7 +194,7 @@ const GalleryImagePreview = () => {
                     <div
                         ref={imageRef}
                         className="gallery-showcase__media"
-                        style={STORY_MASK_STYLE}
+                        style={MASK_4_STYLE}
                     >
                         {!isMediaLoaded && (
                             <div className="gallery-showcase__loader">
