@@ -93,12 +93,29 @@ With hearts rooted in ancient traditions and minds enlightened by modern knowled
 
 
 
+const HEART_INDEX = storyTimeline.length - 2;
+const isLegacy = (index) => storyTimeline[index]?.type === "legacy";
+const imageIndexOf = (src) => storyTimeline.findIndex((item) => item.image === src);
+
+// Content fades in (opacity only) in two groups: heading + badge, then subtitle + description
+function fadeInStoryContent() {
+    gsap.timeline()
+        .fromTo(".about-story-fade-head", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "sine.inOut" })
+        .fromTo(".about-story-fade-body", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "sine.inOut" }, "-=0.35");
+}
+
 const AboutStory = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const activeIndexRef = useRef(0);
     const wrapperRef = useRef(null);
-    const current = storyTimeline[activeIndex] ?? storyTimeline[0];
     const [timelineProgress, setTimelineProgress] = useState(0);
+
+    // Index whose text is on screen; trails activeIndex by the fade-out
+    const [contentIndex, setContentIndex] = useState(0);
+    const contentIndexRef = useRef(0);
+    const latestIndexRef = useRef(0);
+    const contentFadingOut = useRef(false);
+    const shown = storyTimeline[contentIndex] ?? storyTimeline[0];
 
     const cloudRef = useRef(null);
     const personRef = useRef(null);
@@ -114,7 +131,11 @@ const AboutStory = () => {
     };
     const displayItem = storyTimeline.find((item) => item.image === displayImage);
     const imageTransitioning = useRef(false);
-    const heartTransitioning = useRef(false);
+    // true while a Heart ↔ Legacy swap fades the image + cloud with the text
+    const legacySwapping = useRef(false);
+    const legacySwapId = useRef(0);
+    // set by the scroll setup: re-runs the regular image transition to catch up
+    const catchUpImageRef = useRef(null);
     const [isReady, setIsReady] = useState(false);
 
     const [isDesktop, setIsDesktop] = useState(
@@ -142,13 +163,101 @@ const AboutStory = () => {
         return () => window.removeEventListener("resize", checkScreen);
     }, []);
 
+    const whenPersonImageReady = (cb) => {
+        let frames = 0;
+        const tick = () => {
+            const el = personRef.current;
+            const wanted = encodeURIComponent(displayImageRef.current);
+            const ready =
+                el?.complete &&
+                el.naturalWidth > 0 &&
+                (el.currentSrc || el.src).includes(wanted);
+
+            // give up waiting after ~3s so it can never get stuck
+            if (ready || frames++ > 180) {
+                (el?.decode ? el.decode() : Promise.resolve())
+                    .catch(() => { })
+                    .then(cb);
+            } else {
+                requestAnimationFrame(tick);
+            }
+        };
+        requestAnimationFrame(tick);
+    };
+
+    // Heart ↔ Legacy: swap the image while hidden, then fade it back in (timed, not scroll)
+    const swapLegacyImage = (next) => {
+        const id = ++legacySwapId.current;
+        showImage(storyTimeline[next].image);
+
+        whenPersonImageReady(() => {
+            if (id !== legacySwapId.current) return; // a newer swap took over
+            gsap.to(personRef.current, {
+                opacity: 1,
+                duration: 0.7,
+                ease: "sine.inOut",
+                onComplete: () => {
+                    legacySwapping.current = false;
+                    imageTransitioning.current = false;
+                    catchUpImageRef.current?.();
+                },
+            });
+        });
+    };
+
+    // Text lags the timeline: fade the old text out, then swap to the latest index
+    // (fade-in runs on the swap). Steps into / out of Legacy fade the image on the
+    // same timer, so text, image and layout all switch while hidden.
+    const fadeOutContent = () => {
+        const withImage = isLegacy(contentIndexRef.current) || isLegacy(latestIndexRef.current);
+        const targets = gsap.utils.toArray(".about-story-fade-head, .about-story-fade-body");
+
+        if (withImage) {
+            legacySwapping.current = true;
+            imageTransitioning.current = true;
+            legacySwapId.current++; // cancels a pending fade-in from an earlier swap
+            gsap.killTweensOf(personRef.current);
+            targets.push(personRef.current);
+        }
+
+        contentFadingOut.current = true;
+        gsap.to(targets, {
+            opacity: 0,
+            duration: 0.7,
+            ease: "sine.inOut",
+            overwrite: true,
+            onComplete: () => {
+                contentFadingOut.current = false;
+                const next = latestIndexRef.current;
+
+                // scrolled into Legacy during a text-only fade: take the image out too
+                if (!withImage && isLegacy(next)) {
+                    fadeOutContent();
+                    return;
+                }
+
+                if (withImage) swapLegacyImage(next);
+
+                if (next === contentIndexRef.current) {
+                    // scrolled back to the same item meanwhile: no re-render, just fade back in
+                    fadeInStoryContent();
+                    return;
+                }
+                contentIndexRef.current = next;
+                setContentIndex(next);
+            },
+        });
+    };
+
     useEffect(() => {
-        gsap.fromTo(
-            ".about-story-animate",
-            { opacity: 0, y: 30 },
-            { opacity: 1, y: 0, duration: 0.3, stagger: 0.25, ease: "power2.out" }
-        );
+        latestIndexRef.current = activeIndex;
+        if (activeIndex === contentIndexRef.current || contentFadingOut.current) return;
+        fadeOutContent();
     }, [activeIndex]);
+
+    useEffect(() => {
+        fadeInStoryContent();
+    }, [contentIndex]);
 
     useLayoutEffect(() => {
         if (!isDesktop || !wrapperRef.current) return;
@@ -160,12 +269,6 @@ const AboutStory = () => {
 
             ctx = gsap.context(() => {
                 const totalSteps = storyTimeline.length;
-                const heartIndex = totalSteps - 2;
-
-                // Fully invisible windows: [0, FADE_IN_END] and [FADE_OUT_START, 1].
-                // The src swap / cloud flip happen inside these — hidden both directions.
-                const FADE_IN_END = 0.22;
-                const FADE_OUT_START = 0.78;
 
                 let previousIndex = -1;
 
@@ -174,31 +277,14 @@ const AboutStory = () => {
                 // and, once the fade-in completes, it re-runs if the target moved again.
                 let desiredImage = storyTimeline[0].image;
 
-                const whenPersonImageReady = (cb) => {
-                    let frames = 0;
-                    const tick = () => {
-                        const el = personRef.current;
-                        const wanted = encodeURIComponent(displayImageRef.current);
-                        const ready =
-                            el?.complete &&
-                            el.naturalWidth > 0 &&
-                            (el.currentSrc || el.src).includes(wanted);
-
-                        // give up waiting after ~3s so it can never get stuck
-                        if (ready || frames++ > 180) {
-                            (el?.decode ? el.decode() : Promise.resolve())
-                                .catch(() => { })
-                                .then(cb);
-                        } else {
-                            requestAnimationFrame(tick);
-                        }
-                    };
-                    requestAnimationFrame(tick);
-                };
-
                 const transitionImage = () => {
-                    if (imageTransitioning.current) return;
+                    if (imageTransitioning.current || legacySwapping.current) return;
                     if (desiredImage === displayImageRef.current) return;
+                    // into / out of Legacy: handled by the timed text swap (fadeOutContent)
+                    if (
+                        isLegacy(imageIndexOf(desiredImage)) ||
+                        isLegacy(imageIndexOf(displayImageRef.current))
+                    ) return;
 
                     imageTransitioning.current = true;
 
@@ -215,6 +301,7 @@ const AboutStory = () => {
                             // fade in only once the NEW image is loaded + decoded,
                             // otherwise the old bitmap fades back in and then swaps
                             whenPersonImageReady(() => {
+                                if (legacySwapping.current) return; // a Legacy swap took over
                                 gsap.to(personRef.current, {
                                     opacity: 1,
                                     duration: 1,
@@ -231,32 +318,7 @@ const AboutStory = () => {
                     });
                 };
 
-                const transitionHeartLegacy = (newIndex) => {
-                    if (heartTransitioning.current) return;
-                    heartTransitioning.current = true;
-
-                    gsap.killTweensOf([personRef.current, cloudRef.current]);
-
-                    const tl = gsap.timeline({
-                        onComplete: () => {
-                            heartTransitioning.current = false;
-                        },
-                    });
-
-                    tl.to([personRef.current, cloudRef.current], {
-                        opacity: 0,
-                        duration: 0.4,
-                        ease: "power2.inOut",
-                        onComplete: () => {
-                            showImage(storyTimeline[newIndex].image);
-                        },
-                    }).to([personRef.current, cloudRef.current], {
-                        opacity: 1,
-                        duration: 0.7,
-                        ease: "power2.inOut",
-                    });
-                };
-
+                catchUpImageRef.current = transitionImage;
 
 
                 ScrollTrigger.create({
@@ -283,109 +345,38 @@ const AboutStory = () => {
                             (self.progress - segmentStart) / (segmentEnd - segmentStart)
                         );
 
-                        // ---- IMAGE + CLOUD CROSSFADE ----
-                        let personOpacity = 1;
-
-                        if (index < heartIndex) {
-                            personOpacity = 1;
-                        }
-                        else if (index === heartIndex) {
-
-                            if (p < FADE_IN_END) {
-                                personOpacity = p / FADE_IN_END;
-                            }
-                            else if (p > 0.55) {
-                                personOpacity = 1 - ((p - 0.55) / 0.20);
-                            }
-                            else {
-                                personOpacity = 1;
-                            }
-
-                            // Cloud only starts fading during the final transition
-                            let cloudOpacity = 1;
-
-                            if (p > 0.75) {
-                                cloudOpacity = 1 - ((p - 0.75) / 0.25);
-                            }
-
+                        // ---- CLOUD (scroll-driven) ----
+                        if (index < HEART_INDEX) {
+                            // same side as Heart, visible from the start (no scroll fade-in)
                             gsap.set(cloudRef.current, {
-                                opacity: gsap.utils.clamp(0, 1, cloudOpacity),
-                                // xPercent: p > 0.95 ? -100 : 0,
+                                opacity: 1,
                                 xPercent: 0,
                                 scale: 1.08,
                             });
-
-                        }
-                        else if (index > heartIndex) {
-
-                            // Legacy image fades in with scroll
-                            if (p < 0.25) {
-                                personOpacity = p / 0.25;
-                            } else {
-                                personOpacity = 1;
-                            }
-
-                            if (p < 0.25) {
-                                gsap.set(cloudRef.current, {
-                                    opacity: p / 0.25,
-                                    xPercent: 0,
-                                    scale: 1
-                                });
-                            } else {
-                                gsap.set(cloudRef.current, {
-                                    opacity: 1,
-                                    xPercent: 0,
-                                    scale: 1
-                                });
-                            }
-
-                        }
-                        else {
-
-                            const cloudOpacity = gsap.utils.clamp(
-                                0,
-                                1,
-                                p / 0.25
-                            );
-
+                        } else if (index === HEART_INDEX) {
+                            // Cloud only starts fading during the final transition
                             gsap.set(cloudRef.current, {
-                                opacity: cloudOpacity,
-                                xPercent: -100,
-                                scale: 1.08
+                                opacity: p > 0.75 ? gsap.utils.clamp(0, 1, 1 - (p - 0.75) / 0.25) : 1,
+                                xPercent: 0,
+                                scale: 1.08,
                             });
-                            // if (!imageTransitioning.current) {
-                            //     gsap.set(personRef.current, {
-                            //         opacity: 1
-                            //     });
-                            // }
+                        } else {
+                            gsap.set(cloudRef.current, {
+                                opacity: p < 0.25 ? p / 0.25 : 1,
+                                xPercent: 0,
+                                scale: 1,
+                            });
                         }
 
-
-
-                        personOpacity = gsap.utils.clamp(0, 1, personOpacity);
-
+                        // ---- PERSON IMAGE (timed fades, not scroll) ----
                         if (!imageTransitioning.current) {
-                            gsap.set(personRef.current, {
-                                opacity: personOpacity,
-                            });
+                            gsap.set(personRef.current, { opacity: 1 });
                         }
 
                         // ---- WHICH IMAGE SHOULD BE SHOWING ----
-                        // Heart hands over to Legacy only once it has fully faded out (p >= 0.75)
-                        desiredImage =
-                            index === heartIndex && p >= 0.75
-                                ? storyTimeline[heartIndex + 1].image
-                                : storyTimeline[index].image;
-
-                        if (!imageTransitioning.current && displayImageRef.current !== desiredImage) {
-                            if (personOpacity <= 0.05) {
-                                // already invisible (Heart ↔ Legacy scrub): swap silently
-                                showImage(desiredImage);
-                            } else {
-                                // visible: full fade out → swap → fade in
-                                transitionImage();
-                            }
-                        }
+                        // regular steps: full fade out → swap → fade in (Legacy handled in fadeOutContent)
+                        desiredImage = storyTimeline[index].image;
+                        transitionImage();
 
                         const isNewIndex = index !== previousIndex;
 
@@ -397,22 +388,10 @@ const AboutStory = () => {
                                 return;
                             }
 
-                            // image swaps are handled above (desiredImage), text follows the index
+                            // image swaps are handled above (desiredImage); text uses the
+                            // same timed fade out → swap → fade in for every step, not scroll
                             activeIndexRef.current = index;
                             setActiveIndex(index);
-                        }
-
-
-                        // ---- CONTENT FADE (last regular item's text) ----
-                        if (index === heartIndex) {
-                            const fadeProgress = gsap.utils.clamp(
-                                0,
-                                1,
-                                (p - 0.5) / 0.4
-                            );
-                            gsap.set(contentRef.current, { opacity: 1 - fadeProgress });
-                        } else if (!isNewIndex) {
-                            gsap.set(contentRef.current, { opacity: 1 });
                         }
                     },
                 });
@@ -420,11 +399,7 @@ const AboutStory = () => {
                 requestAnimationFrame(() => {
                     gsap.set(personRef.current, { opacity: 1 });
                     gsap.set(cloudRef.current, { opacity: 1, xPercent: 0, scale: 1.08 });
-                    gsap.fromTo(
-                        ".about-story-animate",
-                        { opacity: 0, y: 30 },
-                        { opacity: 1, y: 0, duration: 0.3, stagger: 0.25, ease: "power2.out" }
-                    );
+                    fadeInStoryContent();
                     setIsReady(true);
                 });
             }, wrapperRef);
@@ -465,7 +440,8 @@ const AboutStory = () => {
 
 
                 <div
-                    className={`about-story-grid ${current.type === "legacy"
+                    // layout follows the text on screen, so it only flips while the text is hidden
+                    className={`about-story-grid ${shown.type === "legacy"
                         ? "about-story-grid--legacy"
                         : ""
                         }`}
@@ -475,14 +451,14 @@ const AboutStory = () => {
                 >
 
                     {/* LEFT */}
-                    <div ref={contentRef} key={current.year} className="about-story-content">
+                    <div ref={contentRef} key={shown.year} className="about-story-content">
 
                         <div className="about-story-main-heading">
                             {
-                                activeIndex === 0 ? (
-                                    <h1 className="about-story-animate">{storyTimeline[0].sectionTitle}</h1>
+                                contentIndex === 0 ? (
+                                    <h1 className="about-story-animate about-story-fade-head">{storyTimeline[0].sectionTitle}</h1>
                                 ) : (
-                                    <h2 className="about-story-animate">{storyTimeline[activeIndex].sectionTitle}</h2>
+                                    <h2 className="about-story-animate about-story-fade-head">{shown.sectionTitle}</h2>
                                 )
                             }
                         </div>
@@ -490,8 +466,8 @@ const AboutStory = () => {
                         <div className="about-story-copy">
 
                             {
-                                current?.badge && (
-                                    <span className="about-story-animate about-story-badge glass-effect-card">
+                                shown?.badge && (
+                                    <span className="about-story-animate about-story-fade-head about-story-badge glass-effect-card">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M12.3336 11.6743C18.1377 17.4784 22.5129 22.5138 22.5129 22.5138C22.5129 22.5138 17.4779 18.1378 11.6738 12.3341C5.86973 6.52997 1.49414 1.49496 1.49414 1.49496C1.49414 1.49496 6.52953 5.87056 12.3336 11.6743Z" fill="#D0E3F1" />
                                             <path d="M12.3336 12.3352C6.52916 18.1393 1.49414 22.5141 1.49414 22.5141C1.49414 22.5141 5.86935 17.4795 11.6738 11.675C17.4783 5.87094 22.5133 1.49496 22.5133 1.49496C22.5133 1.49496 18.1385 6.53074 12.3336 12.3352Z" fill="#D0E3F1" />
@@ -505,7 +481,7 @@ const AboutStory = () => {
                                         </svg>
 
 
-                                        {current.badge}
+                                        {shown.badge}
 
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M12.3336 11.6743C18.1377 17.4784 22.5129 22.5138 22.5129 22.5138C22.5129 22.5138 17.4779 18.1378 11.6738 12.3341C5.86973 6.52997 1.49414 1.49496 1.49414 1.49496C1.49414 1.49496 6.52953 5.87056 12.3336 11.6743Z" fill="#D0E3F1" />
@@ -526,12 +502,12 @@ const AboutStory = () => {
 
 
 
-                            <h3 className="about-story-animate about-story-subtitle">
-                                {current.subtitle}
+                            <h3 className="about-story-animate about-story-fade-body about-story-subtitle">
+                                {shown.subtitle}
                             </h3>
 
-                            <p className="about-story-animate about-story-description">
-                                {current.description}
+                            <p className="about-story-animate about-story-fade-body about-story-description">
+                                {shown.description}
                             </p>
 
                         </div>
