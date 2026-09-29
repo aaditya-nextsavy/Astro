@@ -1893,7 +1893,8 @@ html.header-scrolled .astroHeroTopBar::before {
   justify-content: space-between;
   align-items: center;
   /* 24px top padding for the card */
-  padding: 24px 64px 32px;
+  --drawer-pad-x: 64px;
+  padding: 24px var(--drawer-pad-x) 32px;
   color: #d0e3f1 !important;
 }
 
@@ -1901,19 +1902,25 @@ html.header-scrolled .astroHeroTopBar::before {
   color: #17374F !important;
 }
 
-/* Image group: takes whatever height .acharyaDrawerBody leaves free */
+/* Image group: takes whatever height .acharyaDrawerBody leaves free, but never
+   less than half the drawer (on short laptop screens the body scrolls instead) */
 .acharyaDrawerImage {
   flex: 1 1 0;
-  min-height: 0;
+  min-height: 50%;
   width: 100%;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  container-type: size;
 }
 
-/* Full width, stretched to the image group's height (no fixed aspect ratio);
-   the loader and image share this box */
+/* Locked to the mask's ratio (mask-4.png, 910x676) so the mask/photo never squash:
+   as wide as the group allows, shrinking with its height when that runs out.
+   The loader and image share this box */
 .acharyaDrawerImageFrame {
   position: relative;
-  width: 100%;
+  aspect-ratio: 910 / 676;
+  width: min(100cqw, 100cqh * 910 / 676);
 }
 
 .acharyaDrawerImageFrame img {
@@ -1957,12 +1964,84 @@ html.header-scrolled .astroHeroTopBar::before {
 .acharyaDrawerBody {
   flex: 0 1 auto;
   min-height: 0;
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 24px;
   overflow-y: auto;
+  overscroll-behavior: contain;
+
+  /* Scroll area reaches out to 5px from the drawer's right edge so the scrollbar sits
+     there, not against the text; padding puts the text back where it was */
+  --drawer-scroll-out: calc(var(--drawer-pad-x) - 5px);
+  width: calc(100% + 2 * var(--drawer-scroll-out));
+  margin-inline: calc(-1 * var(--drawer-scroll-out));
+  padding-left: var(--drawer-scroll-out);
+  padding-right: calc(var(--drawer-scroll-out) - 8px);
+  scrollbar-gutter: stable;
+
+  /* Soft 1 -> 0 opacity fade on an edge while content is hidden past it
+     (JS toggles .fadeTop / .fadeBottom). Two mask layers: the fade over the text,
+     and a solid strip on the right so the scrollbar itself never fades */
+  --drawer-fade: 56px;
+  --drawer-fade-in: transparent 0, rgba(0, 0, 0, .15) calc(var(--drawer-fade) * .25), rgba(0, 0, 0, .45) calc(var(--drawer-fade) * .5), rgba(0, 0, 0, .8) calc(var(--drawer-fade) * .75), #000 var(--drawer-fade);
+  --drawer-fade-out: #000 calc(100% - var(--drawer-fade)), rgba(0, 0, 0, .8) calc(100% - var(--drawer-fade) * .75), rgba(0, 0, 0, .45) calc(100% - var(--drawer-fade) * .5), rgba(0, 0, 0, .15) calc(100% - var(--drawer-fade) * .25), transparent 100%;
+  --drawer-mask: linear-gradient(#000, #000);
+  -webkit-mask-image: var(--drawer-mask), linear-gradient(#000, #000);
+  mask-image: var(--drawer-mask), linear-gradient(#000, #000);
+  -webkit-mask-size: calc(100% - 16px) 100%, 16px 100%;
+  mask-size: calc(100% - 16px) 100%, 16px 100%;
+  -webkit-mask-position: left top, right top;
+  mask-position: left top, right top;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  /* same thin scrollbar as .glass-dropdown-content (blue drawer) */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(208, 227, 241, .45) transparent;
+}
+
+.acharyaDrawerBody.fadeTop {
+  --drawer-mask: linear-gradient(to bottom, var(--drawer-fade-in));
+}
+
+.acharyaDrawerBody.fadeBottom {
+  --drawer-mask: linear-gradient(to bottom, #000 0, var(--drawer-fade-out));
+}
+
+.acharyaDrawerBody.fadeTop.fadeBottom {
+  --drawer-mask: linear-gradient(to bottom, var(--drawer-fade-in), var(--drawer-fade-out));
+}
+
+.acharyaDrawerBody::-webkit-scrollbar {
+  width: 6px;
+}
+
+.acharyaDrawerBody::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 12px 0;
+}
+
+.acharyaDrawerBody::-webkit-scrollbar-thumb {
+  background: rgba(208, 227, 241, .45);
+  border-radius: 999px;
+}
+
+.acharyaDrawerBody::-webkit-scrollbar-thumb:hover {
+  background: #d0e3f1;
+}
+
+/* cream drawer: the light-section palette of the same scrollbar */
+.acharyaDrawerContent.light .acharyaDrawerBody {
+  scrollbar-color: rgba(23, 55, 79, .45) transparent;
+}
+
+.acharyaDrawerContent.light .acharyaDrawerBody::-webkit-scrollbar-thumb {
+  background: rgba(23, 55, 79, .45);
+}
+
+.acharyaDrawerContent.light .acharyaDrawerBody::-webkit-scrollbar-thumb:hover {
+  background: #17374F;
 }
 
 .acharyaDrawerContent h5 {
@@ -2049,7 +2128,7 @@ body.drawer-open {
 
 @media (max-width: 1440px) {
   .acharyaDrawerContent {
-    padding: 24px 44px 32px;
+    --drawer-pad-x: 44px;
   }
 
   .acharyaDrawerContent h5 {
@@ -2077,7 +2156,7 @@ body.drawer-open {
   }
 
   .acharyaDrawerContent {
-    padding: 24px 44px 32px;
+    --drawer-pad-x: 44px;
   }
 
   .acharyaDrawerContent h5 {
@@ -2107,7 +2186,7 @@ body.drawer-open {
   }
 
   .acharyaDrawerContent {
-    padding: 24px 24px 32px;
+    --drawer-pad-x: 24px;
   }
 }
 
@@ -2345,7 +2424,7 @@ body.drawer-open {
   align-items: center;
   /* sized by its image, not forced to a full screen */
   min-height: auto;
-
+  overflow: hidden;
   position: relative;
 
 }
@@ -5513,11 +5592,38 @@ body.drawer-open {
   width: auto !important;
 }
 
-/* CONTAINER */
+/* CONTAINER: a clipped window of --bullets-visible slots; the track inside slides */
 .home-product-slider-section .custom-pagination {
+  --bullet-slot: 24px;
   display: flex !important;
   align-items: center;
-  gap: 12px;
+  justify-content: flex-start;
+  width: calc(var(--bullets-visible, 5) * var(--bullet-slot));
+  height: 20px;
+  overflow: hidden;
+}
+
+.home-product-slider-section .custom-pagination-track {
+  display: flex;
+  align-items: center;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* every bullet gets a fixed-width slot (dot + gap) so size changes never shift the row */
+.home-product-slider-section .custom-pagination .bullet {
+  flex: 0 0 auto;
+  margin: 0 calc((var(--bullet-slot) - 10px) / 2);
+}
+
+.home-product-slider-section .custom-pagination .bullet.active {
+  margin: 0 calc((var(--bullet-slot) - 12px) / 2);
+}
+
+.home-product-slider-section .custom-pagination .bullet.offscreen {
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .home-product-slider-section .custom-pagination .bullet {
@@ -5866,7 +5972,7 @@ body.drawer-open {
   }
 
   .home-product-slider-section .custom-pagination {
-    gap: 2px;
+    --bullet-slot: 14px;
   }
 
   .home-product-slider-section .nav-btn {
@@ -6276,7 +6382,8 @@ body.drawer-open {
 
 /* Small top (the timeline above already ends with space), larger bottom before the footer */
 .about-operations-wrapper {
-  --about-ops-space: 140px; /* gap between the two groups */
+  --about-ops-space: 140px;
+  /* gap between the two groups */
   --about-ops-bottom: 200px;
   padding: 40px 5.2vw var(--about-ops-bottom);
 }
@@ -6297,7 +6404,7 @@ body.drawer-open {
 }
 
 /* gap between the two groups, matching the outer spacing */
-.about-operations-items-wrapper + div {
+.about-operations-items-wrapper+div {
   margin-top: var(--about-ops-space);
 }
 
@@ -6447,6 +6554,9 @@ body.drawer-open {
 
 }
 
+
+
+
 @media (max-width: 1650px) {
 
   .about-story-content {
@@ -6510,7 +6620,7 @@ body.drawer-open {
 }
 
 
-@media (max-width: 1550px) {
+@media (max-width: 1500px) {
 
   .about-story-content {
     color: #d0e3f1;
@@ -6521,6 +6631,37 @@ body.drawer-open {
   .about-story-grid--legacy .about-story-description {
     width: 550px;
   }
+}
+
+
+@media (max-width: 1650px) and (max-height:760px) {
+
+  .about-story-main-heading h1 {
+    margin-bottom: 36px;
+    font-size: 54px;
+    line-height: 54px;
+  }
+
+  .about-story-badge {
+    gap: 8px;
+    margin-top: 20px;
+    margin-bottom: 24px;
+    padding: 16px;
+    font-size: 18px;
+  }
+
+  .about-story-main-heading h2 {
+    margin-bottom: 18px;
+    font-size: 40px;
+    line-height: 1;
+  }
+
+  /* /#rudrakshaSection from another page: Lenis honours scroll-margin-top, so land
+     ~100px further down, keeping the prev/next buttons on screen */
+  #rudrakshaSection {
+    scroll-margin-top: -100px;
+  }
+
 }
 
 @media (max-width: 1440px) {

@@ -27,8 +27,6 @@ const SliderWithFade = () => {
         )
     );
 
-    const visibleBullets = slides.slice(start, start + VISIBLE);
-
 
 
     useLayoutEffect(() => {
@@ -153,23 +151,35 @@ const SliderWithFade = () => {
 
                 </button>
 
-                <div className="custom-pagination">
-                    {visibleBullets.map((_, i) => {
-                        const index = start + i;
+                {/* All bullets live on one track; the track slides so the VISIBLE window
+                    glides instead of bullets popping in/out (which made the row jump) */}
+                <div className="custom-pagination" style={{ "--bullets-visible": VISIBLE }}>
+                    <div
+                        className="custom-pagination-track"
+                        style={{ transform: `translateX(calc(${-start} * var(--bullet-slot)))` }}
+                    >
+                        {slides.map((_, index) => {
+                            const distance = Math.abs(index - active);
+                            const inWindow = index >= start && index < start + VISIBLE;
 
-                        return (
-                            <button
-                                key={index}
-                                onClick={() => swiperRef.current?.slideTo(index)}
-                                className={`bullet ${index === active
-                                    ? "active"
-                                    : index === active - 1 || index === active + 1
-                                        ? "near"
-                                        : "far"
-                                    }`}
-                            />
-                        );
-                    })}
+                            return (
+                                <button
+                                    key={index}
+                                    tabIndex={inWindow ? 0 : -1}
+                                    aria-label={`Go to slide ${index + 1}`}
+                                    onClick={() => swiperRef.current?.slideTo(index)}
+                                    className={`bullet ${!inWindow
+                                        ? "offscreen"
+                                        : distance === 0
+                                            ? "active"
+                                            : distance === 1
+                                                ? "near"
+                                                : "far"
+                                        }`}
+                                />
+                            );
+                        })}
+                    </div>
                 </div>
 
 

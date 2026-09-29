@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { preload } from "react-dom";
 import { STORY_MASK_STYLE } from "@/lib/maskStyles";
 
@@ -49,15 +49,46 @@ export default function AcharyaDrawer({
 
     const isImageLoaded = !!service?.image && loadedImages.has(service.image);
 
+    // data links are already "/contact"; only prefix bare slugs ("contact")
+    const rawLink = service?.link || "/contact";
+    const href = /^(\/|https?:|mailto:|tel:)/.test(rawLink) ? rawLink : `/${rawLink}`;
+
+    // Fade the body's top/bottom edges only where content is hidden behind them
+    const bodyRef = useRef(null);
+    const [fade, setFade] = useState({ top: false, bottom: false });
+
+    const updateFade = useCallback(() => {
+        const el = bodyRef.current;
+        if (!el) return;
+        const top = el.scrollTop > 1;
+        const bottom = el.scrollTop + el.clientHeight < el.scrollHeight - 1;
+        setFade((prev) => (prev.top === top && prev.bottom === bottom ? prev : { top, bottom }));
+    }, []);
+
     useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
+        const el = bodyRef.current;
+        if (!el) return;
+        const ro = new ResizeObserver(updateFade);
+        ro.observe(el);
+        return () => ro.disconnect();
+    }, [updateFade]);
+
+    // new content → back to the top
+    useEffect(() => {
+        if (bodyRef.current) bodyRef.current.scrollTop = 0;
+        updateFade();
+    }, [service, isOpen, updateFade]);
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        // lock the page: native scroll + Lenis smooth scroll (only this drawer's body scrolls)
+        document.body.style.overflow = "hidden";
+        window.lenis?.stop();
 
         return () => {
             document.body.style.overflow = "";
+            window.lenis?.start();
         };
     }, [isOpen]);
 
@@ -65,6 +96,7 @@ export default function AcharyaDrawer({
     return (
         <>
             <div
+                data-lenis-prevent
                 className={`acharyaDrawerOverlay ${isOpen
                     ? "acharyaDrawerOverlayOpen"
                     : ""
@@ -73,6 +105,7 @@ export default function AcharyaDrawer({
             />
 
             <aside
+                data-lenis-prevent
                 className={`acharyaDrawerPanel
     ${isOpen ? "acharyaDrawerPanelOpen" : ""}
     ${isLight ? "light" : ""}
@@ -115,7 +148,11 @@ export default function AcharyaDrawer({
                         </div>
                     </div>
 
-                    <div className="acharyaDrawerBody">
+                    <div
+                        ref={bodyRef}
+                        onScroll={updateFade}
+                        className={`acharyaDrawerBody ${fade.top ? "fadeTop" : ""} ${fade.bottom ? "fadeBottom" : ""}`}
+                    >
                         <h5>{service?.title}</h5>
 
                         <p>{service?.description}</p>
@@ -126,7 +163,7 @@ export default function AcharyaDrawer({
                             </strong>
                         </p>
 
-                        <a className="acharyaDrawerContentBtn" href={`/${service?.link}`}>
+                        <a className="acharyaDrawerContentBtn" href={href}>
                             Get in touch
                         </a>
                     </div>
