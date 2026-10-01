@@ -56,7 +56,7 @@ He serves as the "Root" of this lineage—the one who planted the seeds of Loka-
         description: `If the foundation was an act of creation, the next chapter was one of magnificent expansion. H.H. 1008 Shri Bhagawati Keshavbhavani Maharaj was the "Sun" that carried the light of Shri Mai to the world. A legendary spiritual orator, his journey began at the tender age of 16, when he first took the Vyaspeeth to preach the Shrimad Devi Bhagavat Katha.
 For nearly seven decades, until the age of 83, his voice resonated across continents, translating esoteric wisdom into a universal language of peace. Beyond his global travels, he was a master of ritual, conducting numerous Yagnas specifically designed for the welfare of humanity and the healing of the world. He brought international recognition to Nadiad, proving that the grace of the Divine Mother knows no borders.
 `,
-        image: "/assets/gallery/g-1.png",
+        image: "/assets/gallery/g-1.webp",
         type: "standard",
     },
 
@@ -86,7 +86,7 @@ As a son and a disciple, he walked step-by-step in the shadow of his Father-Guru
 
 With hearts rooted in ancient traditions and minds enlightened by modern knowledge, these spiritual guides have woven a unique fabric of Vastu and astrology—a blend of timeless wisdom and contemporary understanding. Their journey is not just about predictions and remedies but about empowering lives with the cosmic truth and helping souls align with the universe’s rhythm.
 `,
-        image: "/assets/gallery/g-2.png",
+        image: "/assets/gallery/g-2.webp",
         type: "legacy",
     },
 ];

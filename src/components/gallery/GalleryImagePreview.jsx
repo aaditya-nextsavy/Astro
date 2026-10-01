@@ -8,14 +8,14 @@ import { MASK_4_STYLE } from "@/lib/maskStyles";
 // Each item is either an `image` or a `video`, shown in the same 476x463 masked frame
 // TODO: titles for items 6–9 are placeholders
 const galleryItems = [
-    { id: 1, title: "Rudra Abhishek", image: "/assets/gallery/g-6.png" },
-    { id: 2, title: "Sacred Rudraksha", image: "/assets/gallery/g-3.png" },
-    { id: 3, title: "Temple Ceremonies", image: "/assets/gallery/g-5.png" },
-    { id: 4, title: "Vedic Pooja", image: "/assets/gallery/g-4.png" },
-    { id: 5, title: "Shiva Aradhana", image: "/assets/gallery/g-2.png" },
-    // { id: 6, title: "Divine Darshan", image: "/assets/gallery/g-1.png" },
-    { id: 7, title: "Sacred Rituals", video: "/assets/gallery/g-7.mp4" },
-    { id: 8, title: "Aarti", video: "/assets/gallery/g-8.mp4" },
+    { id: 1, title: "Rudra Abhishek", image: "/assets/gallery/g-6.webp" },
+    { id: 2, title: "Sacred Rudraksha", image: "/assets/gallery/g-3.webp" },
+    { id: 3, title: "Temple Ceremonies", image: "/assets/gallery/temple-ceremonies.webp" },
+    { id: 4, title: "Vedic Pooja", image: "/assets/gallery/g-4.webp" },
+    { id: 5, title: "Shiva Aradhana", image: "/assets/gallery/g-2.webp" },
+    // { id: 6, title: "Divine Darshan", image: "/assets/gallery/g-1.webp" },
+    { id: 7, title: "Sacred Rituals", image: "/assets/gallery/sacred-rituals.webp" },
+    { id: 8, title: "Aarti", image: "/assets/gallery/aarti.webp" },
     // { id: 9, title: "Blessings", video: "/assets/gallery/g-9.mp4" },
 ];
 
@@ -213,6 +213,7 @@ const GalleryImagePreview = () => {
                                 playsInline
                                 preload="auto"
                                 onLoadedData={() => setLoadedSrc(activeItem.video)}
+                                onError={() => setLoadedSrc(activeItem.video)}
                             />
                         ) : (
                             <Image
@@ -224,6 +225,7 @@ const GalleryImagePreview = () => {
                                 loading="eager"
                                 className={`gallery-showcase__media-el ${isMediaLoaded ? "is-loaded" : ""}`}
                                 onLoad={() => setLoadedSrc(activeItem.image)}
+                                onError={() => setLoadedSrc(activeItem.image)}
                             />
                         )}
                     </div>

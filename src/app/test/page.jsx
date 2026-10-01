@@ -12,9 +12,9 @@ export default function Page() {
 
                         images={[
                             "/assets/customParallaxImage/cpp-default-hero.png",
-                            "/assets/gallery/g-1.png",
+                            "/assets/gallery/g-1.webp",
                             "/assets/customParallaxImage/cpp-default-hero.png",
-                            "/assets/gallery/g-1.png",
+                            "/assets/gallery/g-1.webp",
                         ]} />
 
                 </div>
