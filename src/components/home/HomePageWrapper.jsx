@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import HomeHero from "@/components/home/Hero";
 import AcharyaDrawer from "@/components/drawer/AcharyaDrawer";
+import DivineTimeDrawer from "@/components/drawer/DivineTimeDrawer";
 import { MASK_4_STYLE } from "@/lib/maskStyles";
 import ImageZoom from "@/components/home/ImageZoom";
 import MainImageInfoSection from "@/components/home/MainImageInfoSection";
@@ -44,6 +45,14 @@ export default function HomePageWrapper() {
 
     const [selectedAcharya, setSelectedAcharya] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [divineTimeOpen, setDivineTimeOpen] = useState(false);
+    const [divineTimeLight, setDivineTimeLight] = useState(false);
+    // match the drawer to the zone the clicked bar is over (navs get light-section-active on cream sections)
+    const openDivineTime = (e) => {
+        setDivineTimeLight(!!e?.currentTarget?.closest(".light-section-active"));
+        setDivineTimeOpen(true);
+    };
+    const closeDivineTime = useCallback(() => setDivineTimeOpen(false), []);
     const handleOpenAcharya = (data) => {
         setSelectedAcharya(data);
         setDrawerOpen(true);
@@ -422,7 +431,7 @@ export default function HomePageWrapper() {
                                     </svg>
                                 </div>
                             </nav>
-                            <a href="#" target="_blank" className="astroHeroTimeBlock">
+                            <button type="button" onClick={openDivineTime} className="astroHeroTimeBlock">
                                 <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
                                     <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
@@ -431,9 +440,10 @@ export default function HomePageWrapper() {
                                     <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
                                     <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
                                 </svg>
-                            </a>
+                            </button>
                         </div>
                     </div>
+                    <DivineTimeDrawer isOpen={divineTimeOpen} onClose={closeDivineTime} isLight={divineTimeLight} />
                     <div className={`mobile-drawer-menu ${menuOpen ? "open" : ""}`}>
                         <div
                             className="mobile-drawer-menu-backdrop relative"
@@ -465,7 +475,7 @@ export default function HomePageWrapper() {
                         </div>
                     </div>
                     <div className="hero-stack-sequence-wrapper">
-                        <HomeHero onOpenAcharya={handleOpenAcharya} />
+                        <HomeHero onOpenAcharya={handleOpenAcharya} onOpenDivineTime={openDivineTime} />
                         <AcharyaDrawer
                             isOpen={drawerOpen}
                             onClose={() => setDrawerOpen(false)}

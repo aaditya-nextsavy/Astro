@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect, useLayoutEffect } from "react";
 import { preload } from "react-dom";
 import { preloadDrawerImages } from "@/components/drawer/AcharyaDrawer";
@@ -32,7 +31,7 @@ const ACHARYA_DATA = [
 ];
 
 
-export default function HomeHero({ onOpenAcharya }) {
+export default function HomeHero({ onOpenAcharya, onOpenDivineTime }) {
 
     // Drawer photos: high-priority <link rel="preload"> in the page head (runs during SSR),
     // then marked as loaded for the session so the drawer skips its loader
@@ -137,7 +136,7 @@ export default function HomeHero({ onOpenAcharya }) {
                         </svg>
                     </div>
 
-                    <Link href="#" target="_blank" className="astroHeroTimeBlock">
+                    <button type="button" onClick={onOpenDivineTime} className="astroHeroTimeBlock">
                         <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
                             <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
@@ -146,7 +145,7 @@ export default function HomeHero({ onOpenAcharya }) {
                             <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
                             <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
                         </svg>
-                    </Link>
+                    </button>
                 </div>
             </div>
 
