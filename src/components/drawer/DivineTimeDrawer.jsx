@@ -1,23 +1,57 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 
 // Refetch when the drawer is reopened after this long
 const STALE_MS = 15 * 60 * 1000;
 
 const IST = "Asia/Kolkata";
 
-// "06:27:14" → "6:27 AM"
+// Shared across tabs so a new tab can show the panchang without the loader
+const CACHE_KEY = "divineTime:panchang";
+
+const todayIST = () => new Intl.DateTimeFormat("en-CA", { timeZone: IST }).format(new Date());
+
+const readCacheRaw = () => {
+    try {
+        return localStorage.getItem(CACHE_KEY);
+    } catch {
+        return null;
+    }
+};
+
+// other tabs writing the cache fire "storage" here
+const subscribeCache = (onChange) => {
+    window.addEventListener("storage", onChange);
+    return () => window.removeEventListener("storage", onChange);
+};
+
+const parseCache = (raw) => {
+    try {
+        const cached = JSON.parse(raw);
+        // only reuse today's panchang â€” yesterday's would be wrong
+        if (cached?.data?.date === todayIST()) return cached;
+    } catch {}
+    return null;
+};
+
+const writeCache = (entry) => {
+    try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify(entry));
+    } catch {}
+};
+
+// "06:27:14" â†’ "6:27 AM"
 const formatClock = (hms) => {
-    if (!hms) return "—";
+    if (!hms) return "â€”";
     const [h, m] = hms.split(":").map(Number);
     const hour = ((h % 24) + 11) % 12 + 1;
     return `${hour}:${String(m).padStart(2, "0")} ${h % 24 < 12 ? "AM" : "PM"}`;
 };
 
-// ISO end time → "7:38 AM", flagged when it runs past the panchang day
+// ISO end time â†’ "7:38 AM", flagged when it runs past the panchang day
 const formatEnds = (iso, panchangDate) => {
-    if (!iso) return "—";
+    if (!iso) return "â€”";
     const date = new Date(iso);
     const time = new Intl.DateTimeFormat("en-IN", {
         timeZone: IST,
@@ -67,17 +101,31 @@ export default function DivineTimeDrawer({ isOpen, onClose, isLight = false }) {
             const res = await fetch("/api/panchang");
             const json = await res.json();
             if (!res.ok || !json.success) throw new Error(json.message);
-            setState({ status: "ready", data: json.data, city: json.city, at: Date.now() });
+            const entry = { data: json.data, city: json.city, at: Date.now() };
+            writeCache(entry);
+            setState({ status: "ready", ...entry });
         } catch {
-            setState((prev) => ({ ...prev, status: "error" }));
+            setState((prev) => ({ ...prev, status: prev.data ? "ready" : "error" }));
         }
     }, []);
 
+    // today's panchang saved by this or another tab (null on the server, so hydration stays in sync)
+    const cacheRaw = useSyncExternalStore(subscribeCache, readCacheRaw, () => null);
+    const cached = useMemo(() => parseCache(cacheRaw), [cacheRaw]);
+
+    // prefer whichever is newer: this tab's fetch or the shared cache
+    const current = useMemo(
+        () => cached && (!state.data || cached.at > state.at)
+            ? { ...state, ...cached, status: state.status === "loading" ? "loading" : "ready" }
+            : state,
+        [cached, state]
+    );
+
     // fetch on first open, and again if what we have has gone stale (or failed)
-    const stateRef = useRef(state);
+    const stateRef = useRef(current);
     useEffect(() => {
-        stateRef.current = state;
-    }, [state]);
+        stateRef.current = current;
+    }, [current]);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -110,7 +158,7 @@ export default function DivineTimeDrawer({ isOpen, onClose, isLight = false }) {
     useEffect(() => {
         if (bodyRef.current) bodyRef.current.scrollTop = 0;
         updateFade();
-    }, [state.status, isOpen, updateFade]);
+    }, [current.status, isOpen, updateFade]);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -129,7 +177,7 @@ export default function DivineTimeDrawer({ isOpen, onClose, isLight = false }) {
         };
     }, [isOpen, onClose]);
 
-    const { data, city } = state;
+    const { data, city } = current;
     const now = data?.request_time_panchang;
 
     return (
@@ -157,10 +205,10 @@ export default function DivineTimeDrawer({ isOpen, onClose, isLight = false }) {
 
                 <div className={`acharyaDrawerContent divineTimeContent ${isLight ? "light" : ""}`}>
                     <header className="divineTimeHeader">
-                        <h5>Today’s Panchang</h5>
+                        <h5>Todayâ€™s Panchang</h5>
                         <p>
                             {data
-                                ? `${data.weekday?.name}, ${formatDate(data.date)} · ${city}`
+                                ? `${data.weekday?.name}, ${formatDate(data.date)} Â· ${city}`
                                 : "Today's Panchang"}
                         </p>
                     </header>
@@ -170,7 +218,7 @@ export default function DivineTimeDrawer({ isOpen, onClose, isLight = false }) {
                         onScroll={updateFade}
                         className={`acharyaDrawerBody divineTimeBody ${fade.top ? "fadeTop" : ""} ${fade.bottom ? "fadeBottom" : ""}`}
                     >
-                        {!data && state.status !== "error" && (
+                        {!data && current.status !== "error" && (
                             <div className="divineTimeStatus">
                                 <div className="acharyaDrawerImageLoader">
                                     <span />
@@ -178,7 +226,7 @@ export default function DivineTimeDrawer({ isOpen, onClose, isLight = false }) {
                             </div>
                         )}
 
-                        {!data && state.status === "error" && (
+                        {!data && current.status === "error" && (
                             <div className="divineTimeStatus">
                                 <p>We couldn&apos;t read the heavens just now.</p>
                                 <button type="button" className="divineTimeRetry" onClick={load}>
@@ -192,7 +240,7 @@ export default function DivineTimeDrawer({ isOpen, onClose, isLight = false }) {
                                 {now && (
                                     <Section title="Right now">
                                         <Row label="Tithi" value={`${now.tithi?.paksha} ${now.tithi?.name}`} />
-                                        <Row label="Nakshatra" value={now.nakshatra?.name} note={`Pada ${now.nakshatra?.pada} · Lord ${now.nakshatra?.lord}`} />
+                                        <Row label="Nakshatra" value={now.nakshatra?.name} note={`Pada ${now.nakshatra?.pada} Â· Lord ${now.nakshatra?.lord}`} />
                                         <Row label="Yoga" value={now.yoga?.name} />
                                         <Row label="Karana" value={now.karana?.name} />
                                         <Row label="Moon sign" value={now.moon_sign?.name} />
@@ -235,7 +283,7 @@ export default function DivineTimeDrawer({ isOpen, onClose, isLight = false }) {
                                     <Section title="Rahu Kalam">
                                         <Row
                                             label="Avoid new beginnings"
-                                            value={`${formatClock(data.rahu_kalam.start)} – ${formatClock(data.rahu_kalam.end)}`}
+                                            value={`${formatClock(data.rahu_kalam.start)} â€“ ${formatClock(data.rahu_kalam.end)}`}
                                         />
                                     </Section>
                                 )}
