@@ -157,7 +157,7 @@ export default function DivineTimeDrawer({ isOpen, onClose, isLight = false }) {
 
                 <div className={`acharyaDrawerContent divineTimeContent ${isLight ? "light" : ""}`}>
                     <header className="divineTimeHeader">
-                        <h5>Divine Time</h5>
+                        <h5>Today’s Panchang</h5>
                         <p>
                             {data
                                 ? `${data.weekday?.name}, ${formatDate(data.date)} · ${city}`

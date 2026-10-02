@@ -2212,7 +2212,7 @@ body.drawer-open {
   }
 }
 
-/* Divine Time drawer: same shell as the acharya drawer, panchang rows instead of a photo */
+/* Today’s Panchang drawer: same shell as the acharya drawer, panchang rows instead of a photo */
 .divineTimeContent {
   justify-content: flex-start;
   padding-top: 48px;
