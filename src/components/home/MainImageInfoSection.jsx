@@ -11,9 +11,9 @@ const sectionData = [
         title: "Vastu Shastra",
         subtitle: "The Art of Harmonious Living",
         description: `Every wall, every corner, every space around you is alive with energy. Through Vastu Shastra, we decode these energies to create environments that resonate with positivity and abundance. Their profound understanding of Vastu Shastra transforms homes into sanctuaries of peace and offices into engines of success.`,
-        image: "/assets/home/main-image-1.png",
+        image: "/assets/home/main-image-1.webp",
         // layered like Why Us: background + masked subject on top
-        parallaxImage: "/assets/home/vastu-1.png",
+        parallaxImage: "/assets/home/vastu-1.webp",
     },
     {
         id: 2,
@@ -21,9 +21,9 @@ const sectionData = [
         subtitle: "Mapping the Stars, Guiding Your Destiny",
         description: `The stars have a story to tell—your story. Through meticulous analysis of your birth chart, the Aacharyas illuminate the celestial pathways shaping your life. Their consultations dive deep into your life's purpose, challenges, and opportunities, offering remedies rooted in ancient wisdom yet adaptable to the modern age. From strengthening relationships to unlocking career potential, their insights empower you to embrace your destiny with clarity and confidence.
 `,
-        image: "/assets/home/main-image-2.png",
+        image: "/assets/home/main-image-2.webp",
         // same layered treatment as Vastu: background + masked subject on top
-        parallaxImage: "/assets/home/main-image-2.png",
+        parallaxImage: "/assets/home/main-image-2.webp",
     },
 ];
 
@@ -120,7 +120,7 @@ export default function MainImageInfoSection() {
                             <div className="info-image info-image-layered">
                                 <CustomParallaxImages
                                     images={[item.parallaxImage]}
-                                    imageMasks={{ [item.parallaxImage]: "/assets/background/circular-mask.png" }}
+                                    imageMasks={{ [item.parallaxImage]: "/assets/background/circular-mask.webp" }}
                                     activeIndex={0}
                                     showBgMask
                                     bgLight

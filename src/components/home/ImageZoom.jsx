@@ -181,7 +181,7 @@ export default function ImageZoom() {
         <div ref={sectionRef} className="image-zoom-section">
 
             {/* <img
-                src="/assets/background/cloud1.png"
+                src="/assets/background/cloud1.webp"
                 alt="clouds"
                 className="section-layer-image"
             /> */}
@@ -191,19 +191,19 @@ export default function ImageZoom() {
 
                 <img
                     className="light-background-cloud cloud-1"
-                    src="/assets/background/white-bg-cloud-1.png"
+                    src="/assets/background/white-bg-cloud-1.webp"
                     alt=""
                 />
 
                 <img
                     className="light-background-cloud cloud-2"
-                    src="/assets/background/white-bg-cloud-2.png"
+                    src="/assets/background/white-bg-cloud-2.webp"
                     alt=""
                 />
 
                 <img
                     className="light-background-cloud cloud-3"
-                    src="/assets/background/white-bg-cloud-3.png"
+                    src="/assets/background/white-bg-cloud-3.webp"
                     alt=""
                 />
 
@@ -231,7 +231,7 @@ export default function ImageZoom() {
                 <div ref={imageRef} className="zoom-image-wrapper">
                     <img
                         ref={image3Ref}
-                        src="/assets/home/Zoom3-2.png"
+                        src="/assets/home/Zoom3-2.webp"
                         className="zoom-image"
                         alt=""
                     />

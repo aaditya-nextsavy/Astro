@@ -6,7 +6,7 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 const CLOUDS = [
     {
         id: 1,
-        src: "/assets/background/cloud1.png",
+        src: "/assets/background/cloud1.webp",
         top: "5%",
         left: "-10%",
         width: "28vw",
@@ -24,7 +24,7 @@ const CLOUDS = [
     },
     {
         id: 3,
-        src: "/assets/background/cloud3.png",
+        src: "/assets/background/cloud3.webp",
         top: "30%",
         right: "-20%",
         width: "23vw",
@@ -33,7 +33,7 @@ const CLOUDS = [
     },
     {
         id: 4,
-        src: "/assets/background/cloud4.png",
+        src: "/assets/background/cloud4.webp",
         top: "30%",
         left: "-20%",
         width: "62vw",
@@ -42,7 +42,7 @@ const CLOUDS = [
     },
     {
         id: 5,
-        src: "/assets/background/cloud5.png",
+        src: "/assets/background/cloud5.webp",
         top: "30%",
         right: "-30%",
         width: "65vw",

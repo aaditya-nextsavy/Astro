@@ -15,7 +15,7 @@ const whoWeAreData = [
         ],
         buttonText: "View More Details",
         buttonText2: "Contact",
-        image: "/assets/home/who-are-we-2.png",
+        image: "/assets/home/who-are-we-2.webp",
         imagePosition: "right",
         theme: "dark",
     },

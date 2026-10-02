@@ -1,10 +1,16 @@
 const LOADER_KEY = "astro-site-loader-seen";
 
+// sessionStorage: the loader shows once per tab session and again after the tab/window is closed
 function getStorage() {
   if (typeof window === "undefined") return null;
 
   try {
-    return window.localStorage;
+    // drop the old flag that used to persist for days
+    window.localStorage.removeItem(LOADER_KEY);
+  } catch {}
+
+  try {
+    return window.sessionStorage;
   } catch {
     return null;
   }

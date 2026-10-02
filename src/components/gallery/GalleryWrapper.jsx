@@ -209,7 +209,7 @@ const GalleryWrapper = () => {
                         <div className="astroHeroTopBar">
                             <Link href="/" className="astroHeroBrand">
                                 <div className="astroHeroBrandLogo" >
-                                    <img src="/assets/icons/home-title-icon.jpg" alt="Astro Acharya Logo" />
+                                    <img src="/assets/icons/home-title-icon.webp" alt="Astro Acharya Logo" />
                                 </div>
 
                                 <div className="astroHeroBrandText">

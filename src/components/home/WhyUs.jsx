@@ -10,28 +10,28 @@ const sectionData = [
         id: 1,
         label: "Why Us",
         title: "What Makes Us Your Trusted Spiritual Partners?",
-        image: "/assets/home/why-us-1.png",
+        image: "/assets/home/why-us-1.webp",
     },
     {
         id: 2,
         subTitle: "A Marriage of Tradition and Modernity",
         description:
             "Aacharya Markand’s background in computer engineering lends precision to spiritual analysis, while Aacharya Shandilya’s expertise in international business brings a global perspective to their counsel. Together, they balance the ancient with the contemporary.",
-        image: "/assets/home/why-us-1.png", // same as block 1: first image stays until block 3
+        image: "/assets/home/why-us-1.webp", // same as block 1: first image stays until block 3
     },
     {
         id: 3,
         subTitle: "A Heritage of Sacred Knowledge",
         description:
             "Born into a lineage of spiritual luminaries, their teachings are steeped in the eternal truths passed down by their grandfather, a towering figure of faith and wisdom.",
-        image: "/assets/home/why-us-2.png",
+        image: "/assets/home/why-us-2.webp",
     },
     {
         id: 4,
         subTitle: "Solutions Designed for You",
         description:
             "Life is as unique as the stars above. Their consultations are personalized, offering practical remedies tailored to your individual journey—whether a simple Vastu adjustment, an intricate astrological insight, or compassionate spiritual counselling.",
-        image: "/assets/home/why-us-3.png",
+        image: "/assets/home/why-us-3.webp",
     },
 ];
 
@@ -40,7 +40,7 @@ const uniqueImages = [...new Set(sectionData.map((item) => item.image))];
 
 // Images that use the soft oval mask instead of the default circle
 const imageMasks = {
-    "/assets/home/why-us-3.png": "/assets/background/circular-mask.png",
+    "/assets/home/why-us-3.webp": "/assets/background/circular-mask.webp",
 };
 
 

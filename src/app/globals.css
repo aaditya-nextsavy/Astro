@@ -333,7 +333,7 @@ main.app-ready {
 
   position: absolute;
   inset: 0;
-  background: url("/assets/loader/noise-bg.png") repeat;
+  background: url("/assets/loader/noise.svg") repeat;
   z-index: -2;
 
 }
@@ -604,8 +604,9 @@ main.app-ready {
   z-index: 5;
 }
 
-.loader-noise img {
-  object-fit: cover;
+/* grain texture: 347-byte SVG tile, calibrated to match the old 2.2 MB noise-bg.png */
+.loader .loader-noise {
+  background: url("/assets/loader/noise.svg") repeat;
 }
 
 

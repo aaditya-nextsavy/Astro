@@ -7,7 +7,7 @@ import { preloadDrawerImages } from "@/components/drawer/AcharyaDrawer";
 const ACHARYA_DATA = [
     {
         id: "acharya-markand",
-        image: "/assets/drawer/aacharya-markand.png",
+        image: "/assets/drawer/aacharya-markand.webp",
         title: "Acharya Markand",
         name: "Acharya Markand",
         description:
@@ -18,7 +18,7 @@ const ACHARYA_DATA = [
     },
     {
         id: "acharya-shandilya",
-        image: "/assets/drawer/aacharya-shandilya.png",
+        image: "/assets/drawer/aacharya-shandilya.webp",
         title: "Acharya Shandilya",
         name: "Acharya Shandilya",
         role: "Vastu & Spiritual Guidance Expert",

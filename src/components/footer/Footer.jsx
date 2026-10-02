@@ -495,7 +495,7 @@ const Footer = () => {
                     <div className="items-start flex flex-col md:flex-row gap-6 lg:gap-10.5 md:items-center">
                         <div className="astroHeroBrand whitespace-nowrap">
                             <div className="astroHeroBrandLogo" >
-                                <img src="/assets/icons/home-title-icon.jpg" alt="Astro Acharya Logo" />
+                                <img src="/assets/icons/home-title-icon.webp" alt="Astro Acharya Logo" />
                             </div>
 
                             <div className="astroHeroBrandText">

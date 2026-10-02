@@ -91,6 +91,20 @@ const HomeServices = () => {
                         scrub: 1.2,
                         anticipatePin: 1,
                         invalidateOnRefresh: true,
+                        // scrub trails the scroll by ~1.2s; on a fast scroll the section unpins
+                        // while cards are still rising and they get clipped mid-screen.
+                        // Ease them the rest of the way in as the pin releases.
+                        onLeave: (self) => {
+                            const scrubTween = self.getTween();
+                            if (!scrubTween || scrubTween.progress() === 1) return;
+
+                            gsap.to(scrubTween, {
+                                progress: 1,
+                                duration: 0.4,
+                                ease: "sine.out",
+                                overwrite: true,
+                            });
+                        },
                     },
                 });
 
@@ -130,6 +144,10 @@ const HomeServices = () => {
                         ease: "none",
                     });
                 });
+
+                // short rest at the end of the pin: cards settle before the section
+                // scrolls on, giving the scrub lag room to catch up
+                tl.to({}, { duration: 0.6 });
 
             }, sectionRef);
         });

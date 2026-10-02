@@ -106,9 +106,9 @@ export default function HomePageWrapper() {
 
         gsap.to(pageRef.current, {
             autoAlpha: 1,
-            duration: 2,
-            delay: 0.5,
-            ease: "power2.out",
+            duration: 1.3,
+            delay: 0.2,
+            ease: "sine.out",
         });
     }, [appReady, navBootstrapReady]);
 
@@ -360,7 +360,7 @@ export default function HomePageWrapper() {
                         <div className="astroHeroTopBar" ref={topNavRef}>
                             <Link href="/" className="astroHeroBrand">
                                 <div className="astroHeroBrandLogo" >
-                                    <img src="/assets/icons/home-title-icon.jpg" alt="Astro Acharya Logo" />
+                                    <img src="/assets/icons/home-title-icon.webp" alt="Astro Acharya Logo" />
                                 </div>
 
                                 <div className="astroHeroBrandText">

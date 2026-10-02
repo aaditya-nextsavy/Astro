@@ -16,7 +16,7 @@ export default function CustomParallaxImages({
     showBgMask = true,
     glowColor = "#5DA4D9",
     bgLight = false,
-    // optional per-image masks, e.g. { "/assets/home/x.png": "/assets/background/circular-mask.png" }
+    // optional per-image masks, e.g. { "/assets/home/x.png": "/assets/background/circular-mask.webp" }
     imageMasks = {},
 
 }) {
