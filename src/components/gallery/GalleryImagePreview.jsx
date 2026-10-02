@@ -13,7 +13,7 @@ const galleryItems = [
     { id: 2, title: "Sacred Rudraksha", image: "/assets/gallery/g-3.webp" },
     { id: 5, title: "Shiva Aradhana", image: "/assets/gallery/g-2.webp" },
     { id: 7, title: "Sacred Rituals", image: "/assets/gallery/sacred-rituals.webp" },
-    { id: 3, title: "Temple Ceremonies", video: "/assets/gallery/g-8.mp4" },
+    { id: 3, title: "Yagna", video: "/assets/gallery/g-8.mp4" },
     // { id: 6, title: "Divine Darshan", image: "/assets/gallery/g-1.webp" },
     { id: 1, title: "Rudra Abhishek", image: "/assets/gallery/g-6.webp" },
     // { id: 9, title: "Blessings", video: "/assets/gallery/g-9.mp4" },
