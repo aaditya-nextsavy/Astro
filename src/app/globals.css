@@ -2241,11 +2241,11 @@ body.drawer-open {
 }
 
 .divineTimeSection h6 {
-  font-family: satoshi;
+  font-family: var(--font-heading);
   font-weight: 700;
-  font-style: italic;
-  font-size: 14px;
-  line-height: 14px;
+  font-style: normal;
+  font-size: 22px;
+  line-height: 28px;
   text-transform: uppercase;
   opacity: .6;
   margin-bottom: 8px;
@@ -2275,6 +2275,7 @@ body.drawer-open {
   flex-direction: column;
   align-items: flex-end;
   text-align: end;
+  line-height: 1.6;
 }
 
 .divineTimeValue small {
