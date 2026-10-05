@@ -3,6 +3,7 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { subscribeAppReady } from "@/lib/appReady";
+import HeroHeading from "./HeroHeading";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -45,7 +46,8 @@ const HomeServices = () => {
                 );
 
                 const headingLines = section.querySelectorAll(
-                    ".info-sticky-card-section__heading span"
+                    // direct children only: the lines, not the per-letter spans inside them
+                    ".info-sticky-card-section__heading > span"
                 );
 
                 const button = section.querySelector(
@@ -181,10 +183,12 @@ const HomeServices = () => {
                         Our Offerings
                     </p>
 
-                    <h2 className="info-sticky-card-section__heading">
-                        <span>Bridging The Earth</span>
-                        <span>And The Cosmos</span>
-                    </h2>
+                    <HeroHeading
+                        as="h2"
+                        className="info-sticky-card-section__heading"
+                        lineClassName=""
+                        lines={["Bridging The Earth", "And The Cosmos"]}
+                    />
 
 
                     <a href="/services" className="info-sticky-card-section__button ">

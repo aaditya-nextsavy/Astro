@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import HeroHeading from "@/components/home/HeroHeading";
 
 
 export default function ServicesHero() {
@@ -43,9 +44,10 @@ export default function ServicesHero() {
 
             {/* Hero Content */}
             <div className="astroHeroContentArea">
-                <h1 className="astroHeroMainHeading">
-                    Our Offerings: Bridging  <br /> the Earth and the Cosmos
-                </h1>
+                <HeroHeading
+                    className="astroHeroMainHeading"
+                    lines={["Our Offerings: Bridging", "The Earth And The Cosmos"]}
+                />
 
                 <div className="astroHeroSubLine">
                     <span className="astroHeroDivider left" />

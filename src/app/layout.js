@@ -1,5 +1,7 @@
 import "./globals.css";
 import SmoothScroll from "@/components/shared/SmoothScroll";
+import SiteCursor from "@/components/shared/SiteCursor";
+import PageTransition from "@/components/shared/PageTransition";
 import HeaderScrollState from "@/components/shared/HeaderScrollState";
 import GlobalBackground from "@/components/background/GlobalBackground";
 import { newYork, satoshi } from "./fonts";
@@ -77,6 +79,8 @@ export default function RootLayout({ children }) {
         <Providers>
           {children}
         </Providers>
+        <PageTransition />
+        <SiteCursor />
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 import { useState, useEffect, useLayoutEffect } from "react";
 import { preload } from "react-dom";
 import { preloadDrawerImages } from "@/components/drawer/AcharyaDrawer";
+import HeroHeading from "./HeroHeading";
 
 const ACHARYA_DATA = [
     {
@@ -84,11 +85,10 @@ export default function HomeHero({ onOpenAcharya, onOpenDivineTime }) {
 
             {/* Hero Content */}
             <div className="astroHeroContentArea">
-                <h1 className="astroHeroMainHeading">
-                    Unlock The Cosmic Pathway
-                    <br />
-                    To Your Inner Harmony
-                </h1>
+                <HeroHeading
+                    className="astroHeroMainHeading"
+                    lines={["Unlock The Cosmic Pathway", "To Your Inner Harmony"]}
+                />
 
                 <div className="astroHeroSubLine">
                     <span className="astroHeroDivider left" />

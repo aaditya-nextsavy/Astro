@@ -1150,6 +1150,55 @@ html.header-scrolled .astroHeroTopBar::before {
 
 }
 
+/* ===== Hero heading: underwater float + hover ripple (HeroHeading.jsx) ===== */
+.hero-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* outer span: the slow ambient float; negative delays put each letter at a different
+   point of the wave, so it travels across the line instead of everything bobbing together */
+.hero-letter {
+  display: inline-block;
+  /* casing is done in HeroHeading.jsx — CSS capitalize would upper-case every letter here */
+  text-transform: none;
+  animation: heroLetterFloat 7s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -0.18s);
+  will-change: transform;
+}
+
+/* inner span: hover ripple (GSAP) */
+.hero-letter__inner {
+  display: inline-block;
+  transform-origin: 50% 80%;
+}
+
+@keyframes heroLetterFloat {
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  25% {
+    transform: translate3d(0.4px, -2.5px, 0) rotate(-0.4deg);
+  }
+
+  50% {
+    transform: translate3d(0, -1px, 0) rotate(0deg);
+  }
+
+  75% {
+    transform: translate3d(-0.4px, 1.5px, 0) rotate(0.4deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-letter {
+    animation: none;
+  }
+}
+
 .astroHeroSubLine {
   display: flex;
   align-items: center;
@@ -8374,4 +8423,124 @@ button.astroHeroTimeBlock {
   .legal-card--content {
     padding: unset;
   }
+}
+
+/* ===== Site cursor (SiteCursor.jsx): Earth on the pointer, ring + orbiting Moon trailing ===== */
+/* native cursor is hidden only once the custom one is live, so it never disappears without a replacement */
+html.has-site-cursor,
+html.has-site-cursor * {
+  cursor: none !important;
+}
+
+.site-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+  opacity: 0;
+  display: none;
+}
+
+html.has-site-cursor .site-cursor {
+  display: block;
+}
+
+/* GSAP moves the whole cursor (Earth + ring + Moon) to the pointer; the margins put Earth's centre on the hotspot */
+.site-cursor {
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+}
+
+/* overall cursor size (0.75 = 75%); scales about Earth's centre, so the hotspot stays put.
+   It sits on an inner wrapper because the outer element's transform belongs to GSAP */
+.site-cursor__body {
+  position: absolute;
+  inset: 0;
+  transform: scale(0.75);
+}
+
+.site-cursor__orbit {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-cursor.is-hovering .site-cursor__orbit {
+  transform: scale(1.25);
+}
+
+.site-cursor.is-pressed .site-cursor__orbit {
+  transform: scale(0.85);
+}
+
+.site-cursor__earth {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+}
+
+.site-cursor svg {
+  display: block;
+  overflow: visible;
+}
+
+/* Moon orbit: the track is centred on Earth, so rotating it walks the Moon round the ring.
+   Positive rotation = clockwise; starts where the design puts the Moon (top right) */
+.site-cursor__moon-track {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  transform: rotate(var(--moon-start, 0deg));
+  animation: siteCursorMoonOrbit 12s linear infinite;
+}
+
+@keyframes siteCursorMoonOrbit {
+  from {
+    transform: rotate(var(--moon-start, 0deg));
+  }
+
+  to {
+    transform: rotate(calc(var(--moon-start, 0deg) + 360deg));
+  }
+}
+
+/* click wave: both start as Earth-sized discs at its centre, GSAP scales them */
+.site-cursor__wave-fill,
+.site-cursor__wave-ring {
+  position: absolute;
+  inset: 0.25px;
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: 0;
+}
+
+.site-cursor__wave-fill {
+  background: var(--ui-title-color);
+}
+
+.site-cursor__wave-ring {
+  border: 1.5px solid var(--ui-title-color);
+}
+/* ===== Page transition (PageTransition.jsx): cream takeover panel that rises over the page ===== */
+.page-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482000; /* above everything but the cursor */
+  background: #f3e9d8;
+  pointer-events: none;
+  visibility: hidden;
+  will-change: transform;
+}
+
+/* clouds clipped to the panel so the lower one never pokes out past the bottom edge */
+.page-transition__clouds {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
