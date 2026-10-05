@@ -3495,6 +3495,30 @@ button.astroHeroTimeBlock {
   will-change: transform, opacity;
 }
 
+.who-we-are-read-more {
+  font: inherit;
+  font-weight: 700;
+  color: #ffffff;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
+
+/* revealed one by one by GSAP; hidden from the first paint so nothing flashes */
+.who-we-are-word {
+  display: inline-block;
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+
+.who-we-are-read-more:hover {
+  opacity: 0.8;
+}
+
 .who-we-are-description strong {
   font-weight: 900;
 }

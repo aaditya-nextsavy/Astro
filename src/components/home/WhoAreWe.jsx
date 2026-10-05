@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { Fragment, useLayoutEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { subscribeAppReady } from "@/lib/appReady";
 import Link from "next/link";
@@ -34,6 +34,148 @@ With hearts rooted in ancient traditions and minds enlightened by modern knowled
         theme: "dark",
     },
 ];
+
+// longer paragraphs are cut to the Vision paragraph length so both panels read the same
+const VISION_LENGTH = whoWeAreData.find((item) => item.label === "Our Vision").paragraphs[0].length;
+
+// cut on a word boundary at or before the limit; null when the text already fits
+const truncate = (text, limit) => {
+    const clean = text.trim();
+    if (clean.length <= limit) return null;
+    const cut = clean.slice(0, limit);
+    return cut.slice(0, cut.lastIndexOf(" ")).replace(/[\s,.;:—-]+$/, "");
+};
+
+function ReadMoreParagraph({ text }) {
+    const [expanded, setExpanded] = useState(false);
+    const paragraphRef = useRef(null);
+    const collapsedHeight = useRef(0);
+    const animating = useRef(false);
+
+    const clean = text.trim();
+    const short = truncate(clean, VISION_LENGTH);
+    // the hidden part, one span per word so each can fade in on its own
+    const restWords = short ? clean.slice(short.length).trim().split(/\s+/) : [];
+    // keep the punctuation the cut trimmed (e.g. a comma) glued to the visible text
+    const joiner = short && /^[\s]/.test(clean.slice(short.length)) ? " " : "";
+
+    // the panel grows/shrinks, so later scroll triggers need new positions
+    const refreshTriggers = () => requestAnimationFrame(() => ScrollTrigger.refresh());
+
+    // expand: words were just rendered (hidden by CSS) — grow the height, then reveal word by word
+    useLayoutEffect(() => {
+        if (!expanded) return;
+        const p = paragraphRef.current;
+        const words = p.querySelectorAll(".who-we-are-word");
+        const button = p.querySelector(".who-we-are-read-more");
+        const fullHeight = p.offsetHeight;
+
+        const tl = gsap.timeline({
+            onComplete: () => {
+                gsap.set(p, { clearProps: "height,overflow" });
+                animating.current = false;
+                refreshTriggers();
+            },
+        });
+
+        tl.fromTo(
+            p,
+            { height: collapsedHeight.current, overflow: "hidden" },
+            { height: fullHeight, duration: 0.8, ease: "power2.inOut" }
+        )
+            // 1.3s in total, whatever the word count: stagger `amount` spreads 0.6s across all words
+            .fromTo(
+                words,
+                { opacity: 0, y: 8, filter: "blur(6px)" },
+                {
+                    opacity: 1,
+                    y: 0,
+                    filter: "blur(0px)",
+                    duration: 0.4,
+                    ease: "power2.out",
+                    stagger: { amount: 0.6 },
+                },
+                0.1
+            )
+            .fromTo(button, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 1.0);
+
+        return () => tl.kill();
+    }, [expanded]);
+
+    const toggle = () => {
+        if (animating.current) return;
+        animating.current = true;
+        const p = paragraphRef.current;
+
+        if (!expanded) {
+            collapsedHeight.current = p.offsetHeight;
+            setExpanded(true);
+            return;
+        }
+
+        // collapse: words fade out last-to-first, then the height closes up
+        const words = [...p.querySelectorAll(".who-we-are-word")].reverse();
+        const button = p.querySelector(".who-we-are-read-more");
+
+        gsap.timeline({
+            onComplete: () => {
+                setExpanded(false);
+                // after React swaps back to the short text
+                requestAnimationFrame(() => {
+                    gsap.set(p, { clearProps: "height,overflow" });
+                    gsap.fromTo(button, { opacity: 0 }, { opacity: 1, duration: 0.2 });
+                    animating.current = false;
+                    refreshTriggers();
+                });
+            },
+        })
+            // 0.8s here + 0.2s button fade-in afterwards = 1s in total
+            .to(button, { opacity: 0, duration: 0.15 })
+            .to(
+                words,
+                {
+                    opacity: 0,
+                    y: 6,
+                    filter: "blur(6px)",
+                    duration: 0.25,
+                    ease: "power2.in",
+                    stagger: { amount: 0.3 },
+                },
+                0
+            )
+            .fromTo(
+                p,
+                { height: p.offsetHeight, overflow: "hidden" },
+                { height: collapsedHeight.current, duration: 0.45, ease: "power2.inOut" },
+                0.35
+            );
+    };
+
+    if (!short) return <p className="who-we-are-description">{text}</p>;
+
+    return (
+        <p ref={paragraphRef} className="who-we-are-description">
+            {short}
+            {expanded ? (
+                <>
+                    {joiner}
+                    {restWords.map((word, i) => (
+                        // space outside the span so the paragraph's justify still spreads the words
+                        <Fragment key={i}>
+                            <span className="who-we-are-word">{word}</span>
+                            {i < restWords.length - 1 ? " " : ""}
+                        </Fragment>
+                    ))}
+                </>
+            ) : (
+                "…"
+            )}{" "}
+            <button type="button" className="who-we-are-read-more" onClick={toggle} aria-expanded={expanded}>
+                {expanded ? "Read less" : "Read more"}
+            </button>
+        </p>
+    );
+}
 
 function WhoAreWePanel({ item, index }) {
     const panelRef = useRef(null);
@@ -270,12 +412,7 @@ function WhoAreWePanel({ item, index }) {
                         <h2 className="who-we-are-title">{item.title}</h2>
 
                         {item.paragraphs.map((paragraph, paragraphIndex) => (
-                            <p
-                                key={paragraphIndex}
-                                className="who-we-are-description"
-                            >
-                                {paragraph}
-                            </p>
+                            <ReadMoreParagraph key={paragraphIndex} text={paragraph} />
                         ))}
 
                         <div className="who-we-are-buttons-wrapper">
