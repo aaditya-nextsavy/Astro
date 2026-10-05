@@ -433,7 +433,7 @@ const AboutStory = () => {
 
                 {!isReady && (
                     <div className="about-story-loader">
-                        <div className="loader-ring"><div className="loader-ring-inner"></div></div>
+                        <span className="about-story-loader__spinner" />
                     </div>
                 )}
 

@@ -17,15 +17,18 @@ export default function HomeSearchParams({ ready = false } = {}) {
 
         if (!id) return;
 
+        let frame;
+        let timer;
+
         const unsubscribe = subscribeAppReady((appReady) => {
             if (!appReady || !ready) return;
 
 
 
-            requestAnimationFrame(() => {
+            frame = requestAnimationFrame(() => {
                 ScrollTrigger.refresh(true);
 
-                setTimeout(() => {
+                timer = setTimeout(() => {
                     const el = document.getElementById(id);
 
                     if (!el) return;
@@ -42,7 +45,12 @@ export default function HomeSearchParams({ ready = false } = {}) {
             });
         });
 
-        return unsubscribe;
+        // leaving the page before the delayed scroll fires must not scroll the next page
+        return () => {
+            unsubscribe();
+            cancelAnimationFrame(frame);
+            clearTimeout(timer);
+        };
     }, [pathname, ready]);
 
 

@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { subscribeAppReady } from "@/lib/appReady";
 
 export default function SmoothScroll() {
+  const pathname = usePathname();
+
   useEffect(() => {
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -58,6 +61,28 @@ export default function SmoothScroll() {
       lenis.destroy();
     };
   }, []);
+
+  // Lenis outlives route changes and keeps easing toward the old page's scroll target,
+  // so a link clicked mid-scroll lands the new page partway down — reset it to the top.
+  // Hash links (/#rudrakshaSection) are left to HomeSearchParams.
+  useEffect(() => {
+    if (window.location.hash) return;
+
+    const toTop = () => {
+      window.lenis?.resize();
+      window.lenis?.scrollTo(0, { immediate: true, force: true });
+      window.scrollTo(0, 0);
+    };
+
+    toTop();
+    // again after the new page's pins/layout settle
+    const frame = requestAnimationFrame(() => {
+      toTop();
+      ScrollTrigger.refresh();
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [pathname]);
 
   return null;
 }

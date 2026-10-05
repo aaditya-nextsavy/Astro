@@ -7616,7 +7616,9 @@ button.astroHeroTimeBlock {
   z-index: 2;
 }
 
-.gallery-showcase__loader span {
+/* also the About timeline loader, so both pages share one spinner */
+.gallery-showcase__loader span,
+.about-story-loader__spinner {
   width: 40px;
   height: 40px;
   border-radius: 50%;
