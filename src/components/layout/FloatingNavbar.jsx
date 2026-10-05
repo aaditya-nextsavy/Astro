@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import DivineTimeDrawer from "@/components/drawer/DivineTimeDrawer";
 import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa";
 import LocalTime from "@/components/common/LocalTime";
@@ -11,6 +12,14 @@ export default function FloatingNavbar({
 }) {
 
     const [menuOpen, setMenuOpen] = useState(false);
+    const [divineTimeOpen, setDivineTimeOpen] = useState(false);
+    const [divineTimeLight, setDivineTimeLight] = useState(false);
+    // match the drawer to the zone the clicked bar is over (navs get light-section-active on cream sections)
+    const openDivineTime = (e) => {
+        setDivineTimeLight(!!e?.currentTarget?.closest(".light-section-active"));
+        setDivineTimeOpen(true);
+    };
+    const closeDivineTime = useCallback(() => setDivineTimeOpen(false), []);
     const bottomNavRef = useRef(null);
     const floatingNavRef = useRef(null);
     const aboutFooterSection = useRef(null);
@@ -159,7 +168,7 @@ export default function FloatingNavbar({
 
                                 </div>
                             </nav>
-                            <a href="#" target="_blank" className="astroHeroTimeBlock">
+                            <button type="button" onClick={openDivineTime} className="astroHeroTimeBlock">
                                 <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
                                     <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
@@ -168,9 +177,10 @@ export default function FloatingNavbar({
                                     <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
                                     <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
                                 </svg>
-                            </a>
+                            </button>
                         </div>
                     </div>
+                    <DivineTimeDrawer isOpen={divineTimeOpen} onClose={closeDivineTime} isLight={divineTimeLight} />
                     <div className={`mobile-drawer-menu ${menuOpen ? "open" : ""}`}>
 
                         <div

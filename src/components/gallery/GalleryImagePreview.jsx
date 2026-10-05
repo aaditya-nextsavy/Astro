@@ -12,11 +12,12 @@ const galleryItems = [
     { id: 4, title: "Vedic Pooja", image: "/assets/gallery/g-4.webp" },
     { id: 2, title: "Sacred Rudraksha", image: "/assets/gallery/g-3.webp" },
     { id: 5, title: "Shiva Aradhana", image: "/assets/gallery/g-2.webp" },
+    { id: 9, title: "Guidance", image: "/assets/services/relationship-and-career-guidance.png" },
     { id: 7, title: "Sacred Rituals", image: "/assets/gallery/sacred-rituals.webp" },
     { id: 3, title: "Yagna", video: "/assets/gallery/g-8.mp4" },
     // { id: 6, title: "Divine Darshan", image: "/assets/gallery/g-1.webp" },
-    { id: 1, title: "Rudra Abhishek", image: "/assets/gallery/g-6.webp" },
-    // { id: 9, title: "Blessings", video: "/assets/gallery/g-9.mp4" },
+    { id: 1, title: "Abhishek", image: "/assets/gallery/g-6.webp" },
+
 ];
 
 // Frame is 476px wide at most — request that size, not the 3–6MB originals

@@ -29,7 +29,7 @@ const subscribeCache = (onChange) => {
 const parseCache = (raw) => {
     try {
         const cached = JSON.parse(raw);
-        // only reuse today's panchang â€” yesterday's would be wrong
+        // only reuse today's panchang — yesterday's would be wrong
         if (cached?.data?.date === todayIST()) return cached;
     } catch {}
     return null;
@@ -41,17 +41,17 @@ const writeCache = (entry) => {
     } catch {}
 };
 
-// "06:27:14" â†’ "6:27 AM"
+// "06:27:14" → "6:27 AM"
 const formatClock = (hms) => {
-    if (!hms) return "â€”";
+    if (!hms) return "—";
     const [h, m] = hms.split(":").map(Number);
     const hour = ((h % 24) + 11) % 12 + 1;
     return `${hour}:${String(m).padStart(2, "0")} ${h % 24 < 12 ? "AM" : "PM"}`;
 };
 
-// ISO end time â†’ "7:38 AM", flagged when it runs past the panchang day
+// ISO end time → "7:38 AM", flagged when it runs past the panchang day
 const formatEnds = (iso, panchangDate) => {
-    if (!iso) return "â€”";
+    if (!iso) return "—";
     const date = new Date(iso);
     const time = new Intl.DateTimeFormat("en-IN", {
         timeZone: IST,
@@ -205,10 +205,10 @@ export default function DivineTimeDrawer({ isOpen, onClose, isLight = false }) {
 
                 <div className={`acharyaDrawerContent divineTimeContent ${isLight ? "light" : ""}`}>
                     <header className="divineTimeHeader">
-                        <h5>Todayâ€™s Panchang</h5>
+                        <h5>Today’s Panchang</h5>
                         <p>
                             {data
-                                ? `${data.weekday?.name}, ${formatDate(data.date)} Â· ${city}`
+                                ? `${data.weekday?.name}, ${formatDate(data.date)} · ${city}`
                                 : "Today's Panchang"}
                         </p>
                     </header>
@@ -240,7 +240,7 @@ export default function DivineTimeDrawer({ isOpen, onClose, isLight = false }) {
                                 {now && (
                                     <Section title="Right now">
                                         <Row label="Tithi" value={`${now.tithi?.paksha} ${now.tithi?.name}`} />
-                                        <Row label="Nakshatra" value={now.nakshatra?.name} note={`Pada ${now.nakshatra?.pada} Â· Lord ${now.nakshatra?.lord}`} />
+                                        <Row label="Nakshatra" value={now.nakshatra?.name} note={`Pada ${now.nakshatra?.pada} · Lord ${now.nakshatra?.lord}`} />
                                         <Row label="Yoga" value={now.yoga?.name} />
                                         <Row label="Karana" value={now.karana?.name} />
                                         <Row label="Moon sign" value={now.moon_sign?.name} />
@@ -283,7 +283,7 @@ export default function DivineTimeDrawer({ isOpen, onClose, isLight = false }) {
                                     <Section title="Rahu Kalam">
                                         <Row
                                             label="Avoid new beginnings"
-                                            value={`${formatClock(data.rahu_kalam.start)} â€“ ${formatClock(data.rahu_kalam.end)}`}
+                                            value={`${formatClock(data.rahu_kalam.start)} – ${formatClock(data.rahu_kalam.end)}`}
                                         />
                                     </Section>
                                 )}

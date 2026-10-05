@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react";
+import DivineTimeDrawer from "@/components/drawer/DivineTimeDrawer";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import AcharyaDrawer, { preloadDrawerImages } from "@/components/drawer/AcharyaDrawer";
 import { MASK_2_STYLE } from "@/lib/maskStyles";
@@ -24,6 +25,14 @@ export default function ServicesWrapper() {
     const [selectedService, setSelectedService] = useState(null);
     const [activeServiceIndex, setActiveServiceIndex] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [divineTimeOpen, setDivineTimeOpen] = useState(false);
+    const [divineTimeLight, setDivineTimeLight] = useState(false);
+    // match the drawer to the zone the clicked bar is over (navs get light-section-active on cream sections)
+    const openDivineTime = (e) => {
+        setDivineTimeLight(!!e?.currentTarget?.closest(".light-section-active"));
+        setDivineTimeOpen(true);
+    };
+    const closeDivineTime = useCallback(() => setDivineTimeOpen(false), []);
     // Fetch the drawer photos in the background so opening a service is instant
     useEffect(() => {
         preloadDrawerImages(SERVICES.map(({ image }) => image), { priority: "low" });
@@ -350,7 +359,7 @@ export default function ServicesWrapper() {
                                 </div>
                             </nav>
 
-                            <a href="#" target="_blank" className="astroHeroTimeBlock">
+                            <button type="button" onClick={openDivineTime} className="astroHeroTimeBlock">
                                 <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
                                     <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
@@ -360,9 +369,10 @@ export default function ServicesWrapper() {
                                     <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
                                 </svg>
 
-                            </a>
+                            </button>
                         </div>
                     </div>
+                    <DivineTimeDrawer isOpen={divineTimeOpen} onClose={closeDivineTime} isLight={divineTimeLight} />
 
                     <div className={`mobile-drawer-menu ${menuOpen ? "open" : ""}`}>
 
