@@ -5681,6 +5681,8 @@ button.astroHeroTimeBlock {
   width: 100%;
   display: flex;
   justify-content: center;
+  /* dots strip is shorter than the arrow buttons — centre them on one line */
+  align-items: center;
   gap: 24px;
   margin-top: 48px;
   z-index: 20;
@@ -7684,6 +7686,9 @@ button.astroHeroTimeBlock {
   height: 100%;
   overflow: hidden;
   position: relative;
+  /* soften the clip: items fade out toward the top/bottom edge instead of being cut */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%);
 }
 
 /* fade top and bottom */
@@ -7970,6 +7975,9 @@ button.astroHeroTimeBlock {
 
   .gallery-showcase__navigation {
     overflow: hidden;
+    /* the list runs sideways here, so fade the left/right edges instead */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%);
   }
 }
 
