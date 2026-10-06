@@ -13,7 +13,9 @@ const sectionData = [
         description: `Every wall, every corner, every space around you is alive with energy. Through Vastu Shastra, we decode these energies to create environments that resonate with positivity and abundance. Their profound understanding of Vastu Shastra transforms homes into sanctuaries of peace and offices into engines of success.`,
         image: "/assets/home/main-image-1.webp",
         // layered like Why Us: background + masked subject on top
-        parallaxImage: "/assets/home/vastu-1.webp",
+        parallaxImage: "/assets/home/vastu.png",
+        // wide photo with no faded edges: fill the mask instead of fitting inside it
+        coverMask: true,
     },
     {
         id: 2,
@@ -117,7 +119,7 @@ export default function MainImageInfoSection() {
                     <div className="info-image-wrapper">
                         {item.parallaxImage ? (
                             // .info-image keeps the existing scroll parallax on this block
-                            <div className="info-image info-image-layered">
+                            <div className={`info-image info-image-layered ${item.coverMask ? "info-image-cover" : ""}`}>
                                 <CustomParallaxImages
                                     images={[item.parallaxImage]}
                                     imageMasks={{ [item.parallaxImage]: "/assets/background/circular-mask.webp" }}

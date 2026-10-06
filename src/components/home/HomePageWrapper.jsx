@@ -360,7 +360,7 @@ export default function HomePageWrapper() {
                         <div className="astroHeroTopBar" ref={topNavRef}>
                             <Link href="/" className="astroHeroBrand">
                                 <div className="astroHeroBrandLogo" >
-                                    <img src="/assets/icons/home-title-icon.webp" alt="Astro Acharya Logo" />
+                                    <img src="/assets/icons/home-title-icon.webp" alt="Astro Aacharya Logo" />
                                 </div>
 
                                 <div className="astroHeroBrandText">
@@ -368,8 +368,8 @@ export default function HomePageWrapper() {
                                     <span>Vastu Consultant</span>
                                 </div>
                             </Link>
-                            <Link href="/" className="astroHeroCenterLogo" aria-label="Astro Acharya home">
-                                Astro Acharya
+                            <Link href="/" className="astroHeroCenterLogo" aria-label="Astro Aacharya home">
+                                Astro Aacharya
                                 <span className="astroHeroTrademark">©</span>
                             </Link>
                             <div className="astroHeroActions ">
@@ -540,7 +540,7 @@ export default function HomePageWrapper() {
                             <div className="light-background-content" >
                                 <WhyUs />
                                 <SliderWithFade />
-                                <ContactCTA />
+                                {/* <ContactCTA /> */}
                             </div>
                         </div>
                     </div>

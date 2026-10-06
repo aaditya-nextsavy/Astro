@@ -556,7 +556,7 @@ const Footer = () => {
                     <div className="items-start flex flex-col md:flex-row gap-6 lg:gap-10.5 md:items-center">
                         <div className="astroHeroBrand whitespace-nowrap">
                             <div className="astroHeroBrandLogo" >
-                                <img src="/assets/icons/home-title-icon.webp" alt="Astro Acharya Logo" />
+                                <img src="/assets/icons/home-title-icon.webp" alt="Astro Aacharya Logo" />
                             </div>
 
                             <div className="astroHeroBrandText">
@@ -596,7 +596,7 @@ const Footer = () => {
                         <div className="flex justify-start gap-3">
 
                             <span className="footer-legal-information-link cursor-default">
-                                © 2026 Astro Acharya. All rights reserved.
+                                © 2026 Astro Aacharya. All rights reserved.
                             </span>
                             <Link href="/privacy-policy" className="footer-legal-information-link">
                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">

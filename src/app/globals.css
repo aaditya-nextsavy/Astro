@@ -2667,6 +2667,12 @@ button.astroHeroTimeBlock {
   object-position: top;
 }
 
+/* Landscape photos (Vastu): cover the mask box so the oval is filled edge to edge */
+.info-image-cover .cpp-mask img {
+  object-fit: cover;
+  object-position: center;
+}
+
 /* CONTENT SIDE */
 .info-content-wrapper {
   width: 45%;

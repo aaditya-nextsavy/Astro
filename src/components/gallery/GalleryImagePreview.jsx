@@ -11,7 +11,7 @@ const galleryItems = [
     { id: 8, title: "Aarti", video: "/assets/gallery/aarti-v1.mp4" },
     { id: 4, title: "Vedic Pooja", image: "/assets/gallery/g-4.webp" },
     { id: 2, title: "Sacred Rudraksha", image: "/assets/gallery/g-3.webp" },
-    { id: 5, title: "Shiva Aradhana", image: "/assets/gallery/g-2.webp" },
+    { id: 5, title: "Ratna Puja", image: "/assets/gallery/g-3.webp" },
     { id: 9, title: "Guidance", image: "/assets/services/relationship-and-career-guidance.png" },
     { id: 7, title: "Sacred Rituals", image: "/assets/gallery/sacred-rituals.webp" },
     { id: 3, title: "Yagna", video: "/assets/gallery/g-8.mp4" },

@@ -4,9 +4,9 @@ import LegalPageShell from "@/components/legal/LegalPageShell";
 
 
 export const metadata = {
-  title: "Terms and Conditions | Astro Acharya",
+  title: "Terms and Conditions | Astro Aacharya",
   description:
-    "Review the terms that apply to the Astro Acharya website, consultations, content, and user responsibilities.",
+    "Review the terms that apply to the Astro Aacharya website, consultations, content, and user responsibilities.",
 };
 
 const sections = [
@@ -27,7 +27,7 @@ const sections = [
   {
     title: "Intellectual Property",
     paragraphs: [
-      "All text, imagery, graphics, and other site content belong to Astro Acharya unless stated otherwise.",
+      "All text, imagery, graphics, and other site content belong to Astro Aacharya unless stated otherwise.",
       "You may not copy, reproduce, or distribute our content without permission.",
     ],
   },
@@ -35,7 +35,7 @@ const sections = [
     title: "Limitation of Liability",
     paragraphs: [
       "We work to keep the website accurate and available, but we cannot guarantee uninterrupted access or error-free content.",
-      "To the fullest extent allowed by law, Astro Acharya is not liable for losses that result from use of the website or reliance on its content.",
+      "To the fullest extent allowed by law, Astro Aacharya is not liable for losses that result from use of the website or reliance on its content.",
     ],
   },
   {
@@ -67,7 +67,7 @@ export default function TermsAndConditionsPage() {
         <LegalPageShell
           eyebrow="Terms and Conditions"
           title="Clear terms for using our site and services"
-          intro="These terms explain the basic rules for using the Astro Acharya website, reading the content, and requesting services or consultations."
+          intro="These terms explain the basic rules for using the Astro Aacharya website, reading the content, and requesting services or consultations."
           updated="Last updated: July 6, 2026"
           sections={sections}
           asideTitle="Before you continue"

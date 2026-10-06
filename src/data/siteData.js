@@ -119,7 +119,8 @@ export const SERVICES = [
     },
     {
         id: "03",
-        image: "/assets/services/astrological-predictions-effective-remedies.png",
+        // image: "/assets/services/astrological-predictions-effective-remedies.png",
+        image: "/assets/services/vastu-consultation.png",
         masked: true, // soft oval mask in the drawer
         title: "Astrological Predictions & Effective Remedies",
         description:
@@ -130,7 +131,7 @@ export const SERVICES = [
     },
     {
         id: "04",
-        image: "/assets/services/relationship-and-career-guidance.png",
+        image: "/assets/services/spiritual-counseling-and-life-path-direction.png",
         masked: true, // soft oval mask in the drawer
         title: "Relationship and Career Guidance",
         description:
@@ -152,7 +153,7 @@ export const SERVICES = [
     },
     {
         id: "06",
-        image: "/assets/services/spiritual-counseling-and-life-path-direction.png",
+        image: "/assets/services/relationship-and-career-guidance.png",
         masked: true, // soft oval mask in the drawer
         title: "Spiritual Counseling and Life Path Direction",
         description:

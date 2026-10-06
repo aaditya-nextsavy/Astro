@@ -2,9 +2,9 @@ import FloatingNavbar from "@/components/layout/FloatingNavbar";
 import LegalPageShell from "@/components/legal/LegalPageShell";
 
 export const metadata = {
-  title: "Privacy Policy | Astro Acharya",
+  title: "Privacy Policy | Astro Aacharya",
   description:
-    "Read how Astro Acharya collects, uses, and protects personal information across the website, services, and consultation requests.",
+    "Read how Astro Aacharya collects, uses, and protects personal information across the website, services, and consultation requests.",
 };
 
 const sections = [
@@ -59,7 +59,7 @@ export default function PrivacyPolicyPage() {
         <LegalPageShell
           eyebrow="Privacy Policy"
           title="Your privacy is handled with care"
-          intro="This page explains how we handle the information you share with Astro Acharya while browsing the website or requesting spiritual and consultation services."
+          intro="This page explains how we handle the information you share with Astro Aacharya while browsing the website or requesting spiritual and consultation services."
           updated="Last updated: July 6, 2026"
           sections={sections}
           asideTitle="Need help?"
