@@ -736,6 +736,13 @@ al stars */
     drop-shadow(0 0 var(--glow) rgba(255, 255, 255, .8));
 }
 
+/* the image fills its star box (without this it kept its natural 12px and spilled out) */
+.star img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 /* 
 .star img {
   width: calc(var(--size) * 10px);
@@ -879,6 +886,9 @@ al stars */
     height: 8px;
     animation:
       starTwinkle var(--duration) ease-in-out infinite;
+    /* desktop glow (10-30px) turns an 8px star into a big blur; only opacity is animated layer-wise */
+    filter: drop-shadow(0 0 calc(var(--glow) * .25) rgba(255, 255, 255, .7));
+    will-change: opacity;
 
   }
 
@@ -4099,6 +4109,50 @@ button.astroHeroTimeBlock {
   width: 100%;
 }
 
+/* Optional message field: single line beside its label. Same size as the other fields
+   (--field-font) until the text fills 70% of the field, then Footer.jsx adds .is-compact
+   (--msg-min-font); past that the input scrolls sideways. */
+.footer-input.footer-message input {
+  --field-font: 42px;
+  --msg-min-font: 22px;
+  height: 63px;
+  line-height: normal;
+  text-overflow: clip;
+}
+
+.footer-input.footer-message input,
+.footer-input.footer-message input::placeholder {
+  font-size: var(--field-font);
+}
+
+.footer-input.footer-message input.is-compact {
+  font-size: var(--msg-min-font);
+}
+
+.footer-char-count {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: #D0E3F180;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+}
+
+@media (max-width: 1444px) {
+  .footer-input.footer-message input {
+    --field-font: 32px;
+    --msg-min-font: 20px;
+    height: 53px;
+  }
+}
+
+@media (max-width: 550px) {
+  .footer-input.footer-message input {
+    --field-font: 24px;
+    --msg-min-font: 17px;
+    height: 45px;
+  }
+}
 
 .footer-btn {
   width: 100%;
@@ -4203,7 +4257,7 @@ button.astroHeroTimeBlock {
 .glass-dropdown-backdrop {
   position: absolute;
   inset: 0;
-  /* -webkit-backdrop-filter: blur(28px); */
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   background: #232d42bd;
   border-radius: inherit;
@@ -4218,7 +4272,9 @@ button.astroHeroTimeBlock {
 .glass-dropdown-content {
   position: relative;
   z-index: 1;
-  backdrop-filter: blur(20px);
+  /* no backdrop-filter on the scroll box itself: iOS Safari then stops painting the list
+     (only the tapped item shows). The blur comes from .glass-dropdown-backdrop. */
+  -webkit-overflow-scrolling: touch;
   padding: 8px;
   font-size: 32px;
   /* show 4 items, scroll the rest: item = 2 x padding + 26px line + 1px border */
@@ -4226,18 +4282,6 @@ button.astroHeroTimeBlock {
   max-height: calc(4 * (2 * var(--dropdown-item-pad-y) + 27px) + 16px);
   overflow-y: auto;
   overscroll-behavior: contain;
-}
-
-.glass-dropdown-content::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  left: 0;
-  top: 0;
-  height: 100%;
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
-  z-index: -1;
 }
 
 /*Items */
@@ -4261,9 +4305,12 @@ button.astroHeroTimeBlock {
     transform .2s ease;
 }
 
-.glass-dropdown-item:hover {
-  background: rgba(255, 255, 255, .08);
-  transform: translateX(4px);
+/* hover only on real pointers: on touch it sticks and the transform repaints a single item */
+@media (hover: hover) {
+  .glass-dropdown-item:hover {
+    background: rgba(255, 255, 255, .08);
+    transform: translateX(4px);
+  }
 }
 
 

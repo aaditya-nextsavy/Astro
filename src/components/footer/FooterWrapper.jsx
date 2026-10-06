@@ -74,10 +74,10 @@ const FooterWrapper = () => {
                                 </div>
                             </Link>
 
-                            <div className="astroHeroCenterLogo">
+                            <Link href="/" className="astroHeroCenterLogo" aria-label="Astro Acharya home">
                                 Astro Acharya
                                 <span className="astroHeroTrademark">©</span>
-                            </div>
+                            </Link>
 
                             <div className="astroHeroActions ">
                                 <a href="/contact" className="astroHeroMenuButton glass-effect-card">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function SiteNav() {
     const [time, setTime] = useState("");
@@ -40,10 +41,10 @@ export default function SiteNav() {
                     </div>
                 </div>
 
-                <div className="astroHeroCenterLogo">
+                <Link href="/" className="astroHeroCenterLogo" aria-label="Astro Acharya home">
                     Astro Acharya
                     <span className="astroHeroTrademark">©</span>
-                </div>
+                </Link>
 
                 <div className="astroHeroActions ">
                     <a href="/contact" className="astroHeroMenuButton glass-effect-card">

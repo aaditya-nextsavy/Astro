@@ -12,8 +12,9 @@ export default function Stars() {
             { length: 18 },
             (_, i) => ({
                 id: i,
-                left: Math.random() * 100,
-                top: Math.random() * 100,
+                // keep clear of the edges so no star is cut off
+                left: Math.random() * 94 + 2,
+                top: Math.random() * 94 + 2,
                 size: Math.random() * 1.5 + 0.5,
                 glow: Math.random() * 20 + 10,
                 duration: Math.random() * 4 + 6,
@@ -28,6 +29,9 @@ export default function Stars() {
     useEffect(() => {
         if (!stars.length) return;
 
+        // scaling a drop-shadowed element makes mobile Safari re-rasterise it blurry — fade only there
+        const fromScale = window.matchMedia("(max-width: 550px)").matches ? 1 : 0.8;
+
         starsRef.current.forEach((starEl, index) => {
             if (!starEl) return;
 
@@ -37,7 +41,7 @@ export default function Stars() {
                 starEl,
                 {
                     opacity: 0,
-                    scale: 0.8,
+                    scale: fromScale,
                 },
                 {
                     opacity: baseOpacity,

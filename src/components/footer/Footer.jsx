@@ -1,21 +1,50 @@
 
 "use client"
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import Link from "next/link";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { usePopup } from "../Popup/PopupProvider";
 import { FOOTER_SERVICES as services } from "@/data/siteData";
 
+const MESSAGE_CHAR_LIMIT = 120;
+
+let measureCtx;
+
+// Once the text (measured at full size) passes this share of the field's width, drop to the small size
+const MESSAGE_COMPACT_AT = 0.7;
+
+// Message text starts at the same size as the other fields (--field-font) and switches to the
+// small size (--msg-min-font) once it fills 70% of the field; past that the input scrolls sideways.
+const fitMessageFont = (input) => {
+    if (!input) return;
+    const style = getComputedStyle(input);
+    const fullSize = style.getPropertyValue("--field-font").trim();
+    const text = input.value;
+    if (!fullSize || !text) {
+        input.classList.remove("is-compact");
+        return;
+    }
+
+    measureCtx ??= document.createElement("canvas").getContext("2d");
+    measureCtx.font = `${style.fontWeight} ${fullSize} ${style.fontFamily}`;
+    const spacing = parseFloat(style.letterSpacing) || 0;
+    const textWidth = measureCtx.measureText(text).width + spacing * text.length;
+
+    input.classList.toggle("is-compact", textWidth > input.clientWidth * MESSAGE_COMPACT_AT);
+};
+
 const Footer = () => {
 
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const messageRef = useRef(null);
     const { executeRecaptcha } = useGoogleReCaptcha();
     const [formData, setFormData] = useState({
         name: "",
         phone: "",
         email: "",
         service: "",
+        message: "",
     });
     const [errors, setErrors] = useState({});
     const { showPopup } = usePopup();
@@ -121,6 +150,7 @@ const Footer = () => {
                     phone: "",
                     email: "",
                     service: "",
+                    message: "",
                 });
 
 
@@ -142,6 +172,22 @@ const Footer = () => {
 
 
     };
+    // refit the message font as the text changes…
+    useLayoutEffect(() => {
+        fitMessageFont(messageRef.current);
+    }, [formData.message]);
+
+    // …and when the field is resized or the fancy font finishes loading
+    useEffect(() => {
+        const input = messageRef.current;
+        if (!input) return;
+        const refit = () => fitMessageFont(input);
+        const observer = new ResizeObserver(refit);
+        observer.observe(input);
+        document.fonts?.ready.then(refit);
+        return () => observer.disconnect();
+    }, []);
+
     useEffect(() => {
         const handleClick = (e) => {
             if (!dropdownRef.current?.contains(e.target)) {
@@ -282,6 +328,21 @@ const Footer = () => {
 
 
 
+
+                    <div className="footer-input footer-message width-full">
+                        <label htmlFor="footer-message">Message</label>
+                        <input
+                            id="footer-message"
+                            ref={messageRef}
+                            maxLength={MESSAGE_CHAR_LIMIT}
+                            placeholder="type..."
+                            value={formData.message}
+                            onChange={(e) => handleChange("message", e.target.value)}
+                        />
+                        <span className="footer-char-count">
+                            {formData.message.length}/{MESSAGE_CHAR_LIMIT}
+                        </span>
+                    </div>
 
                     <div className="footer-submit-btn-wrapper">
                         <button
@@ -537,7 +598,7 @@ const Footer = () => {
                             <span className="footer-legal-information-link cursor-default">
                                 © 2026 Astro Acharya. All rights reserved.
                             </span>
-                            <Link href="/privacy-policy" target="_blank" className="footer-legal-information-link">
+                            <Link href="/privacy-policy" className="footer-legal-information-link">
                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g filter="url(#filter0_f_83_6873)">
                                         <path d="M6 1L6.67175 5.32825L11 6L6.67175 6.67175L6 11L5.32825 6.67175L1 6L5.32825 5.32825L6 1Z" fill="white" />
@@ -552,7 +613,7 @@ const Footer = () => {
                                 </svg>
                                 <strong >Privacy policy</strong>
                             </Link>
-                            <Link href="/terms-and-conditions" target="_blank" className="footer-legal-information-link">
+                            <Link href="/terms-and-conditions" className="footer-legal-information-link">
                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g filter="url(#filter0_f_83_6873)">
                                         <path d="M6 1L6.67175 5.32825L11 6L6.67175 6.67175L6 11L5.32825 6.67175L1 6L5.32825 5.32825L6 1Z" fill="white" />

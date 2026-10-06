@@ -58,6 +58,21 @@ export default function PageTransition() {
                 };
             });
 
+        // "#section" → that section, no hash → top of the page
+        const scrollWithinPage = (hash) => {
+            const id = decodeURIComponent(hash.replace("#", ""));
+            const target = id ? document.getElementById(id) : 0;
+            if (target === null) return;
+
+            if (window.lenis) {
+                window.lenis.scrollTo(target, { offset: target ? -60 : 0, duration: 1.6, force: true });
+            } else if (target) {
+                target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+            } else {
+                window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+            }
+        };
+
         const transitionTo = async (href) => {
             busy.current = true;
             window.lenis?.stop();
@@ -91,8 +106,13 @@ export default function PageTransition() {
 
             const url = new URL(link.href, window.location.href);
             if (url.origin !== window.location.origin) return;
-            // same page (incl. #section on this page): normal behaviour, no cover
-            if (url.pathname === window.location.pathname) return;
+            // same page (e.g. Home or /#rudrakshaSection while already on "/"): no route change
+            // happens, so Next won't move anything — scroll there ourselves, no cover
+            if (url.pathname === window.location.pathname) {
+                e.preventDefault();
+                scrollWithinPage(url.hash);
+                return;
+            }
 
             e.preventDefault();
             if (busy.current) return;

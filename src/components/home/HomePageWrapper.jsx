@@ -368,10 +368,10 @@ export default function HomePageWrapper() {
                                     <span>Vastu Consultant</span>
                                 </div>
                             </Link>
-                            <div className="astroHeroCenterLogo">
+                            <Link href="/" className="astroHeroCenterLogo" aria-label="Astro Acharya home">
                                 Astro Acharya
                                 <span className="astroHeroTrademark">©</span>
-                            </div>
+                            </Link>
                             <div className="astroHeroActions ">
                                 <a href="/contact" className="astroHeroMenuButton glass-effect-card">
                                     <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -449,26 +449,33 @@ export default function HomePageWrapper() {
                             className="mobile-drawer-menu-backdrop relative"
                             onClick={() => setMenuOpen(false)}
                         />
-                        <div className={`acharyaDrawerContent mobile-header-menu  glass-effect-card `}>
+                        <div
+                            className={`acharyaDrawerContent mobile-header-menu  glass-effect-card `}
+                            onClick={(e) => e.target.closest("a") && setMenuOpen(false)}
+                        >
 
                             <div className="acharyaDrawerContent-bg-filter"></div>
-                            <Link href=''>
+                            <Link href="/">
                                 <nav>Home</nav>
                                 <FaChevronRight />
                             </Link>
-                            <Link href='./about'>
+                            <Link href="/about">
                                 <nav>About</nav>
                                 <FaChevronRight />
                             </Link>
-                            <Link href='./services'>
+                            <Link href="/services">
                                 <nav>Services</nav>
                                 <FaChevronRight />
                             </Link>
-                            <Link href='./gallery'>
+                            <Link href="/gallery">
                                 <nav>Gallery</nav>
                                 <FaChevronRight />
                             </Link>
-                            <Link href='./contact'>
+                            <Link href="/#rudrakshaSection" scroll={false}>
+                                <nav>Rudraksha</nav>
+                                <FaChevronRight />
+                            </Link>
+                            <Link href="/contact">
                                 <nav>Contact</nav>
                                 <FaChevronRight />
                             </Link>

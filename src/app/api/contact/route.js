@@ -10,8 +10,18 @@ export async function POST(req) {
             phone,
             email,
             service,
+            message,
             captchaToken,
         } = body;
+
+        // Optional message: cap at the same 120-character limit as the form, escape for the email HTML
+        const cleanMessage = (typeof message === "string" ? message : "")
+            .trim()
+            .slice(0, 120)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
 
         if (
             !name ||
@@ -93,6 +103,8 @@ export async function POST(req) {
                 <p><strong>Email:</strong> ${email}</p>
 
                 <p><strong>Service:</strong> ${service}</p>
+
+                ${cleanMessage ? `<p><strong>Message:</strong> ${cleanMessage}</p>` : ""}
             `,
         });
 
