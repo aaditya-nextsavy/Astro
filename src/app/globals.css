@@ -2982,6 +2982,14 @@ button.astroHeroTimeBlock {
     padding: 0px 0;
   }
 
+  /* Fill the screen width: the box is wider than the row so the circle's soft cloud edge
+     runs off the sides (clipped by .info-row). Grown via width, not scale, so the height
+     grows with it and the top/bottom fade is never cut. */
+  .info-image.info-image-layered {
+    width: 140%;
+    margin-left: -20%;
+  }
+
   .info-content h2 {
     font-size: 40px;
   }
@@ -3778,7 +3786,7 @@ button.astroHeroTimeBlock {
   }
 
   .who-we-are-description {
-    margin-bottom: 4px;
+    margin-bottom: 24px;
   }
 
   .who-we-are-content .who-we-are-button {
@@ -3789,8 +3797,9 @@ button.astroHeroTimeBlock {
     margin: 0;
   }
 
+  /* same top spacing as the first panel (was 50px) so the gap between the two is shorter */
   .who-we-are-panel.who-we-are-panel--reverse .who-we-are-layout {
-    padding-top: 50px;
+    padding-top: 28px;
 
   }
 
@@ -3799,6 +3808,35 @@ button.astroHeroTimeBlock {
     transform: scale(1.2);
   }
 
+  /* Fill the screen width: GSAP owns the image's transform/scale, so it is enlarged by
+     width instead (capped by height so it still fits the 30vh slot on short phones); the
+     sides run off-screen, clipped by .who-we-are-panel__sticky. The negative margins let
+     only the image's transparent fade (top ~6%, bottom ~15% of its width) sit outside the
+     wrapper, so the visible part neither overlaps the text below nor gets cut by the
+     panel's top edge. */
+  .who-we-are-image-wrapper {
+    --who-img-w: min(130%, 55vh);
+    align-items: flex-start;
+  }
+
+  .who-we-are-image {
+    width: var(--who-img-w);
+    max-width: none;
+    flex-shrink: 0;
+    margin-top: calc(var(--who-img-w) * -0.06);
+    margin-bottom: calc(var(--who-img-w) * -0.15);
+  }
+
+  /* First panel (Who We Are) isn't pinned, so size it to its content instead of a full
+     screen: the empty space below its buttons was most of the gap before Our Vision.
+     "Read more" grows it and refreshes the scroll triggers itself. */
+  .who-we-are-panel:not(.who-we-are-panel--reverse) {
+    min-height: auto;
+  }
+
+  .who-we-are-panel:not(.who-we-are-panel--reverse) .who-we-are-panel__sticky {
+    height: auto;
+  }
 }
 
 
@@ -3864,8 +3902,12 @@ button.astroHeroTimeBlock {
 
 /* footer */
 
+/* --footer-message-space: height the Message row adds to the footer (input height + 30px
+   margin; label stacks above it at ≤550px — values measured in the browser). Added to every takeover min-height below so the
+   vh values, tuned before that field existed, still pin the footer for the same scroll. */
 .footer-takeover-zone {
-  min-height: 370vh;
+  --footer-message-space: 93px;
+  min-height: calc(370vh + var(--footer-message-space));
   margin-top: calc(-160vh);
   position: relative;
   /* background: linear-gradient(180deg,
@@ -4150,6 +4192,10 @@ button.astroHeroTimeBlock {
     --msg-min-font: 20px;
     height: 53px;
   }
+
+  .footer-takeover-zone {
+    --footer-message-space: 83px;
+  }
 }
 
 @media (max-width: 550px) {
@@ -4157,6 +4203,10 @@ button.astroHeroTimeBlock {
     --field-font: 24px;
     --msg-min-font: 17px;
     height: 45px;
+  }
+
+  .footer-takeover-zone {
+    --footer-message-space: 117px;
   }
 }
 
@@ -4591,7 +4641,7 @@ button.astroHeroTimeBlock {
 
 .footer-takeover-zone.service-page {
   margin-top: -100vh;
-  min-height: 320vh;
+  min-height: calc(320vh + var(--footer-message-space));
 }
 
 
@@ -5469,6 +5519,23 @@ button.astroHeroTimeBlock {
   .why-us-mobile-item .cpp-stage {
     width: 100%;
     height: 100%;
+  }
+}
+
+@media(max-width:767px) {
+
+  /* clips the image below where it runs past the screen */
+  .why-us-mobile {
+    overflow: hidden;
+  }
+
+  /* Fill the screen width (same treatment as the Vastu/Astrology images): wider than the
+     screen so the circle's soft edge runs off the sides; height follows the width. */
+  .why-us-mobile-item .custom-parallax-images {
+    width: 140vw;
+    margin-left: calc(50% - 70vw);
+    height: auto;
+    aspect-ratio: 1130 / 1031;
   }
 }
 
@@ -7528,11 +7595,11 @@ button.astroHeroTimeBlock {
 @media(max-width:1600px) {
 
   .footer-takeover-zone {
-    min-height: 410vh;
+    min-height: calc(410vh + var(--footer-message-space));
   }
 
   .footer-takeover-zone.service-page {
-    min-height: 410vh;
+    min-height: calc(410vh + var(--footer-message-space));
   }
 }
 
@@ -7540,11 +7607,11 @@ button.astroHeroTimeBlock {
 @media(max-width:1400px) {
 
   .footer-takeover-zone {
-    min-height: 390vh;
+    min-height: calc(390vh + var(--footer-message-space));
   }
 
   .footer-takeover-zone.service-page {
-    min-height: 390vh;
+    min-height: calc(390vh + var(--footer-message-space));
   }
 }
 
@@ -7553,11 +7620,11 @@ button.astroHeroTimeBlock {
 @media(max-width:1280px) {
 
   .footer-takeover-zone {
-    min-height: 350vh;
+    min-height: calc(350vh + var(--footer-message-space));
   }
 
   .footer-takeover-zone.service-page {
-    min-height: 420vh;
+    min-height: calc(420vh + var(--footer-message-space));
   }
 }
 
@@ -7575,11 +7642,11 @@ button.astroHeroTimeBlock {
 @media(max-width:991px) {
 
   .footer-takeover-zone {
-    min-height: 490vh;
+    min-height: calc(490vh + var(--footer-message-space));
   }
 
   .footer-takeover-zone.service-page {
-    min-height: 450vh;
+    min-height: calc(450vh + var(--footer-message-space));
   }
 
   .about-operations-wrapper {
@@ -7596,12 +7663,12 @@ button.astroHeroTimeBlock {
 
   .footer-takeover-zone {
 
-    min-height: 540vh;
+    min-height: calc(540vh + var(--footer-message-space));
   }
 
   .footer-takeover-zone.service-page {
 
-    min-height: 500vh;
+    min-height: calc(500vh + var(--footer-message-space));
   }
 }
 
@@ -7611,11 +7678,11 @@ button.astroHeroTimeBlock {
 @media(max-width:500px) {
 
   .footer-takeover-zone {
-    min-height: 530vh;
+    min-height: calc(530vh + var(--footer-message-space));
   }
 
   .footer-takeover-zone.service-page {
-    min-height: 550vh;
+    min-height: calc(550vh + var(--footer-message-space));
   }
 }
 
@@ -7624,7 +7691,7 @@ button.astroHeroTimeBlock {
 
 
   .footer-takeover-zone.service-page {
-    min-height: 440vh;
+    min-height: calc(440vh + var(--footer-message-space));
   }
 }
 
@@ -7634,13 +7701,13 @@ button.astroHeroTimeBlock {
 
   .footer-takeover-zone {
     background: linear-gradient(#0000 0%, #0e182fe5 100%);
-    min-height: 590vh;
+    min-height: calc(590vh + var(--footer-message-space));
 
   }
 
   .footer-takeover-zone.service-page {
     background: linear-gradient(#0000 0%, #0e182fe5 100%);
-    min-height: 510vh;
+    min-height: calc(510vh + var(--footer-message-space));
 
   }
 }
@@ -7650,7 +7717,7 @@ button.astroHeroTimeBlock {
 
 @media(min-width:1280px) and (max-height:700px) {
   .footer-takeover-zone {
-    min-height: 590vh;
+    min-height: calc(590vh + var(--footer-message-space));
 
   }
 }
@@ -8579,11 +8646,13 @@ html.has-site-cursor .site-cursor {
 .site-cursor__wave-ring {
   border: 1.5px solid var(--ui-title-color);
 }
+
 /* ===== Page transition (PageTransition.jsx): cream takeover panel that rises over the page ===== */
 .page-transition {
   position: fixed;
   inset: 0;
-  z-index: 2147482000; /* above everything but the cursor */
+  z-index: 2147482000;
+  /* above everything but the cursor */
   background: #f3e9d8;
   pointer-events: none;
   visibility: hidden;
@@ -8596,4 +8665,15 @@ html.has-site-cursor .site-cursor {
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+}
+
+
+@media (max-width:385px) and (max-height:675px) {
+  .footer-takeover-zone {
+    min-height: 600vh;
+  }
+
+  .footer-takeover-zone.service-page {
+    min-height: 530vh;
+  }
 }

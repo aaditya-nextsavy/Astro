@@ -224,7 +224,7 @@ export default function ImageZoom() {
 
                 {/* <img
                     ref={imageRef}
-                    src="/assets/home/imageZoom1.jpg"
+                    src="/assets/home/imageZoom1.webp"
                     alt="Temple"
                     className="zoom-image"
                 /> */}
@@ -238,7 +238,7 @@ export default function ImageZoom() {
 
                     <img
                         ref={image1Ref}
-                        src="/assets/home/imageZoom1.jpg"
+                        src="/assets/home/imageZoom1.webp"
                         className="zoom-image"
                         alt=""
                     />

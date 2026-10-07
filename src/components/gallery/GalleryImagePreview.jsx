@@ -10,9 +10,9 @@ import { MASK_4_STYLE } from "@/lib/maskStyles";
 const galleryItems = [
     { id: 8, title: "Aarti", video: "/assets/gallery/aarti-v1.mp4" },
     { id: 4, title: "Vedic Pooja", image: "/assets/gallery/g-4.webp" },
-    { id: 2, title: "Sacred Rudraksha", image: "/assets/gallery/g-3.webp" },
-    { id: 5, title: "Ratna Puja", image: "/assets/gallery/g-3.webp" },
-    { id: 9, title: "Guidance", image: "/assets/services/relationship-and-career-guidance.png" },
+    { id: 2, title: "Sacred Rudraksha", image: "/assets/gallery/g-rudraksha.webp" },
+    { id: 5, title: "Ratnadhyay", image: "/assets/gallery/g-3.webp" },
+    { id: 9, title: "Guidance", image: "/assets/services/relationship-and-career-guidance.webp" },
     { id: 7, title: "Sacred Rituals", image: "/assets/gallery/sacred-rituals.webp" },
     { id: 3, title: "Yagna", video: "/assets/gallery/g-8.mp4" },
     // { id: 6, title: "Divine Darshan", image: "/assets/gallery/g-1.webp" },
@@ -170,7 +170,7 @@ const GalleryImagePreview = () => {
         <section className="gallery-showcase">
 
             <img
-                src="/assets/background/masked-cloud-bg.png"
+                src="/assets/background/masked-cloud-bg.webp"
                 alt=""
                 className="gallery-showcase__cloud-overlay_out"
             />

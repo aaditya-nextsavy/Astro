@@ -29,7 +29,7 @@ export const storyTimeline = [
         subtitle: "The Sacred Story of Shri Mai Mandir, Nadiad",
         description:
             "To consult with the current Aacharyas is to step into a century-old tapestry woven by three extraordinary souls. The story of this lineage is a history of spiritual awakening that began in the heart of Gujarat and eventually touched the global stage.",
-        image: "/assets/about/a-century-of-divine-lineage.png",
+        image: "/assets/about/a-century-of-divine-lineage.webp",
         masked: true, // soft oval mask, 476x463 frame
         type: "standard",
     },
@@ -42,7 +42,7 @@ export const storyTimeline = [
         badge: "H.H. 1008 Shri Kanishtha Keshav Maharaj",
         description: `The spiritual geography of Nadiad was forever transformed when H.H. 1008 Shri Kanishtha Keshav Maharaj established the Shri Mai Mandir. He was a visionary who did not merely build a temple; he anchored a divine frequency. Through intense penance (Tapasya) and a deep connection with the Divine Mother, he created a sanctuary where the ancient Vedas could breathe in the modern world.
 He serves as the "Root" of this lineage—the one who planted the seeds of Loka-Kalyan (universal welfare) and established the strict standards of Vedic purity that remain the temple’s hallmark to this day.`,
-        image: "/assets/about/the-foundation.png",
+        image: "/assets/about/the-foundation.webp",
         masked: true, // soft oval mask, 476x463 frame
         type: "standard",
     },
@@ -70,7 +70,7 @@ For nearly seven decades, until the age of 83, his voice resonated across contin
 As a son and a disciple, he walked step-by-step in the shadow of his Father-Guru, Shri Bhagawati Keshavbhavani Maharaj. He was the quiet, immovable force that managed the temple's sacred activities and ensured that spiritual knowledge was spread with absolute integrity. Remaining steadfast by his Guru’s side until his very last breath, he became the "Bridge of Purity," ensuring that the wisdom of the ancestors reached the next generation without losing a single drop of its essence.
 
 `,
-        image: "/assets/about/the-heart.png",
+        image: "/assets/about/the-heart.webp",
         masked: true, // soft oval mask, 476x463 frame
         objectPosition: "top",
         type: "standard",
@@ -529,7 +529,7 @@ const AboutStory = () => {
                                 className="about-story-cloud-bg"
                             >
                                 <Image
-                                    src="/assets/background/masked-cloud-bg.png"
+                                    src="/assets/background/masked-cloud-bg.webp"
                                     alt="clouds"
                                     fill
                                 />

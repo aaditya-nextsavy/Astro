@@ -2,91 +2,91 @@
 export const RUDRAKSHA_ITEMS = [
     {
         id: 1,
-        image: "/assets/rudraksha/One-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/One-Mukhi-Rudraksha.webp",
         title: "One Mukhi Rudraksha",
         description: "The deity of the One Mukhi Rudraksha is Lord Shiva. It can be used for salvation, concentration, peace, splendor, and spiritual knowledge.",
     },
     {
         id: 2,
-        image: "/assets/rudraksha/Two-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/Two-Mukhi-Rudraksha.webp",
         title: "Two Mukhi Rudraksha",
         description: "The deity of the Two Mukhi Rudraksha is Ardhanarishwar (Lord Shiva and Goddess Parvati). It can be used for harmony in the family, love and unity in relationships, and mental peace.",
     },
     {
         id: 3,
-        image: "/assets/rudraksha/Three-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/Three-Mukhi-Rudraksha.webp",
         title: "Three Mukhi Rudraksha",
         description: "The deity of the Three Mukhi Rudraksha is Agni Devta. It can be used for the destruction of sins, increasing self-confidence, and pacifying the influence of Mars.",
     },
     {
         id: 4,
-        image: "/assets/rudraksha/Four-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/Four-Mukhi-Rudraksha.webp",
         title: "Four Mukhi Rudraksha",
         description: "The deity of the Four Mukhi Rudraksha is Lord Brahma. It can be used for the development of intelligence, knowledge, creative abilities, and success in education.",
     },
     {
         id: 5,
-        image: "/assets/rudraksha/Five-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/Five-Mukhi-Rudraksha.webp",
         title: "Five Mukhi Rudraksha",
         description: "The deity of the Five Mukhi Rudraksha is Kalagni Rudra (a form of Lord Shiva). It is the most common and auspicious Rudraksha, used for mental peace, health benefits, and blood pressure control.",
     },
     {
         id: 6,
-        image: "/assets/rudraksha/Six-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/Six-Mukhi-Rudraksha.webp",
         title: "Six Mukhi Rudraksha",
         description: "The deity of the Six Mukhi Rudraksha is Lord Kartikeya. It can be used for increasing willpower, leadership ability, artistic talent, and speech power.",
     },
     {
         id: 7,
-        image: "/assets/rudraksha/Seven-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/Seven-Mukhi-Rudraksha.webp",
         title: "Seven Mukhi Rudraksha",
         description: "The deity of the Seven Mukhi Rudraksha is Goddess Mahalakshmi. It can be used for wealth, property, career progress, and financial prosperity.",
     },
     {
         id: 8,
-        image: "/assets/rudraksha/Eight-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/Eight-Mukhi-Rudraksha.webp",
         title: "Eight Mukhi Rudraksha",
         description: "The deity of the Eight Mukhi Rudraksha is Lord Ganesha. It can be used to remove obstacles, achieve success, and gain power.",
     },
     {
         id: 9,
-        image: "/assets/rudraksha/Nine-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/Nine-Mukhi-Rudraksha.webp",
         title: "Nine Mukhi Rudraksha",
         description: "The deity of the Nine Mukhi Rudraksha is Nav Durga (Maa Shakti). It can be used for courage, strength, fearlessness, and all kinds of achievements.",
     },
     {
         id: 10,
-        image: "/assets/rudraksha/Ten-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/Ten-Mukhi-Rudraksha.webp",
         title: "Ten Mukhi Rudraksha",
         description: "The deity of the Ten Mukhi Rudraksha is Lord Vishnu. It can be used for protection from negative energy, planetary defects, and harmful influences.",
     },
     {
         id: 11,
-        image: "/assets/rudraksha/Eleven-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/Eleven-Mukhi-Rudraksha.webp",
         title: "Eleven Mukhi Rudraksha",
         description: "The deity of the Eleven Mukhi Rudraksha is Hanumanji (a form of Rudra). It can be used for knowledge, courage, confidence, and victory over fear.",
     },
     {
         id: 12,
-        image: "/assets/rudraksha/Twelve-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/Twelve-Mukhi-Rudraksha.webp",
         title: "Twelve Mukhi Rudraksha",
         description: "The deity of the Twelve Mukhi Rudraksha is Surya Devta. It can be used for strength, energy, influence, and success in the political field.",
     },
     {
         id: 13,
-        image: "/assets/rudraksha/Thirteen-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/Thirteen-Mukhi-Rudraksha.webp",
         title: "Thirteen Mukhi Rudraksha",
         description: "The deity of the Thirteen Mukhi Rudraksha is Indra Dev. It can be used for physical and spiritual advancement, the attainment of wealth and higher spiritual blessings, and developing an influential personality.",
     },
     {
         id: 14,
-        image: "/assets/rudraksha/Fourteen-Mukhi-Rudraksha.png",
+        image: "/assets/rudraksha/Fourteen-Mukhi-Rudraksha.webp",
         title: "Fourteen Mukhi Rudraksha",
         description: "The deity of the Fourteen Mukhi Rudraksha is Lord Shiva and Lord Hanuman. It can be used for success in the stock market and awakening the Agna Chakra. It is especially beneficial for investors, industrialists, and import-export traders.",
     },
     {
         id: 15,
-        image: "/assets/rudraksha/Gaurishankar-Rudraksha.png",
+        image: "/assets/rudraksha/Gaurishankar-Rudraksha.webp",
         title: "Gaurishankar Rudraksha",
         description: "The deity of the Gaurishankar Rudraksha is Lord Shiva and Goddess Parvati. It can be used for marital happiness and maintaining harmony in family and society. It is especially beneficial for those facing delays or obstacles in marriage.",
     },
@@ -97,7 +97,7 @@ export const RUDRAKSHA_ITEMS = [
 export const SERVICES = [
     {
         id: "01",
-        image: "/assets/services/vastu-consultation.png",
+        image: "/assets/services/vastu-consultation2.webp",
         masked: true, // soft oval mask in the drawer
         title: "Vastu Consultation",
         description:
@@ -108,7 +108,7 @@ export const SERVICES = [
     },
     {
         id: "02",
-        image: "/assets/services/personalized-birth-chart-analysis.png",
+        image: "/assets/services/personalized-birth-chart-analysis2.webp",
         masked: true, // soft oval mask in the drawer
         title: "Personalized Birth Chart Analysis",
         description:
@@ -120,7 +120,7 @@ export const SERVICES = [
     {
         id: "03",
         // image: "/assets/services/astrological-predictions-effective-remedies.png",
-        image: "/assets/services/vastu-consultation.png",
+        image: "/assets/services/vastu-consultation.webp",
         masked: true, // soft oval mask in the drawer
         title: "Astrological Predictions & Effective Remedies",
         description:
@@ -131,7 +131,7 @@ export const SERVICES = [
     },
     {
         id: "04",
-        image: "/assets/services/spiritual-counseling-and-life-path-direction.png",
+        image: "/assets/services/spiritual-counseling-and-life-path-direction.webp",
         masked: true, // soft oval mask in the drawer
         title: "Relationship and Career Guidance",
         description:
@@ -142,7 +142,7 @@ export const SERVICES = [
     },
     {
         id: "05",
-        image: "/assets/services/custom-solutions-for-prosperity-and-growth.png",
+        image: "/assets/services/custom-solutions-for-prosperity-and-growth.webp",
         masked: true, // soft oval mask in the drawer
         title: "Custom Solutions for Prosperity and Growth",
         description:
@@ -153,7 +153,7 @@ export const SERVICES = [
     },
     {
         id: "06",
-        image: "/assets/services/relationship-and-career-guidance.png",
+        image: "/assets/services/relationship-and-career-guidance.webp",
         masked: true, // soft oval mask in the drawer
         title: "Spiritual Counseling and Life Path Direction",
         description:
@@ -164,7 +164,7 @@ export const SERVICES = [
     },
     {
         id: "07",
-        image: "/assets/services/authentic-puja-services.png",
+        image: "/assets/services/authentic-puja-services.webp",
         masked: true, // soft oval mask in the drawer
         title: "Authentic Puja Services",
         description:
@@ -175,7 +175,7 @@ export const SERVICES = [
     },
     {
         id: "08",
-        image: "/assets/services/sarvabadha-nivaran-homa.png",
+        image: "/assets/services/sarvabadha-nivaran-homa.webp",
         masked: true, // soft oval mask in the drawer
         title: "Sarvabadha Nivaran Homa",
         description:

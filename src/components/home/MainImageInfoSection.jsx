@@ -13,7 +13,7 @@ const sectionData = [
         description: `Every wall, every corner, every space around you is alive with energy. Through Vastu Shastra, we decode these energies to create environments that resonate with positivity and abundance. Their profound understanding of Vastu Shastra transforms homes into sanctuaries of peace and offices into engines of success.`,
         image: "/assets/home/main-image-1.webp",
         // layered like Why Us: background + masked subject on top
-        parallaxImage: "/assets/home/vastu.png",
+        parallaxImage: "/assets/home/vastu.webp",
         // wide photo with no faded edges: fill the mask instead of fitting inside it
         coverMask: true,
     },
