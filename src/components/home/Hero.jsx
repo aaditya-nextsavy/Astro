@@ -11,10 +11,10 @@ const ACHARYA_DATA = [
         image: "/assets/drawer/aacharya-markand.webp",
         title: "Acharya Markand",
         name: "Acharya Markand",
-        description:
-            `Clarity in the Chaos Whether you are navigating a complex career transition or seeking harmony in a partnership, we provide data-driven spiritual insights. We analyze "Guna Milan" with overall Chart Analysis of couple for relationships and "Dashas" for career timing to ensure you are moving with the cosmic tide, not against it.`,
-        highlight:
-            `Focused on clarity in relationships, career direction, and timing-based decisions using Dashas and planetary transits.`,
+        description: <>
+            <strong> A Computer Engineer </strong>, carrying forward the sacred legacy of Shri Mai Mandir, Aacharya Markand serves as a dedicated custodian of traditional Astrology and Vastu. He views Astrology and Vastu Shastra as the sacred science of aligning human intention with the natural rhythms of the universe. Drawing upon a heritage enriched by global outreach and selfless devotion, he helps individuals, families, and businesses transform their living and working spaces into reservoirs of vital energy. His guidance offers a grounded bridge between profound Vedic geometry and the strategic demands of modern life.
+        </>,
+        highlight: `Focused on clarity in relationships, career direction, and timing-based decisions using Dashas and planetary transits.`,
         link: "/contact"
     },
     {
@@ -24,8 +24,9 @@ const ACHARYA_DATA = [
         name: "Acharya Shandilya",
         role: "Vastu & Spiritual Guidance Expert",
         description:
-            `Clarity in the Chaos Whether you are navigating a complex career transition or seeking harmony in a partnership, we provide data-driven spiritual insights. We analyze "Guna Milan" with overall Chart Analysis of couple for relationships and "Dashas" for career timing to ensure you are moving with the cosmic tide, not against it.`,
-        highlight:
+            <>
+                Rooted in the century-old spiritual tradition of his forebears, Aacharya Shandilya, having <strong> International Business Management Degree from Canada</strong>, embodies the timeless principle of Loka-Kalyan—universal welfare—in contemporary life. He unites deep ancestral intuition with rigorous analytical clarity, decoding planetary placements not as mere fatalism, but as a roadmap for the soul. His practice transforms ancient Shastric wisdom into actionable, logical remedies that dissolve karmic friction. Through uncompromising spiritual integrity, he guides individuals toward clarity, purpose, and inner equilibrium in an increasingly complex modern world.</>
+        , highlight:
             `Helps harmonize living spaces and life decisions through ancient Vastu principles and energetic balancing.`,
         link: "/contact"
     }

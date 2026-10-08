@@ -315,7 +315,7 @@ const AboutOperations = () => {
                             Harmonize Your Sanctuary
                         </h3>
                         <p>
-                            A logical, modern understanding of the psychological and environmental
+                            Use Vastu to turn your living space into a powerhouse of positive energy.
                         </p>
                     </div>
 

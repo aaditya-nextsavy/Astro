@@ -1739,7 +1739,7 @@ html.header-scrolled .astroHeroTopBar::before {
   }
 
   .astroHeroBottomSection {
-    width: 100%;
+    width: auto;
     justify-content: space-between;
     left: 24px;
     right: 24px;
@@ -1754,9 +1754,8 @@ html.header-scrolled .astroHeroTopBar::before {
     display: flex;
     position: absolute;
     left: 24px;
-    right: 414px;
-    width: 100%;
-    padding-right: 24px;
+    right: 24px;
+    width: auto;
 
 
   }
@@ -3963,6 +3962,48 @@ button.astroHeroTimeBlock {
 
 }
 
+.footer-heading .footer-sanskrit-text {
+  max-width: none;
+  font-size: 28px;
+  line-height: 36px;
+  text-align: end;
+  margin-top: auto;
+}
+
+/* small desktop */
+@media (max-width: 1560px) {
+  .footer-heading .footer-sanskrit-text {
+    font-size: 20px;
+    line-height: 28px;
+  }
+}
+
+/* small desktop */
+@media (max-width: 1280px) {
+  .footer-heading .footer-sanskrit-text {
+    font-size: 18px;
+    line-height: 26px;
+  }
+}
+
+/* tablet */
+@media (max-width: 991px) {
+  .footer-heading .footer-sanskrit-text {
+    max-width: 50%;
+    font-size: 17px;
+    line-height: 25px;
+  }
+}
+
+/* mobile */
+@media (max-width: 550px) {
+  .footer-heading .footer-sanskrit-text {
+    max-width: 100%;
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
 .footer-form {
   padding: 72px;
   margin-bottom: 24px;
@@ -4492,6 +4533,34 @@ button.astroHeroTimeBlock {
 
 .clickable-card:hover .footer-hover-underline::after,
 .contact-card:hover .footer-hover-underline::after {
+  width: 100%;
+}
+
+/* card holding several links: underline only the hovered one */
+.contact-card-multi {
+  cursor: default;
+}
+
+/* numbers sit on one line and wrap only when they don't fit */
+.contact-card-links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.3em;
+  row-gap: 4px;
+  font-size: 29px;
+}
+
+@media (max-width: 1444px) {
+  .contact-card-links {
+    font-size: 22px;
+  }
+}
+
+.contact-card-multi:hover .footer-hover-underline::after {
+  width: 0%;
+}
+
+.contact-card-multi .footer-hover-underline:hover::after {
   width: 100%;
 }
 

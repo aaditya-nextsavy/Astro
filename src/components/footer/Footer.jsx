@@ -205,8 +205,10 @@ const Footer = () => {
                 {/* FORM */}
                 <div className="footer-heading">
                     <h2>Let&apos;s Talk</h2>
-                    <p>
-                        Aacharya Markand’s background in computer engineering lends precision to spiritual analysis, while Aacharya Shandilya’s expertise in international business brings a global perspective to their counsel.
+                    <p className="footer-sanskrit-text">
+                        ॐ सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः।
+                        <br />
+                        सर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत्।
                     </p>
                 </div>
                 <form className="glass-card footer-form"
@@ -352,7 +354,7 @@ const Footer = () => {
                         >
                             {isSubmitting ? "Submitting..." : "Get In Touch"}
                         </button>
-                        <span className="sumbit-message">Our team will get back to you with custom package information.</span>
+                        {/* <span className="sumbit-message">Our team will get back to you with custom package information.</span> */}
                     </div>
                 </form>
                 {/* BOTTOM GRID */}
@@ -483,31 +485,44 @@ const Footer = () => {
                         </div>
                         <div className="footer-grid-of-2">
 
-                            <Link href="https://www.instagram.com/astro_aacharya/" target="_blank" className="glass-card social-card">
+                            <Link href="https://www.instagram.com/astro_aacharya" target="_blank" className="glass-card social-card">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M26.0513 4.00098C28.3021 4.0047 29.4427 4.01662 30.4283 4.04596L30.8165 4.05864C31.2649 4.07458 31.7073 4.09458 32.2407 4.11958C34.3689 4.21792 35.8207 4.55458 37.0957 5.04958C38.4139 5.55792 39.5273 6.24458 40.6389 7.35626C41.7489 8.46792 42.4357 9.58458 42.9457 10.8996C43.4389 12.1729 43.7757 13.6263 43.8757 15.7546C43.8995 16.2879 43.9187 16.7303 43.9345 17.1788L43.9471 17.567C43.9763 18.5525 43.9897 19.6932 43.9939 21.9441L43.9955 23.4353C43.9957 23.6175 43.9957 23.8055 43.9957 23.9995L43.9955 24.5637L43.9943 26.0551C43.9905 28.3059 43.9787 29.4467 43.9493 30.4321L43.9365 30.8203C43.9207 31.2689 43.9007 31.7113 43.8757 32.2445C43.7773 34.3729 43.4389 35.8245 42.9457 37.0995C42.4373 38.4179 41.7489 39.5313 40.6389 40.6429C39.5273 41.7529 38.4089 42.4395 37.0957 42.9495C35.8207 43.4429 34.3689 43.7795 32.2407 43.8795C31.7073 43.9033 31.2649 43.9227 30.8165 43.9383L30.4283 43.9509C29.4427 43.9803 28.3021 43.9935 26.0513 43.9979L24.5599 43.9995C24.3777 43.9995 24.1897 43.9995 23.9957 43.9995H23.4315L21.9401 43.9981C19.6893 43.9945 18.5486 43.9825 17.5631 43.9531L17.1749 43.9405C16.7264 43.9245 16.284 43.9045 15.7507 43.8795C13.6223 43.7813 12.1723 43.4429 10.8957 42.9495C9.57899 42.4413 8.46399 41.7529 7.35233 40.6429C6.24067 39.5313 5.55567 38.4129 5.04567 37.0995C4.55067 35.8245 4.21567 34.3729 4.11567 32.2445C4.09191 31.7113 4.07253 31.2689 4.05683 30.8203L4.04425 30.4321C4.01499 29.4467 4.00165 28.3059 3.99733 26.0551L3.99707 21.9441C4.00079 19.6932 4.01269 18.5525 4.04203 17.567L4.05473 17.1788C4.07067 16.7303 4.09067 16.2879 4.11567 15.7546C4.21399 13.6246 4.55067 12.1746 5.04567 10.8996C5.55399 9.58292 6.24067 8.46792 7.35233 7.35626C8.46399 6.24458 9.58067 5.55958 10.8957 5.04958C12.1707 4.55458 13.6207 4.21958 15.7507 4.11958C16.284 4.09584 16.7264 4.07646 17.1749 4.06076L17.5631 4.04818C18.5486 4.0189 19.6893 4.00556 21.9401 4.00124L26.0513 4.00098ZM23.9957 13.9996C18.4699 13.9996 13.9957 18.4786 13.9957 23.9995C13.9957 29.5253 18.4747 33.9995 23.9957 33.9995C29.5215 33.9995 33.9957 29.5205 33.9957 23.9995C33.9957 18.4738 29.5165 13.9996 23.9957 13.9996ZM23.9957 17.9996C27.3095 17.9996 29.9957 20.6849 29.9957 23.9995C29.9957 27.3133 27.3103 29.9995 23.9957 29.9995C20.6819 29.9995 17.9957 27.3143 17.9957 23.9995C17.9957 20.6857 20.6809 17.9996 23.9957 17.9996ZM34.4957 10.9996C33.1171 10.9996 31.9957 12.1194 31.9957 13.4979C31.9957 14.8764 33.1155 15.9979 34.4957 15.9979C35.8741 15.9979 36.9957 14.8781 36.9957 13.4979C36.9957 12.1194 35.8723 10.9979 34.4957 10.9996Z" fill="#D0E3F1" />
                                 </svg>
 
                             </Link>
 
-                            <Link href="https://linkedin.com/astro" target="_blank" className="glass-card social-card">
+                            <Link href="https://www.youtube.com/@AstroAacharya1008" target="_blank" className="glass-card social-card">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M13.878 10.0028C13.8773 11.6314 12.8892 13.097 11.3797 13.7084C9.87027 14.3198 8.14081 13.955 7.00687 12.786C5.87293 11.617 5.56097 9.87723 6.21807 8.38707C6.87519 6.89691 8.37015 5.95393 9.99803 6.00279C12.1602 6.06769 13.879 7.83967 13.878 10.0028ZM13.998 16.9628H5.99803V42.0027H13.998V16.9628ZM26.6381 16.9628H18.678V42.0027H26.5581V28.8627C26.5581 21.5427 36.0981 20.8627 36.0981 28.8627V42.0027H43.9981V26.1427C43.9981 13.8028 29.8781 14.2628 26.5581 20.3227L26.6381 16.9628Z" fill="#D0E3F1" />
+                                    <g clipPath="url(#clip0_628_18)">
+                                        <mask id="mask0_628_18" style={{ maskType: "luminance" }} maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48">
+                                            <path d="M0 0H48V48H0V0Z" fill="white" />
+                                        </mask>
+                                        <g mask="url(#mask0_628_18)">
+                                            <path d="M46.9993 13.0137C46.7263 12.0447 46.197 11.1673 45.4673 10.4737C44.7159 9.75969 43.7949 9.24895 42.7913 8.98968C39.0353 7.99968 23.9873 7.99968 23.9873 7.99968C17.714 7.93019 11.4423 8.24411 5.20733 8.93968C4.20371 9.21811 3.28446 9.74026 2.53133 10.4597C1.79133 11.1717 1.25533 12.0497 0.975329 13.0117C0.301635 16.635 -0.0251764 20.3143 -0.000670931 23.9997C-0.0246709 27.6817 0.301329 31.3597 0.975329 34.9877C1.24933 35.9457 1.78333 36.8197 2.52533 37.5257C3.26733 38.2317 4.19133 38.7417 5.20733 39.0117C9.01333 39.9997 23.9873 39.9997 23.9873 39.9997C30.2686 40.0702 36.5484 39.7562 42.7913 39.0597C43.7949 38.8004 44.7159 38.2897 45.4673 37.5757C46.1963 36.8819 46.7248 36.0044 46.9973 35.0357C47.6873 31.4136 48.0228 27.7329 47.9993 24.0457C48.0509 20.3429 47.7158 16.6469 46.9993 13.0137ZM19.2033 30.8477V17.1537L31.7233 24.0017L19.2033 30.8477Z" fill="#D0E3F1" />
+                                        </g>
+                                    </g>
+                                    <defs>
+                                        <clipPath id="clip0_628_18">
+                                            <rect width="48" height="48" fill="white" />
+                                        </clipPath>
+                                    </defs>
                                 </svg>
+
 
                             </Link>
 
 
 
 
-                            <Link href="https://www.facebook.com/markand1008" target="_blank" className="glass-card social-card">
+                            <Link href="https://www.facebook.com/astrovastuconsultants" target="_blank" className="glass-card social-card">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M24.0046 1.59961C11.6252 1.59961 1.58984 11.635 1.58984 24.0143C1.58984 35.2021 9.78656 44.4751 20.5023 46.1566V30.4935H14.811V24.0143H20.5023V19.0761C20.5023 13.4584 23.8486 10.3553 28.9685 10.3553C31.4209 10.3553 33.986 10.7931 33.986 10.7931V16.3092H31.1595C28.3752 16.3092 27.5069 18.037 27.5069 19.8097V24.0143H33.7233L32.7297 30.4935H27.5069V46.1566C38.2224 44.4751 46.4192 35.2021 46.4192 24.0143C46.4192 11.635 36.3837 1.59961 24.0046 1.59961Z" fill="#D0E3F1" />
                                 </svg>
 
                             </Link>
 
-                            <Link href="https://x.com/astro" target="_blank" className="glass-card social-card">
+                            <Link href="https://x.com/astroaacharya18" target="_blank" className="glass-card social-card">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M35.044 7.19629H40.9323L28.0681 21.4289L43.2018 40.7963H31.3523L22.0713 29.0501L11.4519 40.7963H5.56004L19.3195 25.5729L4.80176 7.19629H16.9521L25.3412 17.9328L35.044 7.19629ZM32.9774 37.3846H36.2402L15.1792 10.4288H11.6779L32.9774 37.3846Z" fill="#D0E3F1" />
                                 </svg>
@@ -530,20 +545,20 @@ const Footer = () => {
                         </Link>
 
                         <Link
-                            href="mailto:markand1008@gmail.com"
+                            href="mailto:info@astroaacharya.in"
                             className="glass-card contact-card"
                         >
                             <span>Email Us</span>
-                            <div className="footer-hover-underline">markand1008@gmail.com</div>
+                            <div className="footer-hover-underline">info@astroaacharya.in</div>
                         </Link>
 
-                        <Link
-                            href="tel:+919898061008"
-                            className="glass-card contact-card"
-                        >
+                        <div className="glass-card contact-card contact-card-multi">
                             <span>Call Us</span>
-                            <div className="footer-hover-underline">+91 989 806 1008</div>
-                        </Link>
+                            <div className="contact-card-links">
+                                <Link href="tel:+919898061008" className="footer-hover-underline">+91 989 806 1008,</Link>
+                                <Link href="tel:+918758691316" className="footer-hover-underline">+91 875 869 1316</Link>
+                            </div>
+                        </div>
 
                     </div>
 
