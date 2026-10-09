@@ -13,9 +13,7 @@ const ACHARYA_DATA = [
         name: "Acharya Markand",
         description: <>
             <strong> A Computer Engineer </strong>, carrying forward the sacred legacy of Shri Mai Mandir, Aacharya Markand serves as a dedicated custodian of traditional Astrology and Vastu. He views Astrology and Vastu Shastra as the sacred science of aligning human intention with the natural rhythms of the universe. Drawing upon a heritage enriched by global outreach and selfless devotion, he helps individuals, families, and businesses transform their living and working spaces into reservoirs of vital energy. His guidance offers a grounded bridge between profound Vedic geometry and the strategic demands of modern life.
-        </>,
-        highlight: `Focused on clarity in relationships, career direction, and timing-based decisions using Dashas and planetary transits.`,
-        link: "/contact"
+        </>, link: "/contact"
     },
     {
         id: "acharya-shandilya",
@@ -26,9 +24,7 @@ const ACHARYA_DATA = [
         description:
             <>
                 Rooted in the century-old spiritual tradition of his forebears, Aacharya Shandilya, having <strong> International Business Management Degree from Canada</strong>, embodies the timeless principle of Loka-Kalyan—universal welfare—in contemporary life. He unites deep ancestral intuition with rigorous analytical clarity, decoding planetary placements not as mere fatalism, but as a roadmap for the soul. His practice transforms ancient Shastric wisdom into actionable, logical remedies that dissolve karmic friction. Through uncompromising spiritual integrity, he guides individuals toward clarity, purpose, and inner equilibrium in an increasingly complex modern world.</>
-        , highlight:
-            `Helps harmonize living spaces and life decisions through ancient Vastu principles and energetic balancing.`,
-        link: "/contact"
+        , link: "/contact"
     }
 ];
 
