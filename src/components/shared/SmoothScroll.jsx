@@ -101,6 +101,14 @@ export default function SmoothScroll() {
   useLayoutEffect(() => {
     tracking.current.frozen = true;
     tracking.current.key = pageKey();
+
+    // Scroll positions are handled here (top on load, saved position on Back/Forward). Left
+    // on "auto", the browser also restores its own position on refresh, before the pinned
+    // sections exist: the page showed the wrong section (the footer) and then jumped to the top.
+    // The setting is kept per history entry, so it is already in force when this page reloads.
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
   }, [pathname]);
 
   // Lenis outlives route changes and keeps easing toward the old page's scroll target,

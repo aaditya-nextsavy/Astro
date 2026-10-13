@@ -62,7 +62,10 @@ export default function HomePageWrapper() {
     useLayoutEffect(() => {
         if (!pageRef.current) return;
 
-        gsap.set(pageRef.current, { autoAlpha: 0 });
+        // The footer sits outside <main>, behind its last sections. Hide it with the page:
+        // arriving straight at /#rudrakshaSection (or back at a position near the end) would
+        // otherwise show the footer's contact form first, with the section fading in over it.
+        gsap.set([pageRef.current, lastlightSection.current], { autoAlpha: 0 });
     }, []);
 
 
@@ -108,6 +111,15 @@ export default function HomePageWrapper() {
             autoAlpha: 1,
             duration: 1.3,
             delay: 0.2,
+            ease: "sine.out",
+        });
+
+        // The footer lies behind <main>'s last sections. Fading both together let it show
+        // through the half-transparent section on top, so bring it in once <main> is opaque.
+        gsap.to(lastlightSection.current, {
+            autoAlpha: 1,
+            duration: 0.4,
+            delay: 1.5,
             ease: "sine.out",
         });
     }, [appReady, navBootstrapReady]);
@@ -546,7 +558,9 @@ export default function HomePageWrapper() {
                     </div>
                 </div>
             </main>
-            <div ref={lastlightSection} className="footer-takeover-zone">
+            {/* app-loading: hidden in the server HTML too, like <main>, until the page is set up */}
+            <div ref={lastlightSection}
+                className={`footer-takeover-zone ${appReady && navBootstrapReady ? "" : "app-loading"}`}>
                 <Footer />
             </div>
         </>
