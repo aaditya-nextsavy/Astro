@@ -32,6 +32,25 @@ export default function ImageZoom() {
 
         const { width, height } = getInitialSize();
 
+        // touch-only devices; desktop keeps its existing behaviour
+        const isTouch = ScrollTrigger.isTouch === 1;
+
+        // the scrub tween eases the timeline toward wherever the scroll is, so completing
+        // it lands on the end state when leaving forwards and the start state when leaving back
+        const settleScrub = (self) => {
+            if (!isTouch) return;
+
+            const scrubTween = self.getTween();
+            if (!scrubTween || scrubTween.progress() === 1) return;
+
+            gsap.to(scrubTween, {
+                progress: 1,
+                duration: 0.2,
+                ease: "sine.out",
+                overwrite: true,
+            });
+        };
+
 
 
         const ctx = gsap.context(() => {
@@ -60,6 +79,12 @@ export default function ImageZoom() {
                     end: "+=1200",
                     scrub: 0.5,
                     pin: true,
+                    // touch scrolls natively (no Lenis smoothing), so a fling can outrun the pin
+                    anticipatePin: isTouch ? 1 : 0,
+                    // scrub trails the scroll by 0.5s; on a fling the section unpins while the
+                    // image is still mid-zoom. Finish it quickly as the pin releases.
+                    onLeave: settleScrub,
+                    onLeaveBack: settleScrub,
 
 
 

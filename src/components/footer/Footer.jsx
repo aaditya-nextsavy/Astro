@@ -68,8 +68,16 @@ const Footer = () => {
 
 
         // Name
-        if (!formData.name.trim()) {
+        // letters of any language (plus their combining marks), spaces, and . ' - between them;
+        // no digits or other symbols, and at least two letters
+        const name = formData.name.trim();
+        if (!name) {
             newErrors.name = "Please enter your name.";
+        } else if (
+            !/^[\p{L}\p{M}]+(?:[ .'’-]+[\p{L}\p{M}]+)*\.?$/u.test(name) ||
+            (name.match(/\p{L}/gu) || []).length < 2
+        ) {
+            newErrors.name = "Enter a valid name (letters only).";
         }
         // Phone
         if (!formData.phone.trim()) {
@@ -231,16 +239,18 @@ const Footer = () => {
                             <label>this is my number</label>
                             <input
                                 type="tel"
-                                maxLength={10}
                                 inputMode="numeric"
                                 placeholder="type..."
                                 value={formData.phone}
-                                onChange={(e) =>
-                                    handleChange(
-                                        "phone",
-                                        e.target.value.replace(/\D/g, "")
-                                    )
-                                }
+                                // no maxLength: it cut a pasted "98765 43210" to 10 characters before
+                                // the spaces were stripped, losing digits. Strip first, then limit.
+                                onChange={(e) => {
+                                    let digits = e.target.value.replace(/\D/g, "");
+                                    // pasted with a country code / trunk prefix: +91 98765 43210, 098765 43210
+                                    if (digits.length === 12 && digits.startsWith("91")) digits = digits.slice(2);
+                                    else if (digits.length === 11 && digits.startsWith("0")) digits = digits.slice(1);
+                                    handleChange("phone", digits.slice(0, 10));
+                                }}
                             />
                             {errors.phone && (
                                 <span className="form-error-span block text-sm text-red-400">

@@ -11,10 +11,17 @@ import "swiper/css";
 
 import { RUDRAKSHA_ITEMS as slides } from "@/data/siteData";
 
+// the carousel opens on this bead; `active` starts here too so the arrows and dots match it
+const INITIAL_SLIDE = 5;
+
 const SliderWithFade = () => {
-    const [active, setActive] = useState(0);
+    const [active, setActive] = useState(INITIAL_SLIDE);
     const swiperRef = useRef(null);
     const [isAnimating, setIsAnimating] = useState(false);
+
+    // the carousel doesn't loop, so the arrow pointing past either end is switched off
+    const isFirst = active === 0;
+    const isLast = active === slides.length - 1;
 
     const VISIBLE = 5;
     const HALF = Math.floor(VISIBLE / 2);
@@ -78,7 +85,7 @@ const SliderWithFade = () => {
                 <div className="side-fade right" />
 
                 <Swiper
-                    initialSlide={5}
+                    initialSlide={INITIAL_SLIDE}
                     modules={[Autoplay, Pagination]}
                     centeredSlides
                     loop={false}
@@ -141,8 +148,9 @@ const SliderWithFade = () => {
 
             <div className="slider-nav">
                 <button
-                    className="nav-btn left"
-                    disabled={isAnimating}
+                    className={`nav-btn left ${isFirst ? "is-boundary" : ""}`}
+                    aria-label="Previous Rudraksha"
+                    disabled={isAnimating || isFirst}
                     onClick={() => swiperRef.current?.slidePrev()}
                 >
                     <svg width="41" height="15" viewBox="0 0 41 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -184,8 +192,9 @@ const SliderWithFade = () => {
 
 
                 <button
-                    className="nav-btn right"
-                    disabled={isAnimating}
+                    className={`nav-btn right ${isLast ? "is-boundary" : ""}`}
+                    aria-label="Next Rudraksha"
+                    disabled={isAnimating || isLast}
                     onClick={() => swiperRef.current?.slideNext()}
                 >
                     <svg width="41" height="15" viewBox="0 0 41 15" fill="none" xmlns="http://www.w3.org/2000/svg">

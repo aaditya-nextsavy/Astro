@@ -1551,28 +1551,34 @@ html.header-scrolled .astroHeroTopBar::before {
     inset: 0;
     z-index: 9999;
 
-    opacity: 0;
+    /* the fade lives on the backdrop, not here: fading this wrapper would also fade the
+       menu card, hiding it before it has shrunk back into the burger button */
     visibility: hidden;
     pointer-events: none;
 
-    transition:
-      opacity 0.4s ease,
-      visibility 0.4s ease;
+    /* closing: stay visible until the card has finished shrinking */
+    transition: visibility 0s linear 0.4s;
   }
 
   .mobile-drawer-menu.open {
-    opacity: 1;
     visibility: visible;
     pointer-events: auto;
+    transition-delay: 0s;
   }
 
 
   .mobile-drawer-menu-backdrop {
     position: absolute;
     inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
     /* background: rgba(0, 0, 0, 0.068); */
     /* -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px); */
+  }
+
+  .mobile-drawer-menu.open .mobile-drawer-menu-backdrop {
+    opacity: 1;
   }
 
 
@@ -1912,6 +1918,9 @@ html.header-scrolled .astroHeroTopBar::before {
   width: 700px;
   max-width: 90vw;
   height: calc(100vh - 48px);
+  /* mobile: 100vh ignores the browser's address/tool bars, so the card ran off the bottom
+     of the screen; dvh is the part actually visible (vh above stays as the fallback) */
+  height: calc(100dvh - 48px);
   border-radius: 24px;
   transform: translateX(140%);
 
@@ -3192,6 +3201,13 @@ button.astroHeroTimeBlock {
 .info-sticky-card-section__cards {
   transform: translateY(-50%);
   z-index: 1;
+  /* the box sits over the heading/button on mobile even while the cards are still
+     off-screen below; let taps through it and only the cards themselves catch them */
+  pointer-events: none;
+}
+
+.info-sticky-card-section__card-wrapper {
+  pointer-events: auto;
 }
 
 .info-sticky-card-section__card::before {
@@ -3355,7 +3371,7 @@ button.astroHeroTimeBlock {
     width: 100%;
     right: 0;
     height: 400px;
-
+    pointer-events: none;
   }
 
   .info-sticky-card-section__card-wrapper {
@@ -4001,6 +4017,8 @@ button.astroHeroTimeBlock {
     max-width: 100%;
     font-size: 16px;
     line-height: 24px;
+    margin-right: auto;
+    text-align: start;
   }
 }
 
@@ -4356,7 +4374,7 @@ button.astroHeroTimeBlock {
   inset: 0;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  background: #232d42bd;
+  background: #232d42e5;
   border-radius: inherit;
   border: 1px solid rgba(255, 255, 255, .12);
   z-index: 0;
@@ -5857,6 +5875,9 @@ button.astroHeroTimeBlock {
 .product-slide img {
   width: 140px;
   height: auto;
+  /* same square box for every bead: the photos differ in shape (One Mukhi is half as tall
+     as the rest), which made short ones, and the text under them, sit higher */
+  aspect-ratio: 1 / 1;
   object-fit: contain;
   transition: transform 0.6s ease;
 }
@@ -5955,6 +5976,13 @@ button.astroHeroTimeBlock {
 
 .home-product-slider-section .nav-btn:disabled {
   cursor: default;
+}
+
+/* first / last bead: nothing further in that direction */
+.home-product-slider-section .nav-btn.is-boundary {
+  opacity: 0.35;
+  transform: none;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .home-product-slider-section .nav-btn.left {
@@ -7041,6 +7069,30 @@ button.astroHeroTimeBlock {
     scroll-margin-top: -100px;
   }
 
+}
+
+/* Wide but short laptop screens (e.g. 1536 x 692): tighten the About story text so the
+   description clears the timeline. Kept above 1440px so smaller layouts are untouched. */
+@media (min-width: 1441px) and (max-width: 1650px) and (max-height: 760px) {
+
+  .about-story-content {
+    position: sticky;
+    top: 17%;
+  }
+
+  .about-story-grid--legacy .about-story-content {
+    margin-top: 120px;
+  }
+
+  .about-story-content h3 {
+    margin-bottom: 10px;
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  .about-story-description {
+    font-size: 15px;
+  }
 }
 
 @media (max-width: 1440px) {
@@ -8265,7 +8317,16 @@ button.astroHeroTimeBlock {
     position: fixed;
     top: 0;
     left: 50%;
-    transform: translate(-0%, -30%) scale(.08);
+    /* Grows out of / shrinks back into the burger button: the card stays in its open
+       position and only scales, around the button's centre.
+       --menu-btn-x: button centre from the right screen edge (bar inset 24px + half the button)
+       --menu-btn-y: button centre from the top (bar top 12px + half the bar height)
+       --menu-top:   the card's open offset from the top */
+    --menu-btn-x: 53px;
+    --menu-btn-y: 47px;
+    --menu-top: 150px;
+    transform: translate(-50%, var(--menu-top)) scale(.12);
+    transform-origin: calc(50% + 50vw - var(--menu-btn-x)) calc(var(--menu-btn-y) - var(--menu-top));
     background: #0e182f66;
     width: 80%;
     height: max-content;
@@ -8274,25 +8335,31 @@ button.astroHeroTimeBlock {
     border-bottom-left-radius: 500px;
     border-bottom-right-radius: 500px;
     border-top-left-radius: 500px;
-    transform-origin: top right;
     opacity: 0;
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     /* filter: blur(2px); */
+    /* closing (these apply on the way back): accelerate into the button, fade only at the end */
     transition:
       background-color .3s ease,
-      border-radius .5s ease,
-      transform .5s ease,
-      opacity .2s ease;
+      border-radius .4s ease,
+      transform .4s cubic-bezier(0.64, 0, 0.78, 0),
+      opacity .15s ease .25s;
 
   }
 
   .mobile-drawer-menu.open .mobile-header-menu {
     border-radius: 24px;
     /* border-radius: 0; */
-    transform: translate(-50%, 150px) scale(1);
+    transform: translate(-50%, var(--menu-top)) scale(1);
     opacity: 1;
     /* background: #0e182ffc; */
+    /* opening: the mirror of the close — fade in first, decelerate into place */
+    transition:
+      background-color .3s ease,
+      border-radius .4s ease,
+      transform .4s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity .15s ease;
   }
 
   .mobile-drawer-menu .acharyaDrawerContent-bg-filter {
@@ -8359,7 +8426,10 @@ button.astroHeroTimeBlock {
     height: max-content;
     position: fixed;
     left: 50%;
-    transform: translate(-50%, -20%) scale(.08);
+    /* smaller header here: 40px button, 40px bar; the card sits 20% of its own height down */
+    --menu-btn-x: 44px;
+    --menu-btn-y: 32px;
+    --menu-top: 20%;
     max-width: 300px;
   }
 
@@ -8369,7 +8439,6 @@ button.astroHeroTimeBlock {
 
   .mobile-drawer-menu.open .mobile-header-menu {
     border-radius: 24px;
-    transform: translate(-50%, 20%) scale(1);
     opacity: 1;
     background: #0e182f31;
 

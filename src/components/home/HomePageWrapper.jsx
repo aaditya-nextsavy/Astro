@@ -281,45 +281,45 @@ export default function HomePageWrapper() {
 
         const triggers = [];
 
+        // The theme is worked out from where the page is, not from which callback fired last.
+        // Separate enter/leave/hide callbacks gave the wrong answer when the scroll jumped past
+        // all of them at once (browser Back restoring the footer position, then the reset to
+        // the top): the last one to run left the navs in the light theme over the dark hero.
         NAV_CONFIG.forEach(({ position, enter, leave, hide }) => {
-            triggers.push(
-                ScrollTrigger.create({
-                    trigger: section,
-                    start: enter,
-                    invalidateOnRefresh: true,
-                    onEnter: () => setTakeover(position, true),
-                    onEnterBack: () => setTakeover(position, true),
-                })
-            );
+            // only here to turn the `enter` threshold into a scroll position
+            const enterMark = ScrollTrigger.create({
+                trigger: section,
+                start: enter,
+                invalidateOnRefresh: true,
+            });
 
-            triggers.push(
-                ScrollTrigger.create({
-                    trigger: section,
-                    start: leave,
-                    invalidateOnRefresh: true,
-                    onLeaveBack: () => setTakeover(position, false),
-                })
-            );
+            const sync = (self) => {
+                const y = self.scroll();
+                const pastHide = y >= self.end;
 
-            triggers.push(
-                ScrollTrigger.create({
-                    trigger: section,
-                    start: hide,
-                    invalidateOnRefresh: true,
-                    onEnter: () => {
-                        setTakeover(position, false);
-                        if (position === "bottom") {
-                            bottomNav.classList.add("hide-bottom-nav");
-                        }
-                    },
-                    onLeaveBack: () => {
-                        setTakeover(position, true);
-                        if (position === "bottom") {
-                            bottomNav.classList.remove("hide-bottom-nav");
-                        }
-                    },
-                })
-            );
+                let active = lightThemeSources.current[position].takeover;
+                if (pastHide || y < self.start) active = false;
+                else if (y >= enterMark.start) active = true;
+                // between `leave` and `enter`: keep the current theme (turns on later going
+                // down than it turns off going up)
+
+                setTakeover(position, active);
+                if (position === "bottom") {
+                    bottomNav.classList.toggle("hide-bottom-nav", pastHide);
+                }
+            };
+
+            const range = ScrollTrigger.create({
+                trigger: section,
+                start: leave,
+                end: hide,
+                invalidateOnRefresh: true,
+                onUpdate: sync,
+                onRefresh: sync,
+            });
+
+            sync(range);
+            triggers.push(enterMark, range);
         });
 
         return () => {

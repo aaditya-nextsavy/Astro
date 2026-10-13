@@ -175,6 +175,21 @@ export async function POST(req) {
             );
         }
 
+        // Same rule as the form: letters of any language, spaces and . ' - only, at least two letters
+        const cleanName = typeof name === "string" ? name.trim() : "";
+        if (
+            !/^[\p{L}\p{M}]+(?:[ .'’-]+[\p{L}\p{M}]+)*\.?$/u.test(cleanName) ||
+            (cleanName.match(/\p{L}/gu) || []).length < 2
+        ) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "Please enter a valid name.",
+                },
+                { status: 400 }
+            );
+        }
+
         const isProduction = process.env.NODE_ENV === "production";
 
         if (isProduction) {
