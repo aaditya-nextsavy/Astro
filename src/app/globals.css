@@ -5344,6 +5344,13 @@ button.astroHeroTimeBlock {
   }
 }
 
+@media (max-width: 491px) {
+
+  .contact-page-wrapper .footer {
+    padding: 120px 0px 40px;
+  }
+}
+
 /* why us */
 
 .why-us-section {
