@@ -968,6 +968,10 @@ al stars */
   top: 0;
   width: 100%;
   min-height: 100vh;
+  /* mobile: 100vh is the screen with the browser's address bar hidden, so with the bar showing
+     the hero's bottom (and the time / Panchang row on it) fell below the screen. svh is the
+     height with the bar showing, and unlike dvh it doesn't resize the hero as the bar hides. */
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   padding: 2% 5%;
