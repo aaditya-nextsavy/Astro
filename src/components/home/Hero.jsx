@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { preload } from "react-dom";
 import { preloadDrawerImages } from "@/components/drawer/AcharyaDrawer";
 import HeroHeading from "./HeroHeading";
@@ -29,7 +29,7 @@ const ACHARYA_DATA = [
 ];
 
 
-export default function HomeHero({ onOpenAcharya, onOpenDivineTime }) {
+export default function HomeHero({ onOpenAcharya }) {
 
     // Drawer photos: high-priority <link rel="preload"> in the page head (runs during SSR),
     // then marked as loaded for the session so the drawer skips its loader
@@ -37,29 +37,6 @@ export default function HomeHero({ onOpenAcharya, onOpenDivineTime }) {
 
     useEffect(() => {
         preloadDrawerImages(ACHARYA_DATA.map(({ image }) => image));
-    }, []);
-
-    const [time, setTime] = useState("");
-    useEffect(() => {
-        const updateTime = () => {
-            const formatted = new Intl.DateTimeFormat(
-                "en-IN",
-                {
-                    timeZone: "Asia/Kolkata",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                }
-            ).format(new Date());
-            setTime(formatted);
-        };
-        updateTime();
-        const interval = setInterval(
-            updateTime,
-            1000
-        );
-        return () =>
-            clearInterval(interval);
     }, []);
 
 
@@ -114,35 +91,6 @@ export default function HomeHero({ onOpenAcharya, onOpenDivineTime }) {
                         Acharya Shandilya
                     </button>
 
-                </div>
-
-
-                <div
-                    className="astroHeroBottomSection showmobile">
-                    <div className="astroHeroTimeBlock">
-                        <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
-                            <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
-                        </svg>
-                        <span>
-                            ( IST {time} )
-                        </span>
-                        <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
-                            <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
-                        </svg>
-                    </div>
-
-                    <button type="button" onClick={onOpenDivineTime} className="astroHeroTimeBlock">
-                        <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
-                            <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
-                        </svg>
-                        Today’s Panchang <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
-                            <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
-                        </svg>
-                    </button>
                 </div>
             </div>
 

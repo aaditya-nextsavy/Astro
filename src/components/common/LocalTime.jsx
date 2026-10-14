@@ -9,7 +9,9 @@ export default function LocalTime({
 
     useEffect(() => {
         const updateTime = () => {
-            const formatted = new Intl.DateTimeFormat(undefined, {
+            // India time, same as the IST clock on the other pages
+            const formatted = new Intl.DateTimeFormat("en-IN", {
+                timeZone: "Asia/Kolkata",
                 hour: "2-digit",
                 minute: "2-digit",
                 hour12: true,
@@ -32,7 +34,7 @@ export default function LocalTime({
                 <circle cx="12.3535" cy="2.5" r="2.5" fill="currentColor" />
             </svg>
 
-            <span>({time})</span>
+            <span>( IST {time} )</span>
 
             <svg width="15" height="5" viewBox="0 0 15 5" fill="none">
                 <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />

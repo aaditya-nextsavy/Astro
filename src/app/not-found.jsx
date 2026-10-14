@@ -1,33 +1,30 @@
 import Link from "next/link";
+import FloatingNavbar from "@/components/layout/FloatingNavbar";
+import HeroHeading from "@/components/home/HeroHeading";
 
+// Home-hero style page: header + IST / Panchang row, big heading, description, two buttons (no footer)
 export default function NotFound() {
   return (
-    <main className="legal-page not-found-page">
-      <section className="section pt-0!">
-        <div className="container-custom legal-shell">
-          <div className="legal-card legal-card--content">
-            <div className="not-found-figure">
-              <p className="legal-eyebrow font-body">Page not found</p>
-              <div className="not-found-code">404</div>
-            </div>
+    <FloatingNavbar showFooter={false}>
+      <main className="astroHeroWrapper not-found-hero">
+        <div className="astroHeroContentArea">
+          <HeroHeading className="astroHeroMainHeading not-found-hero__code" lines={["404"]} />
 
-            <h1 className="legal-title font-heading">We could not find this page</h1>
-            <p className="legal-intro not-found-subtitle font-body">
-              The page you are looking for may have moved, been renamed, or no longer exists.
-              You can return home or contact us if you need help finding the right page.
-            </p>
+          <p className="not-found-hero__text">
+            This path isn&apos;t written in the stars. The page you&apos;re looking for may have moved,
+            but guidance on astrology, Vastu and Rudraksha is only a step away.
+          </p>
 
-            <div className="legal-actions__buttons" style={{ marginTop: "1.4rem" }}>
-              <Link href="/" className="legal-button legal-button--primary font-body">
-                Go Home
-              </Link>
-              <Link href="/contact" className="legal-button legal-button--secondary font-body">
-                Contact Us
-              </Link>
-            </div>
+          <div className="not-found-hero__actions">
+            <Link href="/" className="astroHeroContactButton glass-effect-card">
+              Return Home
+            </Link>
+            <Link href="/contact" className="astroHeroContactButton glass-effect-card">
+              Get In Touch
+            </Link>
           </div>
         </div>
-      </section>
-    </main>
+      </main>
+    </FloatingNavbar>
   );
 }

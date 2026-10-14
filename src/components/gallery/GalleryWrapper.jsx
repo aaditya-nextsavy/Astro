@@ -5,7 +5,7 @@ import DivineTimeDrawer from "@/components/drawer/DivineTimeDrawer";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import Link from "next/link";
 import GalleryImagePreview from "./GalleryImagePreview";
-import { FaChevronRight } from "react-icons/fa6";
+import MobileMenu from "@/components/layout/MobileMenu";
 import { subscribeAppReady } from "@/lib/appReady";
 
 
@@ -17,6 +17,7 @@ const GalleryWrapper = () => {
     const bottomNavRef = useRef(null);
     const lastlightSection = useRef(null);
     const [menuOpen, setMenuOpen] = useState(false);
+    const closeMenu = useCallback(() => setMenuOpen(false), []);
     const [divineTimeOpen, setDivineTimeOpen] = useState(false);
     const [divineTimeLight, setDivineTimeLight] = useState(false);
     // match the drawer to the zone the clicked bar is over (navs get light-section-active on cream sections)
@@ -356,56 +357,7 @@ const GalleryWrapper = () => {
                     </div>
                     <DivineTimeDrawer isOpen={divineTimeOpen} onClose={closeDivineTime} isLight={divineTimeLight} />
 
-                    <div className={`mobile-drawer-menu ${menuOpen ? "open" : ""}`}>
-
-                        <div
-                            className="mobile-drawer-menu-backdrop relative"
-                            onClick={() => setMenuOpen(false)}
-                        />
-                        <div
-                            className={`acharyaDrawerContent mobile-header-menu  glass-effect-card `}
-                            onClick={(e) => e.target.closest("a") && setMenuOpen(false)}
-                        >
-
-                            <div className="acharyaDrawerContent-bg-filter"></div>
-
-                            <Link href="/">
-                                <nav>Home</nav>
-                                <FaChevronRight />
-
-                            </Link>
-                            <Link href="/about">
-                                <nav>About</nav>
-                                <FaChevronRight />
-
-                            </Link>
-                            <Link href="/services">
-                                <nav>Services</nav>
-                                <FaChevronRight />
-
-                            </Link>
-                            <Link href="/gallery">
-                                <nav>Gallery</nav>
-                                <FaChevronRight />
-
-                            </Link>
-                            <Link href="/#rudrakshaSection" scroll={false}>
-                                <nav>Rudraksha</nav>
-                                <FaChevronRight />
-                            </Link>
-                            <Link href="/contact">
-                                <nav>Contact</nav>
-                                <FaChevronRight />
-
-                            </Link>
-
-
-
-
-
-                        </div>
-
-                    </div>
+                    <MobileMenu open={menuOpen} onClose={closeMenu} />
 
                     <div className="hero-stack-sequence-wrapper">
 

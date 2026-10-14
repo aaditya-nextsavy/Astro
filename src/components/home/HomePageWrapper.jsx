@@ -15,7 +15,7 @@ import Footer from "@/components/footer/Footer";
 import SliderWithFade from "@/components/home/SliderWithFade";
 import ContactCTA from "@/components/home/ContactCTA";
 import Link from "next/link";
-import { FaChevronRight } from "react-icons/fa6";
+import MobileMenu from "@/components/layout/MobileMenu";
 import { Suspense } from "react";
 import HomeSearchParams from "@/components/home/HomeSearchParams";
 import { subscribeAppReady } from "@/lib/appReady";
@@ -45,6 +45,7 @@ export default function HomePageWrapper() {
 
     const [selectedAcharya, setSelectedAcharya] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
+    const closeMenu = useCallback(() => setMenuOpen(false), []);
     const [divineTimeOpen, setDivineTimeOpen] = useState(false);
     const [divineTimeLight, setDivineTimeLight] = useState(false);
     // match the drawer to the zone the clicked bar is over (navs get light-section-active on cream sections)
@@ -223,25 +224,6 @@ export default function HomePageWrapper() {
             allTriggers.forEach((trigger) => trigger.kill());
         };
     }, [appReady]);
-    useEffect(() => {
-        if (!menuOpen) return;
-        const scrollY = window.scrollY;
-        document.body.style.position = "fixed";
-        document.body.style.top = `-${scrollY}px`;
-        document.body.style.left = "0";
-        document.body.style.right = "0";
-        document.body.style.width = "100%";
-        document.body.style.overflow = "hidden";
-        return () => {
-            document.body.style.position = "";
-            document.body.style.top = "";
-            document.body.style.left = "";
-            document.body.style.right = "";
-            document.body.style.width = "";
-            document.body.style.overflow = "";
-            window.scrollTo(0, scrollY);
-        };
-    }, [menuOpen]);
     const [time, setTime] = useState("");
     useEffect(() => {
         const updateTime = () => {
@@ -340,18 +322,6 @@ export default function HomePageWrapper() {
     }, [appReady]);
 
 
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (e.key === "Escape") {
-                setMenuOpen(false);
-            }
-        };
-        window.addEventListener("keydown", handleKeyDown);
-        return () => {
-            window.removeEventListener("keydown", handleKeyDown);
-        };
-    }, []);
-
     return (
         <>
             <Suspense fallback={null}>
@@ -407,7 +377,7 @@ export default function HomePageWrapper() {
                             </div>
                         </div>
                         <div ref={bottomNavRef}
-                            className="astroHeroBottomSection hidemobile">
+                            className="astroHeroBottomSection">
                             <div className="astroHeroTimeBlock">
                                 <svg width="15" height="5" viewBox="0 0 15 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="2.5" cy="2.5" r="2.5" fill="currentColor" />
@@ -456,45 +426,9 @@ export default function HomePageWrapper() {
                         </div>
                     </div>
                     <DivineTimeDrawer isOpen={divineTimeOpen} onClose={closeDivineTime} isLight={divineTimeLight} />
-                    <div className={`mobile-drawer-menu ${menuOpen ? "open" : ""}`}>
-                        <div
-                            className="mobile-drawer-menu-backdrop relative"
-                            onClick={() => setMenuOpen(false)}
-                        />
-                        <div
-                            className={`acharyaDrawerContent mobile-header-menu  glass-effect-card `}
-                            onClick={(e) => e.target.closest("a") && setMenuOpen(false)}
-                        >
-
-                            <div className="acharyaDrawerContent-bg-filter"></div>
-                            <Link href="/">
-                                <nav>Home</nav>
-                                <FaChevronRight />
-                            </Link>
-                            <Link href="/about">
-                                <nav>About</nav>
-                                <FaChevronRight />
-                            </Link>
-                            <Link href="/services">
-                                <nav>Services</nav>
-                                <FaChevronRight />
-                            </Link>
-                            <Link href="/gallery">
-                                <nav>Gallery</nav>
-                                <FaChevronRight />
-                            </Link>
-                            <Link href="/#rudrakshaSection" scroll={false}>
-                                <nav>Rudraksha</nav>
-                                <FaChevronRight />
-                            </Link>
-                            <Link href="/contact">
-                                <nav>Contact</nav>
-                                <FaChevronRight />
-                            </Link>
-                        </div>
-                    </div>
+                    <MobileMenu open={menuOpen} onClose={closeMenu} />
                     <div className="hero-stack-sequence-wrapper">
-                        <HomeHero onOpenAcharya={handleOpenAcharya} onOpenDivineTime={openDivineTime} />
+                        <HomeHero onOpenAcharya={handleOpenAcharya} />
                         <AcharyaDrawer
                             isOpen={drawerOpen}
                             onClose={() => setDrawerOpen(false)}

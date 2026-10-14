@@ -523,45 +523,45 @@ main.app-ready {
   color: var(--color-text);
 }
 
-.not-found-page {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
+/* 404: the home hero layout (.astroHeroWrapper), but scrolling normally instead of sticky,
+   so the footer below doesn't slide over a pinned hero */
+.not-found-hero {
+  position: relative;
+  z-index: var(--z-content);
 }
 
-.not-found-page .legal-card--content {
+.not-found-hero .astroHeroMainHeading.not-found-hero__code {
+  font-size: clamp(110px, 13vw, 200px);
+}
+
+.not-found-hero__text {
+  max-width: 620px;
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: clamp(17px, 1.5vw, 22px);
+  line-height: 1.6;
+  letter-spacing: 0.3px;
+  color: #D0E3F1;
+}
+
+.not-found-hero__actions {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.not-found-page .legal-title {
-  margin-inline: auto;
-}
-
-.not-found-page .legal-actions__buttons {
-  align-self: stretch;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 16px;
 }
 
-.not-found-figure {
-  display: grid;
-  gap: 0.6rem;
-  justify-items: center;
-  margin-bottom: 1rem;
+.not-found-hero__actions .astroHeroContactButton:hover {
+  background: rgba(208, 227, 241, 0.12);
+  border-color: rgba(208, 227, 241, 0.24);
 }
 
-.not-found-code {
-  font-family: var(--font-heading);
-  font-size: clamp(4.5rem, 18vw, 10rem);
-  line-height: 0.8;
-  color: var(--color-primary);
-}
-
-.not-found-subtitle {
-  max-width: 68ch;
-  color: rgba(245, 247, 255, 0.8);
+@media (max-width: 550px) {
+  .not-found-hero__actions .astroHeroContactButton {
+    font-size: 18px;
+    padding: 14px 26px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -1274,7 +1274,8 @@ html.header-scrolled .astroHeroTopBar::before {
   gap: 48px;
 }
 
-.astroHeroAcharyaLinks button {
+.astroHeroAcharyaLinks button,
+.astroHeroAcharyaLinks a {
   background: transparent;
   border: none;
   cursor: pointer;
@@ -1292,7 +1293,8 @@ html.header-scrolled .astroHeroTopBar::before {
 }
 
 
-.astroHeroAcharyaLinks button::after {
+.astroHeroAcharyaLinks button::after,
+.astroHeroAcharyaLinks a::after {
   content: "";
   position: absolute;
   left: 0%;
@@ -1304,7 +1306,8 @@ html.header-scrolled .astroHeroTopBar::before {
   width: 0;
 }
 
-.astroHeroAcharyaLinks button:hover::after {
+.astroHeroAcharyaLinks button:hover::after,
+.astroHeroAcharyaLinks a:hover::after {
   width: 100%;
 }
 
@@ -1327,6 +1330,36 @@ html.header-scrolled .astroHeroTopBar::before {
   padding-bottom: 1rem;
   z-index: 100;
   transition: all 0.4s ease;
+}
+
+/* Bottom-row counterpart of the scrolled header band (.astroHeroTopBar::before): blurs and
+   tints what passes under the IST / nav / Panchang row, fading out upwards. Desktop only. */
+.astroHeroBottomSection::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  /* stretch past the row's insets to the full viewport width / bottom edge */
+  bottom: -10px;
+  left: -92px;
+  right: -92px;
+  height: calc(100% + 10px + 40px);
+  background: linear-gradient(to top, rgba(8, 18, 36, 0.45), rgba(8, 18, 36, 0.15));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  -webkit-mask-image: linear-gradient(to top, #000 65%, transparent);
+  mask-image: linear-gradient(to top, #000 65%, transparent);
+  opacity: 0;
+  transition: opacity 0.35s ease, background 0.35s ease;
+}
+
+html.header-scrolled .astroHeroBottomSection::before {
+  opacity: 1;
+}
+
+.astroHeroBottomSection.light-section-active::before,
+.light-section-active .astroHeroBottomSection::before {
+  background: linear-gradient(to top, rgba(243, 233, 216, 0.7), rgba(243, 233, 216, 0.3));
 }
 
 .astroHeroBottomSection.hide-on-footer {
@@ -1518,10 +1551,6 @@ html.header-scrolled .astroHeroTopBar::before {
   inset: 0;
 }
 
-
-.astroHeroBottomSection.showmobile {
-  display: none;
-}
 
 /* ---------- RESPONSIVE ---------- */
 
@@ -1768,38 +1797,57 @@ html.header-scrolled .astroHeroTopBar::before {
     width: 38px;
   }
 
-  .astroHeroAcharyaLinks button {
+  .astroHeroAcharyaLinks button,
+.astroHeroAcharyaLinks a {
     font-size: 22px;
   }
 
+  /* mobile: the row collapses to one centred, fixed "Today's Panchang" pill (no IST, no nav, no fade band) */
   .astroHeroBottomSection {
     width: auto;
-    justify-content: space-between;
+    justify-content: center;
     left: 24px;
     right: 24px;
+    pointer-events: none;
   }
 
-  .astroHeroBottomSection.hidemobile {
+  .astroHeroBottomSection::before {
     display: none;
   }
 
-  .astroHeroBottomSection.showmobile {
+  .astroHeroBottomSection>.astroHeroTimeBlock:not(button) {
+    display: none;
+  }
 
-    display: flex;
-    position: absolute;
-    left: 24px;
-    right: 24px;
-    width: auto;
+  .astroHeroBottomSection button.astroHeroTimeBlock {
+    pointer-events: auto;
+    min-width: 0;
+    justify-content: center;
+    padding: 14px 24px;
+    border-radius: 999px;
+    border: 1px solid rgba(208, 227, 241, 0.22);
+    border-top-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.05);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    font-size: 12px;
+    transition: background 0.35s ease, border-color 0.35s ease;
+  }
 
+  .astroHeroBottomSection.hide-bottom-nav button.astroHeroTimeBlock,
+  .astroHeroBottomSection.hide-on-footer button.astroHeroTimeBlock {
+    pointer-events: none;
+  }
 
+  .astroHeroBottomSection.light-section-active button.astroHeroTimeBlock,
+  .light-section-active .astroHeroBottomSection button.astroHeroTimeBlock {
+    border-color: rgba(23, 55, 79, 0.16);
+    border-top-color: rgba(23, 55, 79, 0.22);
+    background: rgba(243, 233, 216, 0.35);
   }
 
   .astroHeroTimeBlock {
     font-size: 10px;
-  }
-
-  .astroHeroBottomSection .astroHeroTimeBlock:nth-child(2) {
-    justify-content: end;
   }
 
   .astroHeroNavigation {
@@ -1817,7 +1865,8 @@ html.header-scrolled .astroHeroTopBar::before {
     font-size: 38px;
   }
 
-  .astroHeroAcharyaLinks button {
+  .astroHeroAcharyaLinks button,
+.astroHeroAcharyaLinks a {
     font-size: 20px;
   }
 
@@ -1873,7 +1922,8 @@ html.header-scrolled .astroHeroTopBar::before {
     gap: 15px;
   }
 
-  .astroHeroAcharyaLinks button {
+  .astroHeroAcharyaLinks button,
+.astroHeroAcharyaLinks a {
     font-size: 14px;
   }
 
@@ -8488,8 +8538,39 @@ button.astroHeroTimeBlock {
   }
 
   .mobile-drawer-menu-backdrop {
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(5, 12, 26, 0.4);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+  }
 
+  /* close button: same round glass button as the drawers' close, placed exactly over the
+     burger button (top right) so the menu closes from where it opened */
+  .mobile-drawer-menu-close {
+    position: fixed;
+    z-index: 1;
+    /* burger: 58px, centred 47px down and 53px from the right */
+    top: 18px;
+    right: 24px;
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    color: #D0E3F1;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    cursor: pointer;
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.6);
+    transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .mobile-drawer-menu.open .mobile-drawer-menu-close {
+    opacity: 1;
+    transform: none;
   }
 
   .mobile-drawer-menu .mobile-header-menu.acharyaDrawerContent {
@@ -8553,8 +8634,17 @@ button.astroHeroTimeBlock {
 
   }
 
-  .mobile-drawer-menu-backdrop {
-    background: rgba(0, 0, 0, 0.35);
+  /* smaller header here: 40px burger button centred 32px down, 44px from the right */
+  .mobile-drawer-menu-close {
+    top: 12px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .mobile-drawer-menu-close svg {
+    width: 12px;
+    height: 12px;
   }
 
   .mobile-drawer-menu .mobile-header-menu.acharyaDrawerContent {
