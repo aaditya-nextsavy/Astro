@@ -123,6 +123,7 @@ export default function MainImageInfoSection() {
                                 <CustomParallaxImages
                                     images={[item.parallaxImage]}
                                     imageMasks={{ [item.parallaxImage]: "/assets/background/circular-mask.webp" }}
+                                    alts={{ [item.parallaxImage]: item.title }}
                                     activeIndex={0}
                                     showBgMask
                                     bgLight

@@ -18,6 +18,8 @@ export default function CustomParallaxImages({
     bgLight = false,
     // optional per-image masks, e.g. { "/assets/home/x.png": "/assets/background/circular-mask.webp" }
     imageMasks = {},
+    // alt text per image src, e.g. { "/assets/home/x.webp": "Acharya performing a puja" }
+    alts = {},
 
 }) {
 
@@ -105,7 +107,7 @@ export default function CustomParallaxImages({
                             src={img}
                             className={`cpp-subject ${perImageMask ? "cpp-subject-masked" : ""}`}
                             style={perImageMask ? imageMaskStyle(imageMasks[img] ?? maskImage) : undefined}
-                            alt=""
+                            alt={alts[img] ?? ""}
                         />
 
                     ))}

@@ -204,7 +204,7 @@ const HomeServices = () => {
                             key={index}
                             className="info-sticky-card-section__card-wrapper"
                         >
-                            <img src="/assets/home/card-noise.png" className="info-sticky-card-section__card-noise-bg" />
+                            <img src="/assets/home/card-noise.png" className="info-sticky-card-section__card-noise-bg" alt="" aria-hidden="true" />
 
 
 

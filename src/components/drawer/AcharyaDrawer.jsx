@@ -145,7 +145,7 @@ export default function AcharyaDrawer({
                                     if (el?.complete && el.naturalWidth) markLoaded(service?.image);
                                 }}
                                 src={service?.image}
-                                alt={service?.title}
+                                alt={service?.title ?? ""}
                                 className={isImageLoaded ? "loaded" : ""}
                                 style={isMasked ? maskStyle : undefined}
                                 onLoad={() => markLoaded(service?.image)}

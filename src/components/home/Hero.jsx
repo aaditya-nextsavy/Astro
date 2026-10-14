@@ -84,7 +84,7 @@ export default function HomeHero({ onOpenAcharya }) {
                     </button>
 
                     <div className="astroHeroCenterIcon">
-                        <img src="/assets/icons/Hero-Mantra.svg" alt="Center Icon" />
+                        <img src="/assets/icons/Hero-Mantra.svg" alt="" />
                     </div>
 
                     <button onClick={() => onOpenAcharya(ACHARYA_DATA[1])}>

@@ -267,7 +267,7 @@ export default function ImageZoom() {
                         src="/assets/home/Zoom3-2.webp"
                         className="zoom-image"
                         decoding="async"
-                        alt=""
+                        alt="Flower-decorated shrine inside Shri Mai Mandir"
                     />
 
                     <img
@@ -275,7 +275,7 @@ export default function ImageZoom() {
                         src="/assets/home/imageZoom1-2400.webp"
                         className="zoom-image"
                         decoding="async"
-                        alt=""
+                        alt="Shri Mai Mandir, its tiered red and white spire against the sky"
                     />
                 </div>
 

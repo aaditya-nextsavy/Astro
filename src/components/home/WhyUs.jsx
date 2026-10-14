@@ -38,6 +38,12 @@ const sectionData = [
 // Blocks sharing an image keep it on screen (no fade) while scrolling between them
 const uniqueImages = [...new Set(sectionData.map((item) => item.image))];
 
+const imageAlts = {
+    "/assets/home/why-us-1.webp": "Acharya Markand and Acharya Shandilya performing a sacred fire ritual",
+    "/assets/home/why-us-2.webp": "An Acharya offering prayers before a garlanded portrait at a home shrine",
+    "/assets/home/why-us-3.webp": "An Acharya performing a puja with a Shri Yantra in a home",
+};
+
 // Images that use the soft oval mask instead of the default circle
 const imageMasks = {
     "/assets/home/why-us-3.webp": "/assets/background/circular-mask.webp",
@@ -186,6 +192,7 @@ export default function WhyUs() {
 
                                 images={uniqueImages}
                                 imageMasks={imageMasks}
+                                alts={imageAlts}
                                 activeIndex={uniqueImages.indexOf(sectionData[activeImage - 1]?.image)}
                                 showGlow={sectionData[activeImage - 1]?.showGlow ?? false}
                                 showBgMask={true}
@@ -281,6 +288,7 @@ export default function WhyUs() {
                             <CustomParallaxImages
                                 images={[item?.image]}
                                 imageMasks={imageMasks}
+                                alts={imageAlts}
                                 activeIndex={0}
                                 showGlow={item.showGlow}
                                 showBgMask

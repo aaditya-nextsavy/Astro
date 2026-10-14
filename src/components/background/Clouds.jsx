@@ -145,7 +145,7 @@ export default function Clouds() {
                 >
                     <img
                         src={cloud.src}
-                        alt="cloud"
+                        alt=""
                         width={cloud.width}
                         height={200}
                         fetchPriority="high"

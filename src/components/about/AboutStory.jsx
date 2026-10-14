@@ -530,7 +530,7 @@ const AboutStory = () => {
                             >
                                 <Image
                                     src="/assets/background/masked-cloud-bg.webp"
-                                    alt="clouds"
+                                    alt=""
                                     fill
                                 />
                             </div>

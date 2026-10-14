@@ -52,7 +52,7 @@ const SliderWithFade = () => {
             <img
                 className="product-slider-bg-image"
                 src="/assets/background/mask-bg-clouds.webp"
-                alt="clouds"
+                alt=""
             />
 
 

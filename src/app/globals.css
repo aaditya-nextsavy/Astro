@@ -3235,6 +3235,10 @@ button.astroHeroTimeBlock {
   box-shadow: 0 0 20px 3px rgba(105, 165, 209, 0.6);
   padding: 15px;
   overflow: hidden;
+  /* the wrappers are moved with GSAP transforms; while animated, the rounded overflow clip
+     can let square children (noise image, blurred glow) peek past the corners. A separate
+     stacking context keeps the clip applied to them. */
+  isolation: isolate;
 }
 
 .info-sticky-card-section__card-wrapper:nth-child(odd) {
@@ -3277,6 +3281,8 @@ button.astroHeroTimeBlock {
   left: 0;
   width: 100%;
   height: 100%;
+  /* round it itself too, so its square corners can't show past the card's rounded ones */
+  border-radius: inherit;
   background: url('/assets/home/card-noise.png');
 }
 
@@ -4988,6 +4994,9 @@ button.astroHeroTimeBlock {
   z-index: -1;
   left: 0;
   top: 0;
+  /* the card is overflow: visible (so the service dropdown can spill out), so this layer
+     isn't clipped — round it itself or its square corners show past the card's */
+  border-radius: inherit;
   -webkit-backdrop-filter: blur(0.5px);
   backdrop-filter: blur(0.5px);
 }
