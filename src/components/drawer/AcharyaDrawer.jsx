@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { preload } from "react-dom";
 import { STORY_MASK_STYLE } from "@/lib/maskStyles";
+import { FOOTER_SERVICES } from "@/data/siteData";
 
 // Photos already loaded this session — these skip the loader
 const loadedImages = new Set();
@@ -51,7 +52,11 @@ export default function AcharyaDrawer({
 
     // data links are already "/contact"; only prefix bare slugs ("contact")
     const rawLink = service?.link || "/contact";
-    const href = /^(\/|https?:|mailto:|tel:)/.test(rawLink) ? rawLink : `/${rawLink}`;
+    let href = /^(\/|https?:|mailto:|tel:)/.test(rawLink) ? rawLink : `/${rawLink}`;
+    // a contact-form service: carry it along so the form opens with it selected
+    if (href === "/contact" && FOOTER_SERVICES.includes(service?.title)) {
+        href += `?service=${encodeURIComponent(service.title)}`;
+    }
 
     // Fade the body's top/bottom edges only where content is hidden behind them
     const bodyRef = useRef(null);

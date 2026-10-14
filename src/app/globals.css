@@ -389,6 +389,7 @@ main.app-ready {
   font-size: clamp(3rem, 8vw, 6.25rem);
   line-height: 0.95;
   color: var(--color-text);
+  margin-bottom: 24px;
 }
 
 .legal-intro {
@@ -407,7 +408,7 @@ main.app-ready {
   display: grid;
   /* grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr); */
   gap: 1.5rem;
-  align-items: start;
+  align-items: center;
 }
 
 .legal-card {
@@ -528,10 +529,26 @@ main.app-ready {
   place-items: center;
 }
 
+.not-found-page .legal-card--content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.not-found-page .legal-title {
+  margin-inline: auto;
+}
+
+.not-found-page .legal-actions__buttons {
+  align-self: stretch;
+  justify-content: center;
+}
+
 .not-found-figure {
   display: grid;
   gap: 0.6rem;
-  justify-items: start;
+  justify-items: center;
   margin-bottom: 1rem;
 }
 
@@ -543,7 +560,7 @@ main.app-ready {
 }
 
 .not-found-subtitle {
-  max-width: 34ch;
+  max-width: 68ch;
   color: rgba(245, 247, 255, 0.8);
 }
 
@@ -5116,6 +5133,27 @@ button.astroHeroTimeBlock {
 
 }
 
+.footer-recaptcha-note {
+  margin-top: 16px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 20px;
+  color: rgba(208, 227, 241, 0.7);
+}
+
+.footer-recaptcha-note a {
+  transition: color 0.3s ease;
+}
+
+.footer-recaptcha-note a:hover {
+  color: #fff;
+}
+
+.footer-recaptcha-dot {
+  margin: 0 6px;
+  color: #D1AA67;
+}
+
 
 .glow-svgs .icon-card {
   cursor: default;
@@ -5288,9 +5326,72 @@ button.astroHeroTimeBlock {
     display: flex;
   }
 
+  /* stacked under the brand: wrap with roomy spacing, gold dots between the links */
+  .footer-nav-links {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 18px 0;
+  }
+
+  .footer-nav-links a {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .footer-nav-links a:not(:last-child)::after {
+    content: "";
+    width: 4px;
+    height: 4px;
+    margin: 0 20px;
+    border-radius: 50%;
+    background: #D1AA67;
+    flex-shrink: 0;
+  }
+
+  /* bottom block: divider · © line · Privacy | Terms · divider · Crafted by · reCAPTCHA note */
+  .footer-legal-information {
+    gap: 0;
+  }
+
+  .footer-legal-links {
+    flex-wrap: wrap;
+    gap: 14px 0;
+    padding-top: 24px;
+    border-top: 1px solid rgba(208, 227, 241, 0.25);
+  }
+
+  .footer-legal-links>span {
+    flex-basis: 100%;
+  }
+
+  .footer-legal-links svg {
+    display: none;
+  }
+
+  .footer-legal-links a+a::before {
+    content: "|";
+    margin: 0 22px 0 18px;
+    color: #D1AA67;
+  }
+
   .footer-legal-information-link,
   .crafted-by {
-    font-size: 12px;
+    font-size: 14px;
+  }
+
+  .footer-legal-information-link strong,
+  .crafted-by strong {
+    font-weight: 400;
+  }
+
+  .crafted-by {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(208, 227, 241, 0.25);
+  }
+
+  .footer-recaptcha-note {
+    margin-top: 10px;
   }
 }
 
@@ -5304,12 +5405,6 @@ button.astroHeroTimeBlock {
 
   .footer-heading p {
     max-width: 100%;
-  }
-
-  .footer-nav-links {
-    justify-content: start;
-    gap: 12px;
-    flex-wrap: wrap;
   }
 
   .footer-form {
@@ -5345,14 +5440,6 @@ button.astroHeroTimeBlock {
     max-height: 30px;
   }
 
-}
-
-@media (max-width: 400px) {
-
-  .footer-legal-information-link,
-  .crafted-by {
-    font-size: 8px;
-  }
 }
 
 @media (max-width: 491px) {

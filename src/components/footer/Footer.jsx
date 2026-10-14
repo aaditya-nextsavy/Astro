@@ -1,7 +1,8 @@
 
 "use client"
-import { useState, useRef, useEffect, useLayoutEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect, useCallback, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { usePopup } from "../Popup/PopupProvider";
 import { FOOTER_SERVICES as services } from "@/data/siteData";
@@ -33,6 +34,18 @@ const fitMessageFont = (input) => {
     input.classList.toggle("is-compact", textWidth > input.clientWidth * MESSAGE_COMPACT_AT);
 };
 
+// "Get in touch" on a service card links to /contact?service=<title>; preselect that service.
+// Its own component so useSearchParams sits in a Suspense boundary and doesn't opt pages out of static rendering.
+function ServiceFromQuery({ onService }) {
+    const service = useSearchParams().get("service");
+
+    useEffect(() => {
+        if (service && services.includes(service)) onService(service);
+    }, [service, onService]);
+
+    return null;
+}
+
 const Footer = () => {
 
     const [open, setOpen] = useState(false);
@@ -62,6 +75,8 @@ const Footer = () => {
         }));
     };
 
+    const preselectService = useCallback((service) => handleChange("service", service), []);
+
     const validateForm = () => {
 
         const newErrors = {};
@@ -89,7 +104,7 @@ const Footer = () => {
         if (!formData.email.trim()) {
             newErrors.email = "Please enter your email address.";
         } else if (
-            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email.trim())
         ) {
             newErrors.email = "Enter a valid email address.";
         }
@@ -140,6 +155,7 @@ const Footer = () => {
                 },
                 body: JSON.stringify({
                     ...formData,
+                    email: formData.email.trim(),
                     captchaToken: token,
                 }),
             });
@@ -209,6 +225,9 @@ const Footer = () => {
 
     return (
         <footer className="footer">
+            <Suspense fallback={null}>
+                <ServiceFromQuery onService={preselectService} />
+            </Suspense>
             <div className="footer-container">
                 {/* FORM */}
                 <div className="footer-heading">
@@ -262,8 +281,11 @@ const Footer = () => {
                     <div className="footer-input width-full">
                         <label>& my email id</label>
                         <input placeholder="type..."
+                            inputMode="email"
+                            autoComplete="email"
                             value={formData.email}
-                            onChange={(e) => handleChange("email", e.target.value)}
+                            // an email address never contains spaces, so drop any typed or pasted ones
+                            onChange={(e) => handleChange("email", e.target.value.replace(/\s/g, ""))}
                         />
                         {errors.email && (
                             <span className="form-error-span block text-sm text-red-400">
@@ -618,7 +640,7 @@ const Footer = () => {
                     </div>
 
                     <div className="footer-legal-information flex justify-between ">
-                        <div className="flex justify-start gap-3">
+                        <div className="footer-legal-links flex justify-start gap-3">
 
                             <span className="footer-legal-information-link cursor-default">
                                 © 2026 Astro Aacharya. All rights reserved.
@@ -668,14 +690,16 @@ const Footer = () => {
                     </div>
 
                 </div>
-                <div className="footer-legal-information  flex justify-start ">
-                    <div className="flex justify-start gap-3">
-
-                        <span className="footer-legal-information-link cursor-default">
-                            This site is protected by reCAPTCHA and the Google
-                        </span>
-                    </div>
-                </div>
+                <p className="footer-recaptcha-note">
+                    Protected by reCAPTCHA and the Google{" "}
+                    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+                        Privacy Policy
+                    </a>
+                    <span className="footer-recaptcha-dot" aria-hidden="true">·</span>
+                    <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">
+                        Terms of Service
+                    </a>
+                </p>
             </div>
 
 

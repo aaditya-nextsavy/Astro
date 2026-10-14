@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <main className="legal-page not-found-page">
-      <section className="section pt-0">
+      <section className="section pt-0!">
         <div className="container-custom legal-shell">
           <div className="legal-card legal-card--content">
             <div className="not-found-figure">
