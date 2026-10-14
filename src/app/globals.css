@@ -1798,7 +1798,7 @@ html.header-scrolled .astroHeroBottomSection::before {
   }
 
   .astroHeroAcharyaLinks button,
-.astroHeroAcharyaLinks a {
+  .astroHeroAcharyaLinks a {
     font-size: 22px;
   }
 
@@ -1866,7 +1866,7 @@ html.header-scrolled .astroHeroBottomSection::before {
   }
 
   .astroHeroAcharyaLinks button,
-.astroHeroAcharyaLinks a {
+  .astroHeroAcharyaLinks a {
     font-size: 20px;
   }
 
@@ -1923,7 +1923,7 @@ html.header-scrolled .astroHeroBottomSection::before {
   }
 
   .astroHeroAcharyaLinks button,
-.astroHeroAcharyaLinks a {
+  .astroHeroAcharyaLinks a {
     font-size: 14px;
   }
 
@@ -4456,7 +4456,7 @@ button.astroHeroTimeBlock {
   inset: 0;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  background: #232d42e5;
+  background: #232d42;
   border-radius: inherit;
   border: 1px solid rgba(255, 255, 255, .12);
   z-index: 0;
