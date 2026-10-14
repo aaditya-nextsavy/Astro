@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useLayoutEffect } from "react";
+import { useRef, useEffect, useLayoutEffect } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -194,6 +194,14 @@ export default function ImageZoom() {
         return () => ctx.revert();
     }, []);
 
+    // zoom1 sits at opacity 0 until ~65% through the scroll, so the browser would only decode it
+    // on its first fade-in — a visible hitch the first time after a reload. Decode both up front.
+    useEffect(() => {
+        [image3Ref.current, image1Ref.current].forEach((img) => {
+            img?.decode?.().catch(() => {});
+        });
+    }, []);
+
     useLayoutEffect(() => {
         console.log(
             "ImageZoom  mounted",
@@ -258,13 +266,15 @@ export default function ImageZoom() {
                         ref={image3Ref}
                         src="/assets/home/Zoom3-2.webp"
                         className="zoom-image"
+                        decoding="async"
                         alt=""
                     />
 
                     <img
                         ref={image1Ref}
-                        src="/assets/home/imageZoom1.webp"
+                        src="/assets/home/imageZoom1-2400.webp"
                         className="zoom-image"
+                        decoding="async"
                         alt=""
                     />
                 </div>
